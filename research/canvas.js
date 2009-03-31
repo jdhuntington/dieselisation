@@ -41,6 +41,7 @@ MapManager = {
   {
     var ctx = tile.getContext("2d");
     ctx.fillStyle = '#ffff00';
+    ctx.strokeStyle = '#222222';
     ctx.beginPath();
     ctx.moveTo(M.r, 0);
     ctx.lineTo(M.width, M.h);
@@ -50,6 +51,14 @@ MapManager = {
     ctx.lineTo(0, M.h);
     ctx.lineTo(M.r, 0);
     ctx.fill();
+    ctx.stroke();
     ctx.closePath();
+
+    ctx.lineWidth = 7;
+    ctx.beginPath();
+    // ctx.arc(M.width, M.h, M.h, Math.PI * 1/6.0, Math.PI / 2.0, true);
+    ctx.arc(M.width, M.h, M.h, Math.PI * 7/6.0, Math.PI / 2.0 , true);
+    ctx.stroke();
   }
 };
+
