@@ -50,7 +50,7 @@ namespace :build do
       sqlite3-ruby 1.2.4
       rake 0.8.3
       mongrel 1.1.5
-      rspec-rails 1.1.12
+      rspec-rails 1.2.2 
       selenium-client 1.2.10
       rack 0.9.1
       capistrano 2.5.5
