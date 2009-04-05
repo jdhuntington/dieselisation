@@ -36,20 +36,21 @@ MapManager = {
 	     left: '' + (Math.round(column * M.width) + offset) +'px'
 	   };
   },
-  addTile: function(tileData)
+  addTile: function(tileData, layRotation)
   {
     var tile = document.createElement('canvas');
-
+    if (typeof(G_vmlCanvasManager) != "undefined")
+      G_vmlCanvasManager.initElement(tile);
     tile.setAttribute('width', 200);
     tile.setAttribute('height', 200);
     tile.setStyle(this.currentTilePosition());
-    this.drawTile(tile, tileData);
+    this.drawTile(tile, tileData, layRotation);
     this.map.appendChild(tile);
     this.tiles[this.tiles.length] = tile;
   },
-  drawTile: function(tile, tileData)
+  drawTile: function(tileNode, tileData, layRotation)
   {
-    var ctx = tile.getContext("2d");
+    var ctx = tileNode.getContext("2d");
     ctx.fillStyle = '#ffff00';
     ctx.strokeStyle = '#222222';
     ctx.beginPath();
@@ -67,26 +68,39 @@ MapManager = {
     ctx.save();
     tileData.segments.each(function(segment)
       {
-	if(segment.type == 'wide') MapManager.drawWideTurn(ctx, segment.side);
-	else if(segment.type == 'tight') MapManager.drawTightTurn(ctx, segment.side);
-	else if(segment.type == 'straight') MapManager.drawStraight(ctx, segment.side);
+	if(segment.type == 'wide') MapManager.drawWideTurn(ctx, segment.side + layRotation, segment.town);
+	else if(segment.type == 'tight') MapManager.drawTightTurn(ctx, segment.side + layRotation, segment.town);
+	else if(segment.type == 'straight') MapManager.drawStraight(ctx, segment.side + layRotation, segment.town);
       });
   },
-  drawTightTurn: function(ctx, side)
+  drawTightTurn: function(ctx, side, town)
   {
-    this.strokeWithAngle(ctx, side, function()
+    this.strokeWithAngle(ctx, side - 2, function()
       {
-	ctx.arc(M.r, 0 - M.h, M.h, Math.PI * 7/6.0, Math.PI / 2.0 , true);
+	ctx.arc(0, M.height / 2, M.h, Math.PI * 11 /6.0, Math.PI * 7/ 6.0 , true);
+      });
+    if(town)
+    this.strokeWithAngle(ctx, side - 2, function()
+      {
+	ctx.moveTo(0, M.height / 4 + 9);
+	ctx.lineTo(0, M.height / 4 - 7);
       });
   },
-  drawWideTurn: function(ctx, side)
+  drawWideTurn: function(ctx, side, town)
   {
     this.strokeWithAngle(ctx, side, function()
       {
 	ctx.arc(M.width, 0, M.s * 1.5, Math.PI * 7/6.0, Math.PI * 5 / 6.0 , true);
       });
+    if(town)
+    this.strokeWithAngle(ctx, side, function()
+      {
+	ctx.moveTo(M.width / 4 - 4, 0);
+	ctx.lineTo(M.width / 4 - 20, 0);
+      });
+
   },
-  drawStraight: function(ctx, side)
+  drawStraight: function(ctx, side, town)
   {
     this.strokeWithAngle(ctx, side - 1, function()
       {
@@ -106,21 +120,14 @@ MapManager = {
 };
 
 Dataset = {
-  tiles: [
-    { segments: [{type: 'tight', side: 0}] },
-    { segments: [{type: 'wide', side: 0}] },
-    { segments: [{type: 'straight', side: 0}] },
-    { segments: [{type: 'straight', side: 1}] },
-    { segments: [{type: 'straight', side: 2}] },
-    { segments: [{type: 'straight', side: 2}] },
-    { segments: [{type: 'wide', side: 3}, {type: 'straight', side: 3}] },
-    { segments: [{type: 'wide', side: 3}, {type: 'tight', side: 4}] },
-    { segments: [{type: 'straight', side: 5}, {type: 'tight', side: 4}] }
-  ],
   load: function()
   {
-    $A(this.tiles).each(function(tile){
-		  MapManager.addTile(tile);
-		});
+    var myTiles = $A(tiles).compact();
+    for(i = 0; i < 5; i++)
+      {
+	alert('drawing');
+	MapManager.addTile(myTiles[Math.floor(Math.random() * myTiles.length)], Math.floor(Math.random() * 6));
+	alert('drew');
+  }
   }
 };
