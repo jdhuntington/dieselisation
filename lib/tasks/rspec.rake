@@ -147,12 +147,13 @@ rescue MissingSourceFile
   require File.expand_path(File.dirname(__FILE__) + "/../../config/environment")
 
   # ... otherwise, do this:
-  raise <<-MSG
+  STDERR.puts <<-MSG
 
   You have rspec rake tasks installed in
   #{__FILE__},
   but rspec can not be found in vendor/gems, vendor/plugins or on the system.
 
+  ...processing will continue
 MSG
 end
 

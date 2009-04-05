@@ -47,6 +47,7 @@ namespace :build do
 
   add_gems do
     %w(
+      sqlite3-ruby 1.2.4
       rake 0.8.3
       mongrel 1.1.5
       rspec-rails 1.1.12

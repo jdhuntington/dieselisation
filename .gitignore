@@ -5,3 +5,4 @@ tmp/**/*
 doc/api
 doc/app
 deps
+db/*.sqlite3
