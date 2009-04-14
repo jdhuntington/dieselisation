@@ -6,4 +6,18 @@ describe Player do
     p = Player.new(:name => 'johndoe')
     p.name.should == 'johndoe'
   end
+
+  it 'should have a balance' do
+    p = Player.new(:balance => 50)
+    p.balance.should == 50
+  end
+
+  it 'should be able to purchase a certificate from the bank' do
+    p = Player.new(:balance => 500)
+    bank = mock 'bank'
+    p bank
+
+    p.purchase(bank, certificate)
+    p.balance.should == 450
+  end
 end

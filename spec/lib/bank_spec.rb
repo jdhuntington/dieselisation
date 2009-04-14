@@ -10,4 +10,10 @@ describe Bank do
     Bank.instance.init(:balance => 99)
     Bank.instance.balance.should == 99
   end
+
+  it 'should have assets' do
+    Bank.instance.init(:balance => 99)
+    Bank.instance << :some_asset
+    Bank.instance.assets.should == [:some_asset]
+  end
 end

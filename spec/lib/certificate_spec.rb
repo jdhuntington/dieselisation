@@ -7,6 +7,11 @@ describe Certificate do
     cert.company.should == :a_company
   end
 
+  it 'should have a value' do
+    cert = Certificate.new(:a_company, :owner, :value => 50)
+    cert.value.should == 50
+  end
+
   it 'should have an owner' do
     cert = Certificate.new(:a_company, :owner)
     cert.owner.should == :owner
