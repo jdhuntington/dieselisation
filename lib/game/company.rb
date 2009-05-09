@@ -1,5 +1,6 @@
 class Company
-  attr_reader :name
+  attr_reader :name, :president
+  
   def initialize(name)
     @name = name
   end

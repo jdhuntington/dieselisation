@@ -1,4 +1,5 @@
-$:.unshift File.join(File.dirname(__FILE__), '..', '..', 'lib', 'game')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+
 require 'bank'
 
 describe Bank do

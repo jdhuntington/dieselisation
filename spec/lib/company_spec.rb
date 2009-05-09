@@ -1,4 +1,5 @@
-$:.unshift File.join(File.dirname(__FILE__), '..', '..', 'lib', 'game')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+
 require 'company'
 
 def company_factory()
@@ -27,8 +28,11 @@ describe Company do
     end
   end
 
-  describe 'presidency' do
-    it 'should have a one'
+  describe 'president' do
+    it 'should not exist if no shares have been purchased' do
+      c = Company.new(*company_factory)
+      c.president.should be_nil
+    end
   end
 end
 

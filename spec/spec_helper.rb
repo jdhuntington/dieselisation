@@ -1,11 +1,9 @@
-# This file is copied to ~/spec when you run 'ruby script/generate rspec'
-# from the project root directory.
+$:.unshift File.join(File.dirname(__FILE__), '..', 'lib', 'game')
+
 ENV["RAILS_ENV"] ||= 'test'
 require File.dirname(__FILE__) + "/../config/environment" unless defined?(RAILS_ROOT)
 require 'spec/autorun'
 require 'spec/rails'
-
-$:.unshift File.join(File.dirname(__FILE__), '..', 'lib', 'game')
 
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
