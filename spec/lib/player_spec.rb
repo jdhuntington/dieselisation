@@ -12,5 +12,14 @@ describe Player do
     p.balance.should == 50
   end
 
-  it 'should be able to purchase a certificate from the bank'
+  describe 'transactions' do
+    it 'should be able to purchase an asset from the bank' do
+      bank = mock 'bank'
+      asset = mock 'asset'
+      player = Player.new(:balance => 133)
+      player.buy(asset, bank, 50)
+      player.balance.should == 83
+    end
+
+  end
 end
