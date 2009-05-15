@@ -1,7 +1,7 @@
 require 'uri'
 require 'net/http'
 require 'net/https'
-# require 'json'
+require 'json'
 
 module Rpx
   class RpxException < StandardError

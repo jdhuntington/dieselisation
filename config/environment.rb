@@ -42,4 +42,6 @@ end
 
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib', 'game')
 
-$rpx_config = YAML.load(File.read(File.join(File.dirname(__FILE__), 'rpx.yml')))
+require 'rpx'
+rpx_config = YAML.load(File.read(File.join(File.dirname(__FILE__), 'rpx.yml')))
+$rpx = Rpx::RpxHelper.new rpx_config['api_key'], rpx_config['base_url'], rpx_config['realm']
