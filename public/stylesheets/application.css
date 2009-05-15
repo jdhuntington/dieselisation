@@ -1,0 +1,15 @@
+body { margin: 0; padding: 0; font-family: Helvetica, Arial, sans-serif; font-size: 12px; background: #eaeaea; }
+
+#header h1 { margin: 0; padding: 3px 0 0; font-weight: normal; float: left; }
+#header #profile
+{
+    float: right;
+    padding: 3px 3px 0 0;
+}
+#header
+{
+    color: #fff;
+    background: url(../images/header_background.gif) repeat-x;
+    height: 35px;
+}
+.clearall { clear: both; }
