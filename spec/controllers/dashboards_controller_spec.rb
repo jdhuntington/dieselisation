@@ -2,9 +2,14 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe DashboardsController do
 
-  #Delete this example and add some real ones
-  it "should use DashboardsController" do
-    controller.should be_an_instance_of(DashboardsController)
+  describe '#show' do
+    it 'should show the users current games' do
+      game = Game.create!(:status => 'waiting')
+      user = User.create!
+      game.users << user
+      session[:user_id] = user.id
+      get :show
+      assigns[:current_games].should == [game]
+    end
   end
-
 end
