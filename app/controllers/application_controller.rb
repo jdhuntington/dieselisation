@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   def current_user
-    User.find(session[:user_id])
+    @current_user ||= User.find(session[:user_id])
+  rescue
+    redirect_to new_session_url
   end
 end

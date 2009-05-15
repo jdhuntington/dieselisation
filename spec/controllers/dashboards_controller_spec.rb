@@ -11,5 +11,9 @@ describe DashboardsController do
       get :show
       assigns[:current_games].should == [game]
     end
+    it 'should redirect to the login if no user is logged in' do
+      get :show
+      response.should be_redirect
+    end
   end
 end
