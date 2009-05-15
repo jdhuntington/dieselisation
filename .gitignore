@@ -7,3 +7,4 @@ doc/app
 deps
 db/*.sqlite3
 *#*
+config/rpx.yml

@@ -42,3 +42,4 @@ end
 
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib', 'game')
 
+$rpx_config = YAML.load(File.read(File.join(File.dirname(__FILE__), 'rpx.yml')))
