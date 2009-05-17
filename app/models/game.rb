@@ -19,4 +19,10 @@ class Game < ActiveRecord::Base
   def current_player
     seatings.find_by_active(true).user
   end
+
+  def start!
+    self.status = 'active'
+    self.current_player = users[rand(users.length)]
+    self.save!
+  end
 end

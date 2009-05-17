@@ -7,3 +7,4 @@ end
 
 Factory.define :game, :class => 'game' do |g|
 end
+
