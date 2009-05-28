@@ -4,12 +4,12 @@ describe DashboardsController do
 
   describe '#show' do
     it 'should show the users current games' do
-      game = Game.create!(:status => 'waiting')
+      game = Factory.create(:game, :status => 'new')
       user = User.create!
       game.users << user
       session[:user_id] = user.id
       get :show
-      assigns[:current_games].should == [game]
+      assigns[:games].should == [game]
     end
     it 'should redirect to the login if no user is logged in' do
       get :show

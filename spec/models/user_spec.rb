@@ -1,17 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe User do
-  before(:each) do
-    @valid_attributes = {
-    }
-  end
-
   describe '#current_games' do
     it 'should load all current games' do
-      g0 = Game.create!(:status => 'finished')
-      g1 = Game.create!(:status => 'abandoned')
-      g2 = Game.create!(:status => 'active')
-      g3 = Game.create!(:status => 'waiting')
+      g0 = Factory.create(:game, :status => 'finished')
+      g1 = Factory.create(:game, :status => 'abandoned')
+      g2 = Factory.create(:game, :status => 'active')
+      g3 = Factory.create(:game, :status => 'new')
       u = User.create!
       u.games = [g0,g1,g2,g3]
       u.save!

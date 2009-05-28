@@ -1,10 +1,13 @@
 class Game < ActiveRecord::Base
   has_many :seatings
   has_many :users, :through => :seatings
+  belongs_to :owner, :class_name => 'User'
 
-  validates_presence_of :status
+  validates_presence_of :status, :owner_id
 
   named_scope :unfinished, :conditions => ['status <> ?', 'finished']
+
+  before_create :add_owner_to_game
 
   def current_player=(player)
     new_seating = seatings.find_by_user_id(player.id)
@@ -31,6 +34,11 @@ class Game < ActiveRecord::Base
   end
 
   def owner_name
-    "abc"
+    owner.actual_name
+  end
+
+  protected
+  def add_owner_to_game
+    users << owner
   end
 end

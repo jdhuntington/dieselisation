@@ -25,7 +25,24 @@ describe Game do
   end
 
   describe 'owner' do
-    it 'should exist'
-    it 'should respond to owner_name'
+    it 'should exist' do
+      g = Factory.create(:game)
+      g.owner.should be_an_instance_of(User)
+    end
+    
+    it 'should respond to owner_name' do
+      g = Factory.create(:game)
+      g.owner.actual_name = 'JIMBOB'
+      g.owner_name.should == 'JIMBOB'
+    end
+    
+    it 'should be seated at the game' do
+      g = Factory.create(:game)
+      g.users.should include(g.owner)
+    end
+  end
+
+  describe 'players' do
+    it "shouldn't be able to register multiple times"
   end
 end
