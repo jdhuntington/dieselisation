@@ -7,11 +7,11 @@ class GamesController < ApplicationController
   end
   
   def new
-    @game = Game.new
+    @game = Game.new(:name => "#{current_user.username}'s game")
   end
 
   def create
-    game = Game.create!(params[:game].merge({ :status => 'new'}))
+    game = Game.create!(params[:game].merge({ :status => 'new', :owner => current_user}))
     flash[:notice] = 'Game created successfully.'
     redirect_to(game)
   end

@@ -1,1 +1,9 @@
-This is the dashboard
+<h3>Your games</h3>
+<div id="games">
+<%= render :partial => 'games/game', :collection => @games %>
+</div>
+<% if @games.empty? %>
+<div id="games-alternate" class="empty-slate">
+You currently are not enrolled in any games, consider <%= link_to 'joining one', games_url %>
+</div>
+<% end %>

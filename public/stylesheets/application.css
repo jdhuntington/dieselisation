@@ -1,10 +1,11 @@
 body { margin: 0; padding: 0; font-family: Helvetica, Arial, sans-serif; font-size: 12px; background: #eaeaea; }
 
-#header h1 { margin: 0; padding: 3px 0 0; font-weight: normal; float: left; }
+#header h1 { margin: 0 0 0 20px; padding: 3px 0 0; font-weight: normal; float: left; }
 #header #profile
 {
     float: right;
-    padding: 3px 3px 0 0;
+    padding: 5px 0 0;
+    margin: 0 20px 0 0;
 }
 #header
 {
@@ -12,4 +13,12 @@ body { margin: 0; padding: 0; font-family: Helvetica, Arial, sans-serif; font-si
     background: url(../images/header_background.gif) repeat-x;
     height: 35px;
 }
+#header a, #header a:link, #header a:visited { color: #fff }
+#header a:hover, #header a:active { background: #050; }
+#footer { margin: 20px 20px 0; font-size: 90%; color: #444; }
+
+#content { margin: 10px 20px; }
+
+#notice { margin: 8px 20px; padding: 8px 8px; background: #E6EFC2; border: 2px solid #C6D880; }
 .clearall { clear: both; }
+.empty-slate { font-style: oblique; }

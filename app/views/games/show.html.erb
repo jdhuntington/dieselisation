@@ -1,4 +1,11 @@
 <div id="<%= dom_id @game %>" class="<%= dom_class @game %>">
   <h2><%= h @game.name %></h2>
   <p>Status: <%= @game.status %></p>
+  <p>Players:
+    <ul>
+      <% @game.users.each do |u| %>
+      <li><%= h u.display_name %></li>
+      <% end %>
+    </ul>
+  </p>
 </div>
