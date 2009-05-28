@@ -93,4 +93,44 @@ describe GamesController do
       response.should be_redirect
     end
   end
+
+  describe '#edit' do
+    before(:each) do
+      @user = Factory.create(:player)
+      session[:user_id] = @user.id
+      @game = Factory.create(:game)
+    end
+    
+    it 'should assign the game and respond successfully' do
+      get :edit, :id => @game.id
+      response.should be_success
+      assigns[:game].should == @game
+    end
+  end
+
+  
+  describe '#update' do
+    before(:each) do
+      @user = Factory.create(:player)
+      session[:user_id] = @user.id
+      @game = Factory.create(:game)
+    end
+    
+    it 'should redirect to the edit form with a flash message if the game is not valid' do
+      game = Factory.create(:game, :name => 'my_game')
+      put :update, :id => @game.id, :game => { :name => 'my_game' }
+      assigns[:game].should have(1).errors_on(:name)
+      response.should render_template("games/edit")
+    end
+    
+    it 'should let a user create a game' do
+      put :update, :id => @game.id, :game => { :name => 'my_game' }
+      response.should be_redirect
+    end
+
+    it 'should set the flash message' do
+      put :update, :id => @game.id, :game => { :name => 'my_game' }
+      flash[:notice].should include("successfully")
+    end
+  end
 end

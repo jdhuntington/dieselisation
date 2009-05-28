@@ -32,4 +32,18 @@ class GamesController < ApplicationController
   ensure
     redirect_to game_url(game)
   end
+
+  def edit
+    @game = Game.find params[:id]
+  end
+
+  def update
+    @game = Game.find(params[:id])
+    @game.name = params[:game][:name]
+    @game.save!
+    flash[:notice] = 'Game updated successfully.'
+    redirect_to(@game)
+  rescue ActiveRecord::RecordInvalid
+    render :action => 'edit'
+  end
 end

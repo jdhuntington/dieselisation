@@ -1,0 +1,11 @@
+<h2>Edit game</h2>
+<% form_for @game do |f| %>
+  <%= f.error_messages :class => 'error', :header_message => nil %>
+
+  <%= f.label :name %>
+  <%= f.text_field :name, :class => 'title' %>
+
+  <p>
+    <%= f.submit 'Save' %>
+  </p>
+<% end %>
