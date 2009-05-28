@@ -1,6 +1,6 @@
-body { margin: 0; padding: 0; font-family: Helvetica, Arial, sans-serif; font-size: 12px; background: #eaeaea; }
+body { background: #eaeaea; }
 
-#header h1 { margin: 0 0 0 20px; padding: 3px 0 0; font-weight: normal; float: left; }
+#header h1 { margin: 0 0 0 20px; padding: 3px 0 0; font-weight: normal; float: left; color: #fff; font-size: 2em; }
 #header #profile
 {
     float: right;
@@ -19,6 +19,8 @@ body { margin: 0; padding: 0; font-family: Helvetica, Arial, sans-serif; font-si
 
 #content { margin: 10px 20px; }
 
-#notice { margin: 8px 20px; padding: 8px 8px; background: #E6EFC2; border: 2px solid #C6D880; }
+#notice { margin: 8px 20px; padding: 8px 8px; }
 .clearall { clear: both; }
 .empty-slate { font-style: oblique; }
+
+.fieldWithErrors input { border: 1px solid #FBC2C4; }
