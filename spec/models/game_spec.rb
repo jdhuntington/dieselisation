@@ -23,4 +23,9 @@ describe Game do
       g.current_player.should_not be_nil
     end
   end
+
+  describe 'owner' do
+    it 'should exist'
+    it 'should respond to owner_name'
+  end
 end
