@@ -2,4 +2,9 @@
   <h1>dieselisation</h1>
   <div id="profile">you are logged in | something | else</div>
 </div>
+<% if flash[:notice] %>
+<div class="notice">
+<%= h flash[:notice] %>
+</div>
+<% end %>
 <div class="clearall"></div>
