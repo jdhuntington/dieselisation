@@ -16,4 +16,21 @@ describe User do
       current.include?(g3).should be_true
     end
   end
+
+  describe '#in_game?' do
+    before(:each) do
+      @user = Factory.create(:player)
+    end
+    
+    it 'should respond false if player is not in game' do
+      game = Factory.create(:game)
+      @user.in_game?(game).should == false
+    end
+
+    it 'should respond true if player is in game' do
+      game = Factory.create(:game)
+      game.users << @user
+      @user.in_game?(game).should == true
+    end
+  end
 end

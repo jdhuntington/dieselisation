@@ -3,10 +3,12 @@ class Game < ActiveRecord::Base
   has_many :users, :through => :seatings
   belongs_to :owner, :class_name => 'User'
 
-  validates_presence_of :status, :owner_id
+  validates_presence_of :status, :owner_id, :name
+  validates_uniqueness_of :name
 
   named_scope :unfinished, :conditions => ['status <> ?', 'finished']
 
+  before_save :strip_whitespace
   before_create :add_owner_to_game
 
   def current_player=(player)
@@ -34,11 +36,15 @@ class Game < ActiveRecord::Base
   end
 
   def owner_name
-    owner.actual_name
+    owner.display_name
   end
 
   protected
   def add_owner_to_game
     users << owner
+  end
+
+  def strip_whitespace
+    self.name.strip!
   end
 end

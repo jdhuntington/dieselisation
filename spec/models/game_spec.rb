@@ -13,6 +13,19 @@ describe Game do
     end
   end
 
+  describe 'name' do
+    it 'should be unique' do
+      Factory.create(:game, :name => 'foo')
+      game = Factory.build(:game, :name => 'foo')
+      game.should have(1).errors_on(:name)
+    end
+
+    it 'should be present' do
+      game = Factory.build(:game, :name => '')
+      game.should have(1).errors_on(:name)
+    end
+  end
+
   describe 'game activation' do
     it 'should choose a player to be "active"' do
       g = Factory(:game, :status => 'waiting')
@@ -43,6 +56,16 @@ describe Game do
   end
 
   describe 'players' do
-    it "shouldn't be able to register multiple times"
+    it "should be able to register in multiple games" do
+      lambda { 
+        Factory.create(:game)
+        Factory.create(:game)
+      }.should_not raise_error
+    end
+    
+    it "shouldn't be able to register multiple times" do
+      g = Factory.create(:game)
+      lambda { g.users << g.owner }.should raise_error
+    end
   end
 end

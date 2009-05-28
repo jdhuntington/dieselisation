@@ -18,16 +18,24 @@ describe GamesController do
   end
 
   describe '#create' do
+    before(:each) do
+      @user = Factory.create(:player)
+      session[:user_id] = @user.id
+    end
+    
+    it 'should redirect to the new form with a flash message if the game is not valid' do
+      game = Factory.create(:game, :name => 'my_game')
+      post :create, :game => { :name => 'my_game' }
+      assigns[:game].should have(1).errors_on(:name)
+      response.should render_template("games/new")
+    end
+    
     it 'should let a user create a game' do
-      user = Factory.create(:player)
-      session[:user_id] = user.id
       post :create, :game => { :name => 'my_game' }
       response.should be_redirect
     end
 
     it 'should set the flash message' do
-      user = Factory.create(:player)
-      session[:user_id] = user.id
       post :create, :game => { :name => 'my_game' }
       flash[:notice].should include("successfully")
     end
@@ -62,6 +70,27 @@ describe GamesController do
       get :index
       assigns[:games].should_not include(game)
       assigns[:games].length.should == 2
+    end
+  end
+
+  describe '#join' do
+    before(:each) do
+      @user = Factory.create(:player)
+      session[:user_id] = @user.id
+      @game = Factory.create(:game)
+    end
+
+    it 'should add the player to the game and redirect' do
+      post :join, :id => @game.id
+      @user.games.should include(@game)
+      response.should be_redirect
+    end
+
+    it 'should show an error and redirect if the player attempts to join twice' do
+      @game.users << @user
+      post :join, :id => @game.id
+      flash[:error].should include("already")
+      response.should be_redirect
     end
   end
 end

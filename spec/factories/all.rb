@@ -7,6 +7,7 @@ end
 
 Factory.define :game, :class => 'game' do |g|
   g.association :owner, :factory => :player
+  g.name { |n| "game-#{n}" }
   g.status 'new'
 end
 

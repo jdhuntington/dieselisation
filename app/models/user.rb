@@ -9,4 +9,8 @@ class User < ActiveRecord::Base
   def display_name
     self.actual_name || self.username
   end
+
+  def in_game?(game)
+    games.include?(game)
+  end
 end
