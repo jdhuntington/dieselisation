@@ -6,5 +6,6 @@ Factory.define :player, :class => 'user' do |u|
 end
 
 Factory.define :game, :class => 'game' do |g|
+  g.status 'new'
 end
 
