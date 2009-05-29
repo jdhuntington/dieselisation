@@ -2,8 +2,15 @@
 <% form_for @game do |f| %>
   <%= f.error_messages :class => 'error', :header_message => nil %>
 
-  <%= f.label :name %>
-  <%= f.text_field :name, :class => 'title' %>
+  <p>
+    <%= f.label :name %>
+    <%= f.text_field :name, :class => 'title' %>
+  </p>
+
+  <p>
+    <%= f.label :max_players, "Player Limit" %>
+    <%= f.text_field :max_players, :class => 'title' %>
+  </p>
 
   <p>
     <%= f.submit 'Save' %>

@@ -1,18 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Game do
-  describe 'active games' do
-    it 'should have a current player' do
-      g = Factory(:game, :status => 'active')
-      u0, u1 = Factory(:player), Factory(:player)
-      g.users << u0
-      g.users << u1
-      g.current_player = u0
-      g.reload
-      g.current_player.should == u0
-    end
-  end
-
   describe 'name' do
     it 'should be unique' do
       Factory.create(:game, :name => 'foo')
@@ -28,10 +16,10 @@ describe Game do
 
   describe 'game activation' do
     it 'should choose a player to be "active"' do
-      g = Factory(:game, :status => 'waiting')
+      g = Factory(:game)
       u0, u1 = Factory(:player), Factory(:player)
-      g.users << u0
-      g.users << u1
+      g.add_player u0
+      g.add_player u1
       g.start!
       g.current_player.should_not be_nil
     end
@@ -49,9 +37,9 @@ describe Game do
       g.owner_name.should == 'JIMBOB'
     end
     
-    it 'should be seated at the game' do
+    it 'should be added to the game' do
+      Game.any_instance.expects(:add_player)
       g = Factory.create(:game)
-      g.users.should include(g.owner)
     end
   end
 
@@ -67,6 +55,11 @@ describe Game do
       g = Factory.create(:game)
       lambda { g.users << g.owner }.should raise_error
     end
+
+    it 'should be limited' do
+      g = Factory.create(:game)
+      g.max_players.should be > 0
+    end
   end
 
   describe '#joinable?' do
@@ -76,8 +69,33 @@ describe Game do
     end
 
     it 'should not be joinable if it has started' do
-      g = Factory.create(:game, :status => 'active')
+      g = Factory.create(:game)
+      g.start!
       g.should_not be_joinable
+    end
+
+    it 'should not be joinable if it is full' do
+      g = Factory.create(:game)
+      g.expects(:users).returns(stub_everything(:length => 4))
+      g.expects(:max_players).returns(4)
+      g.should_not be_joinable
+    end
+  end
+
+  describe '#add_player' do
+    it 'should add the player to the game' do
+    end
+    
+    it 'should start automatically when full' do
+      g = Factory.create(:game, :max_players => 2)
+      g.expects(:start!)
+      g.add_player(Factory.create(:player))
+    end
+
+    it 'should not add a player if the game is not joinable' do
+      g = Factory.create(:game, :max_players => 2)
+      g.expects(:joinable?).returns(false)
+      lambda { g.add_player(Factory.create(:player)) }.should raise_error
     end
   end
 end

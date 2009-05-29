@@ -44,12 +44,18 @@ class Game < ActiveRecord::Base
   end
 
   def joinable?
-    self.status == 'new'
+    self.status == 'new' && users.length < max_players
+  end
+
+  def add_player(player)
+    raise "Unable to join game" unless joinable?
+    users << player
+    start! if users.length >= self.max_players
   end
 
   protected
   def add_owner_to_game
-    users << owner
+    add_player owner
   end
 
   def strip_whitespace

@@ -26,10 +26,10 @@ class GamesController < ApplicationController
 
   def join
     game = Game.find params[:id]
-    if game.started?
-      flash[:error] = "Sorry, this game has already started."
+    if !game.joinable?
+      flash[:error] = "Sorry, this game has already started or is full."
     else
-      game.users << current_user
+      game.add_player current_user
     end
   rescue ActiveRecord::RecordInvalid
     flash[:error] = "You've already joined this game."
@@ -44,6 +44,7 @@ class GamesController < ApplicationController
   def update
     @game = Game.find(params[:id])
     @game.name = params[:game][:name]
+    @game.max_players = params[:game][:max_players]
     @game.save!
     flash[:notice] = 'Game updated successfully.'
     redirect_to(@game)

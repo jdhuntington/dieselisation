@@ -81,8 +81,10 @@ describe GamesController do
     end
 
     it 'should add the player to the game and redirect' do
+      Game.stubs(:find).returns(@game)
+      User.stubs(:find).returns(@user)
+      @game.expects(:add_player).with(@user)
       post :join, :id => @game.id
-      @user.games.should include(@game)
       response.should be_redirect
     end
 
