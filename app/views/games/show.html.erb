@@ -1,7 +1,12 @@
 <div id="<%= dom_id @game %>" class="<%= dom_class @game %>">
   <h2><%= h @game.name %></h2>
   <% if @current_user == @game.owner %>
+    <div class="owner-actions">
     <%= link_to 'Edit', edit_game_url(@game), :class => 'edit' %>
+    <% unless @game.started? %>
+      <%= link_to 'Start game', start_game_url(@game), :class => 'start', :method => 'put' %>
+    <% end %>
+    </div>
   <% end %>
   <p>Status: <%= @game.status %></p>
   <p>Players:

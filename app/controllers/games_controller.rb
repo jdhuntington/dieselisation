@@ -26,7 +26,11 @@ class GamesController < ApplicationController
 
   def join
     game = Game.find params[:id]
-    game.users << current_user
+    if game.started?
+      flash[:error] = "Sorry, this game has already started."
+    else
+      game.users << current_user
+    end
   rescue ActiveRecord::RecordInvalid
     flash[:error] = "You've already joined this game."
   ensure
@@ -45,5 +49,16 @@ class GamesController < ApplicationController
     redirect_to(@game)
   rescue ActiveRecord::RecordInvalid
     render :action => 'edit'
+  end
+
+  def start
+    game = Game.find params[:id]
+    if game.owner == current_user
+      game.start!
+      flash[:notice] = 'Game started.'
+    else
+      flash[:error] = 'Only the game owner may start the game.'
+    end
+    redirect_to game_url(game)
   end
 end

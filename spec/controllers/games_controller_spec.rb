@@ -92,6 +92,13 @@ describe GamesController do
       flash[:error].should include("already")
       response.should be_redirect
     end
+
+    it 'should not work if the game is not new' do
+      @game.start!
+      post :join, :id => @game.id
+      flash[:error].should include("started")
+      response.should be_redirect
+    end
   end
 
   describe '#edit' do
@@ -131,6 +138,26 @@ describe GamesController do
     it 'should set the flash message' do
       put :update, :id => @game.id, :game => { :name => 'my_game' }
       flash[:notice].should include("successfully")
+    end
+  end
+
+  describe '#start' do
+    it "should set the game's status to active" do
+      game = Factory.create(:game)
+      session[:user_id] = game.owner.id
+      put :start, :id => game.id
+      game.reload
+      game.should be_started
+    end
+
+    it 'should only be accessible to the owner' do
+      game = Factory.create(:game)
+      user = Factory.create(:player)
+      session[:user_id] = user.id  
+      put :start, :id => game.id
+      flash[:error].should include("owner")
+      game.reload
+      game.should_not be_started
     end
   end
 end
