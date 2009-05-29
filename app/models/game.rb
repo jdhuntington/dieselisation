@@ -43,6 +43,10 @@ class Game < ActiveRecord::Base
     owner.display_name
   end
 
+  def joinable?
+    self.status == 'new'
+  end
+
   protected
   def add_owner_to_game
     users << owner

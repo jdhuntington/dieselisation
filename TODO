@@ -1,12 +1,10 @@
 UI Side
- * Kick player from game
- * Site navigation
  * Game details
    * player limit
    * comment
  * Dashboard - sections should be [my active games where I am to act, my active games, my waiting games, my recently finished games] and recently created games
- * Cool buttons for common actions
  * Start game automatically when player limit is reached
+ * game list - open games first
 
 Game Side
  ??
@@ -17,3 +15,9 @@ Open Questions
 -- Done --
  * Start game
  * Edit account details
+ * Site navigation
+ * Cool buttons for common actions
+
+
+-- Ignore --
+ * Kick player from game

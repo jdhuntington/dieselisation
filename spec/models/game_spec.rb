@@ -68,4 +68,16 @@ describe Game do
       lambda { g.users << g.owner }.should raise_error
     end
   end
+
+  describe '#joinable?' do
+    it 'should be joinable if it is new' do
+      g = Factory.create(:game, :status => 'new')
+      g.should be_joinable
+    end
+
+    it 'should not be joinable if it has started' do
+      g = Factory.create(:game, :status => 'active')
+      g.should_not be_joinable
+    end
+  end
 end

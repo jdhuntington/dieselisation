@@ -7,7 +7,11 @@ class User < ActiveRecord::Base
   end
 
   def display_name
-    self.actual_name || self.username
+    if self.actual_name && !self.actual_name.empty?
+      self.actual_name
+    else
+      self.username
+    end
   end
 
   def in_game?(game)

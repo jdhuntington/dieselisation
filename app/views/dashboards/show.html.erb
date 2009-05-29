@@ -1,3 +1,9 @@
+<div id="left-side">
+<div class="featured-actions">
+  <%= custom_button_to 'More games', games_url %>
+  <%= custom_button_to 'Create a new game', new_game_url %>
+</div>
+<div class="clearall"></div>
 <h3>Your games</h3>
 <div id="games">
 <%= render :partial => 'games/game', :collection => @games %>
@@ -7,6 +13,4 @@
 You currently are not enrolled in any games, consider <%= link_to 'joining one', games_url %>
 </div>
 <% end %>
-
-<h3>Nav</h3>
-<%= link_to 'Games', games_url %> | <%= link_to 'Create a new game', new_game_url, :class => 'create' %>
+</div>

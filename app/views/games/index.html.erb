@@ -1,5 +1,7 @@
+<%= custom_button_to 'Create a new game', new_game_url %>
+<div class="clearall"></div>
+
 <h2>Games</h2>
-<%= link_to 'Create a new game', new_game_url, :class => 'create' %>
 <div id="games">
 <%= render :partial => 'game', :collection => @games %>
 </div>

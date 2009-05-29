@@ -1,7 +1,7 @@
 <div id="<%= dom_id game %>" class="<%= dom_class game %>">
   <h3><%= link_to game.name, game_url(game) %></h3>
-  <p class="owner">Owner: <%= h game.owner_name %></p>
-  <% unless @current_user.in_game?(game) %>
-    <%= link_to 'Join game', join_game_url(game), :method => 'post', :class => 'join' %>
+  <%= friendly_game_status game %>
+  <% unless @current_user.in_game?(game) || !game.joinable? %>
+    <%= link_to 'Join game', join_game_url(game), :method => 'put', :class => 'join' %>
   <% end %>
 </div>
