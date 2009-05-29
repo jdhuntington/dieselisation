@@ -4,4 +4,7 @@
   <% unless @current_user.in_game?(game) || !game.joinable? %>
     <%= link_to 'Join game', join_game_url(game), :method => 'put', :class => 'join' %>
   <% end %>
+  <% if game.in_progress? %>
+    <p>Active Player: <%= h game.current_player.display_name %></p>
+  <% end %>
 </div>

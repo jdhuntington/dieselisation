@@ -3,7 +3,7 @@ class GamesController < ApplicationController
   before_filter :current_user
 
   def index
-    @games = Game.unfinished
+    @games = Game.open_for_registration
   end
   
   def new
@@ -43,9 +43,7 @@ class GamesController < ApplicationController
 
   def update
     @game = Game.find(params[:id])
-    @game.name = params[:game][:name]
-    @game.max_players = params[:game][:max_players]
-    @game.save!
+    @game.update_attributes!(params[:game])
     flash[:notice] = 'Game updated successfully.'
     redirect_to(@game)
   rescue ActiveRecord::RecordInvalid

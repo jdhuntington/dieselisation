@@ -1,6 +1,26 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Game do
+
+  describe 'named scopes' do
+    describe 'open_for_registraion' do
+      it 'should return all new games' do
+        g0 = Factory.create(:game)
+        g1 = Factory.create(:game)
+        g2 = Factory.create(:game)
+        g2.status = 'active'
+        g2.save!
+        g3 = Factory.create(:game)
+        g3.status = 'finished'
+        g3.save!
+        games = Game.open_for_registration
+        games.length.should == 2
+        games.should include(g0)
+        games.should include(g1)
+      end
+    end
+  end
+  
   describe 'name' do
     it 'should be unique' do
       Factory.create(:game, :name => 'foo')

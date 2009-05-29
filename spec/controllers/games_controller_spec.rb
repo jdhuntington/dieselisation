@@ -39,7 +39,6 @@ describe GamesController do
       post :create, :game => { :name => 'my_game' }
       flash[:notice].should include("successfully")
     end
-    
   end
 
   describe '#show' do
@@ -57,19 +56,12 @@ describe GamesController do
   end
 
   describe '#index' do
-    before(:each) do
-      @user = Factory.create(:player)
-      session[:user_id] = @user.id
-      @games = [Factory.create(:game), Factory.create(:game)]
-    end
-
-    it 'should show all games that are not finished' do
-      game = Factory.create(:game)
-      game.status = 'finished'
-      game.save!
+    it 'should show all games that are open for registration' do
+      user = Factory.create(:player)
+      session[:user_id] = user.id
+      Game.expects(:open_for_registration).returns([Factory.create(:game, :name => 'checkforthis')])
       get :index
-      assigns[:games].should_not include(game)
-      assigns[:games].length.should == 2
+      assigns[:games].first.name.should == 'checkforthis'
     end
   end
 
@@ -132,7 +124,7 @@ describe GamesController do
       response.should render_template("games/edit")
     end
     
-    it 'should let a user create a game' do
+    it 'should let a user edit a game' do
       put :update, :id => @game.id, :game => { :name => 'my_game' }
       response.should be_redirect
     end
@@ -140,6 +132,12 @@ describe GamesController do
     it 'should set the flash message' do
       put :update, :id => @game.id, :game => { :name => 'my_game' }
       flash[:notice].should include("successfully")
+    end
+
+    it 'should update attributes' do
+      put :update, :id => @game.id, :game => { :comment => 'foobar' }
+      @game.reload
+      @game.comment.should == 'foobar'
     end
   end
 

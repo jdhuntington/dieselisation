@@ -61,3 +61,5 @@ h3 { border-bottom: solid 2px #aaa; }
 
 
 #left-side { width: 50%; }
+
+textarea.short { height: 125px; }
