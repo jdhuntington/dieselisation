@@ -24,3 +24,5 @@ body { background: #eaeaea; }
 .empty-slate { font-style: oblique; }
 
 .fieldWithErrors input { border: 1px solid #FBC2C4; }
+
+label { display: block; }

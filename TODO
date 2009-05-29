@@ -1,5 +1,4 @@
 UI Side
- * Edit account details
  * Kick player from game
  * Site navigation
  * Game details
@@ -12,5 +11,9 @@ UI Side
 Game Side
  ??
 
+Open Questions
+ - Users are unique by the rpx identifier. What constraints should be placed on username/real name?
+
 -- Done --
  * Start game
+ * Edit account details

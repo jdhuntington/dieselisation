@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090528142837) do
+ActiveRecord::Schema.define(:version => 20090529010804) do
 
   create_table "games", :force => true do |t|
     t.string   "name"
@@ -29,11 +29,12 @@ ActiveRecord::Schema.define(:version => 20090528142837) do
   end
 
   create_table "users", :force => true do |t|
-    t.string "username"
-    t.string "email"
-    t.string "password"
-    t.string "actual_name"
-    t.string "identifier",  :limit => nil
+    t.string  "username"
+    t.string  "email"
+    t.string  "password"
+    t.string  "actual_name"
+    t.string  "identifier",         :limit => nil
+    t.boolean "email_notification"
   end
 
 end
