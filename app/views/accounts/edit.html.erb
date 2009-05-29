@@ -1,6 +1,6 @@
 <h2>Edit Account</h2>
 
-<% form_for :account, @current_user do |f| %>
+<% form_for :account, @current_user, :url => { :action => "update"} , :html => { :method => 'put' } do |f| %>
   <p>
     <%= f.label :username %>
     <%= f.text_field :username, :class => 'title' %>
