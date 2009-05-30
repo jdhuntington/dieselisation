@@ -123,11 +123,9 @@ Dataset = {
   load: function()
   {
     var myTiles = $A(tiles).compact();
-    for(i = 0; i < 5; i++)
+    for(i = 0; i < 99; i++)
       {
-	alert('drawing');
 	MapManager.addTile(myTiles[Math.floor(Math.random() * myTiles.length)], Math.floor(Math.random() * 6));
-	alert('drew');
-  }
+     }
   }
 };
