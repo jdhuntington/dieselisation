@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :games, :member => { :join => :put, :start => :put }
+  map.resources :games, :member => { :join => :put, :start => :put, :play => :get }
   map.resource :session
   map.resource :dashboard
   map.resource :account

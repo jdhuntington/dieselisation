@@ -60,4 +60,8 @@ class GamesController < ApplicationController
     end
     redirect_to game_url(game)
   end
+
+  def play
+    
+  end
 end
