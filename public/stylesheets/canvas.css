@@ -1,0 +1,13 @@
+* { margin: 0; padding: 0; }
+body { font-family: Helvetica, Arial; font-size: 11px; }
+div#content { width: 1000px; margin: 10px auto; }
+
+/* map */
+
+div#map
+{
+    position: relative;
+    width: 1000px;
+    height: 1300px;
+    background: #bbb;
+}

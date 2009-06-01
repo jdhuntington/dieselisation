@@ -24,3 +24,4 @@ game.board.sorted_rows.each do |row|
   putc "\n"
 end
 
+puts game.board.to_json

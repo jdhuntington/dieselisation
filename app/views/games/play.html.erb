@@ -1,0 +1,10 @@
+<% content_for :header do %>
+  <%= javascript_include_tag 'canvas', 'tiles' %>
+  <%= stylesheet_link_tag 'canvas' %>
+
+  <script>
+    var board = <%= @game_instance.board.to_json %>;
+  </script>
+<% end %>
+
+<div id="map"></div>

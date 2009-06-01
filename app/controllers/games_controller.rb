@@ -62,6 +62,6 @@ class GamesController < ApplicationController
   end
 
   def play
-    
+    @game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18GA)
   end
 end

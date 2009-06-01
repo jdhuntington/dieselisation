@@ -142,8 +142,8 @@ module Dieselisation
     
     col(7){ town "Valdosta" }
     
-    col(11) { city "Waycross" }
-    col(13) { city "Brunswick" }
+    col(9) { city "Waycross" }
+    col(11) { city "Brunswick" }
   end
   
   row :j do
