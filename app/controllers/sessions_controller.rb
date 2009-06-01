@@ -14,4 +14,10 @@ class SessionsController < ApplicationController
     session[:user_id] = nil
     redirect_to new_session_url
   end
+
+  def login_as
+    raise "INTRUDER ALERT!" unless ENV['RAILS_ENV'] == 'development'
+    session[:user_id] = User.find_or_create_by_username params[:username]
+    redirect_to dashboard_url
+  end
 end
