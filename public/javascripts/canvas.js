@@ -143,7 +143,7 @@ Dataset = {
 	  cell = board['cells']["cell_" + row + "_" + i];
 	  if(cell)
 	    {
-	      console.log(cell);
+	//      console.log(cell);
 	      MapManager.addTile(0, cell, row, i);
 	    }
 
