@@ -66,8 +66,18 @@ module Dieselisation
       options = {}
       if @current_round == SR
         if (@bank.assets.map { |a| a.class == Dieselisation::Private }).include?(true)
-          options[:buy_private] = {:private => @bank.cheapest_private}
-          # options[:bid_on_private] = 
+          # the bank still owns a private
+          cheapest_pvt = @bank.cheapest_private
+          if cheapest_pvt.bids.empty?
+            # no bid on the cheapest private
+            options[:buy_private] = {:player => @current_player, :private => cheapest_pvt}
+          else
+            options[:auction_private] = {:players => cheapest_pvt.bidders, 
+                                         :private => cheapest_pvt}
+            return options
+          end
+          options[:bid_on_private] = {:player => @current_player, 
+                                      :privates => @bank.assets - [cheapest_pvt]}
         end
         
       elsif @current_round == OR
@@ -77,6 +87,22 @@ module Dieselisation
       end
       
       return options
+    end
+    
+    def auction_private
+      asset = @bank.cheapest_private
+      unless asset.bids.empty?
+        if asset.bids.length == 1
+          # only bidder auto buys
+          asset.bids[0][:player].buy(asset, @bank, asset.bids[0][:price])
+          asset #return value
+        else
+          
+        end
+        
+      else
+        false        
+      end
     end
     
     protected

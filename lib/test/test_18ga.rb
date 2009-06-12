@@ -55,22 +55,31 @@ class TestGameFlow < Test::Unit::TestCase
   def test_player
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
     assert(inst.players['id3'].balance == 450)
-    pr = inst.privates['mid']
-    assert(!(inst.current_player.bid_on_private(pr, 452)))
-    assert(!(inst.current_player.bid_on_private(pr, 30)))
-    assert(!(inst.current_player.bid_on_private(pr, 40)))
+    pvt = inst.privates['mid']
+    assert(!(inst.current_player.bid_on_private(pvt, 30)))
+    assert(!(inst.current_player.bid_on_private(pvt, 452)))
+    assert(inst.current_player.bid_on_private(pvt, 40))
+    pvt2 = inst.privates['wsr']
+    assert(!(inst.current_player.bid_on_private(pvt2, 412)))
+    assert(inst.current_player.bid_on_private(pvt2, 400))
+    assert_equal(inst.current_player.bids_total, 440)
   end
   
   def test_private
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
+    next_player = inst.players['id2']
     assert_equal(inst.privates['mid'].highest_bid, 35)
     assert_equal(inst.privates['mid'].bid(inst.current_player, 40), 
                     [{:price => 40, :player => inst.current_player}])
     assert_equal(inst.privates['mid'].highest_bid, 40)
     assert(!(inst.privates['mid'].bid(inst.current_player, 42)))
-    assert_equal(inst.privates['mid'].bid(inst.current_player, 45), 
+    assert_equal(inst.privates['mid'].bid(next_player, 45), 
                     [{:price => 40, :player => inst.current_player},
-                     {:price => 45, :player => inst.current_player}])        
+                     {:price => 45, :player => next_player}])
+    assert_equal(inst.privates['mid'].bidders, [inst.current_player, next_player])
+    
+    inst.current_player.buy(inst.privates['ltr'], inst.bank, inst.privates['ltr'].par)
+    assert_equal(inst.bank.cheapest_private, inst.privates['mid'])
   end
 
   def test_game_4p_setup
@@ -92,25 +101,60 @@ class TestGameFlow < Test::Unit::TestCase
     assert(inst.current_phase == 1)
   end
     
-  def test_game_player_options
+  def test_game_instance
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
-    assert_equal(inst.player_options.keys, [:buy_private])
+    assert(inst.player_options.keys.include?(:bid_on_private))
+    assert(inst.player_options.keys.include?(:buy_private))
+    assert_equal(inst.player_options[:buy_private][:player], inst.current_player)
     cheap_private = inst.player_options[:buy_private][:private]
     assert_equal(cheap_private.name, 'Lexington Terminal RR')
     assert(inst.bank.assets.include?(cheap_private))
-    
-    # buy private
+  end
+  
+  def test_buy_private
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
     cup = inst.current_player
+    cheap_private = inst.player_options[:buy_private][:private]
     cup.buy(cheap_private, inst.bank, cheap_private.par)
     assert_equal(cup.balance, 430)
     assert(cup.assets.include?(cheap_private))
     assert(!(inst.bank.assets.include?(cheap_private)))
     assert_equal(inst.bank.balance, 6220)
-    
-    inst.next_player
-    assert(!(inst.current_player == cup))
-    
-    
+    assert(inst.player_options.keys.include?(:bid_on_private))
+    assert(inst.player_options.keys.include?(:buy_private))
   end
+    
+  def test_buy_private_trigger_auction
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
+    p1 = inst.current_player
+    cheap_private = inst.player_options[:buy_private][:private]
+    # p1 buys cheapest private
+    p1.buy(cheap_private, inst.bank, cheap_private.par)
+    inst.next_player
+    assert(!(inst.current_player == p1))
+    p2 = inst.current_player
+    # p2 bids on wsr
+    assert(inst.privates['wsr'].bid(p2, 75))
+    options = inst.player_options
+    assert(options.keys.include?(:bid_on_private))
+    assert(options.keys.include?(:buy_private))
+    inst.next_player
+    assert(!(inst.current_player == p2))
+    p3 = inst.current_player
+    price = options[:buy_private][:private].par
+    #p3 buys cheapest private
+    p3.buy(options[:buy_private][:private], inst.bank, price)
+    assert_equal(p3.balance, 450 - price)
+    assert(p3.assets.include?(options[:buy_private][:private]))
+    assert(!(inst.bank.assets.include?(cheap_private)))
+    assert_equal(inst.bank.balance, 6220 + price)
+    assert_equal(inst.player_options.keys, [:auction_private])
+    # should trigger immediate buy of wsr by p2
+    assert_equal(inst.auction_private, inst.privates['wsr'])
+    assert(p2.assets.include?(inst.privates['wsr']))
+    assert_equal(p2.balance, 450 - 75)
+  end
+  
+  
   
 end

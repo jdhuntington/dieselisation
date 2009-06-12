@@ -29,15 +29,22 @@ module Dieselisation
     end
     
     def cheapest_private
-      cheapest = 0
-      @assets.each do |a|
-        if cheapest == 0
-          cheapest = a
-        elsif a.par <= cheapest.par
-          cheapest = a 
-        end
+      unless @assets.empty?
+        (@assets.sort { |a,b| a.par <=> b.par }).first
+        # (@privates.map { |k, p| p.par }).sort.first
+      else
+        false
       end
-      cheapest
+
+      # cheapest = 0
+      # @assets.each do |a|
+      #   if cheapest == 0
+      #     cheapest = a
+      #   elsif a.par <= cheapest.par
+      #     cheapest = a 
+      #   end
+      # end
+      # cheapest
     end
     
   end

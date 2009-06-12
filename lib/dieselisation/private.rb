@@ -29,5 +29,12 @@ module Dieselisation
       end
     end    
     
+    def bidders
+      unless @bids.empty?
+        @bids.map { |b| b[:player] }
+      else
+        false
+      end
+    end
   end
 end

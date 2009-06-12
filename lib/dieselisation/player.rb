@@ -1,28 +1,42 @@
 module Dieselisation
   class Player < Base
-    attr_reader :name, :balance, :assets, :seat_order
+    attr_reader :name, :balance, :assets, :seat_order, :bids
     
     def initialize(params={ })
       @name = params[:name]
       @balance = params[:balance]
       @assets = []
       @seat_order = params[:seat_order]
+      @bids = {}
     end
     
     def bid_on_private(asset, bid)
-      # TODO need to figure out proper error handling
-      unless bid >= @balance or bid >= (asset.highest_bid + 5)
-        asset.bid(self, bid)
+        # puts (@balance - bids_total)
+      if bid <= (@balance - bids_total)
+        # puts asset.highest_bid + 5
+        if bid >= (asset.highest_bid + 5)
+          @bids[asset.name] = bid
+          asset.bid(self, bid)          
+        end
       else
-        # raise 'Not enough cash to bid'
         false
       end
     end
     
     def buy(asset, owning_entity, price)
+      @bids.delete(asset.name) if @bids.has_key?(asset.name)
       @balance -= price
       owning_entity.sell(asset, price)
       @assets << asset
     end
+    
+    def bids_total
+      total = 0
+      @bids.each do |k,v|
+        total += v
+      end
+      total
+    end
+    
   end
 end
