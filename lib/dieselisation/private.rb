@@ -33,8 +33,12 @@ module Dieselisation
       unless @bids.empty?
         @bids.map { |b| b[:player] }
       else
-        false
+        []
       end
+    end
+    
+    def clear_bids
+      @bids = []
     end
   end
 end

@@ -24,7 +24,6 @@ module Dieselisation
     end
     
     def buy(asset, owning_entity, price)
-      @bids.delete(asset.name) if @bids.has_key?(asset.name)
       @balance -= price
       owning_entity.sell(asset, price)
       @assets << asset
@@ -36,6 +35,10 @@ module Dieselisation
         total += v
       end
       total
+    end
+    
+    def clear_bids(asset)
+      @bids.delete(asset.name) if @bids.has_key?(asset.name)
     end
     
   end

@@ -95,6 +95,8 @@ module Dieselisation
         if asset.bids.length == 1
           # only bidder auto buys
           asset.bids[0][:player].buy(asset, @bank, asset.bids[0][:price])
+          asset.clear_bids
+          asset.bidders.each  { |b| b.clear_bids }
           asset #return value
         else
           

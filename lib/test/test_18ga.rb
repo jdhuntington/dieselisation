@@ -59,6 +59,7 @@ class TestGameFlow < Test::Unit::TestCase
     assert(!(inst.current_player.bid_on_private(pvt, 30)))
     assert(!(inst.current_player.bid_on_private(pvt, 452)))
     assert(inst.current_player.bid_on_private(pvt, 40))
+    assert_equal(pvt.bidders, [inst.current_player])
     pvt2 = inst.privates['wsr']
     assert(!(inst.current_player.bid_on_private(pvt2, 412)))
     assert(inst.current_player.bid_on_private(pvt2, 400))
@@ -153,6 +154,7 @@ class TestGameFlow < Test::Unit::TestCase
     assert_equal(inst.auction_private, inst.privates['wsr'])
     assert(p2.assets.include?(inst.privates['wsr']))
     assert_equal(p2.balance, 450 - 75)
+    assert_equal(p2.bids_total, 0)
   end
   
   
