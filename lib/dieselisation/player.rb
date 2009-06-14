@@ -40,6 +40,14 @@ module Dieselisation
     def clear_bids(asset)
       @bids.delete(asset.name) if @bids.has_key?(asset.name)
     end
+
+    def to_json
+     { :name => @name,
+      :balance => @balance,
+      :assets => @assets,
+      :seat_order => @seat_order
+    }.to_json
+    end
     
   end
 end
