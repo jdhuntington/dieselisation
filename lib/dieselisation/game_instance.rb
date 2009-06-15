@@ -139,9 +139,9 @@ module Dieselisation
       @players = {}
       starting_cash = @implementation::CONFIG[:player_init][@num_players][:start_money]
       order = (1..@num_players).to_a.sort{rand}
-      players.each do |id, player|
+      players.each_with_index do |player, id|
         seat = order.shift
-        @players["id#{seat}"] = Player.new({:name => player[:name], :balance => starting_cash,
+        @players["id#{seat}"] = Player.new({:name => player.display_name, :balance => starting_cash,
                                    :seat_order => seat})
       end
     end

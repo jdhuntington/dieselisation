@@ -8,3 +8,4 @@ deps
 db/*.sqlite3
 *#*
 config/rpx.yml
+.emacs-project

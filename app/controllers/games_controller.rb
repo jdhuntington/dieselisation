@@ -62,6 +62,7 @@ class GamesController < ApplicationController
   end
 
   def play
-    @game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18GA)
+    @game = Game.find(params[:id])
+    @game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18GA, @game.users)
   end
 end
