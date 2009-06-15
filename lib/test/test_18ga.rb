@@ -112,6 +112,22 @@ class TestGameFlow < Test::Unit::TestCase
     assert(inst.bank.assets.include?(cheap_private))
   end
   
+  def test_game_instance_next_player
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
+    p1 = inst.current_player
+    inst.next_player
+    p2 = inst.current_player
+    assert(!(p1 == p2))
+    inst.next_player
+    p3 = inst.current_player
+    assert(!(p2 == p3))
+    inst.next_player
+    p4 = inst.current_player
+    assert(!(p3 == p4))
+    inst.next_player
+    assert(p1 == inst.current_player)
+  end
+  
   def test_buy_private
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
     cup = inst.current_player
@@ -155,6 +171,32 @@ class TestGameFlow < Test::Unit::TestCase
     assert(p2.assets.include?(inst.privates['wsr']))
     assert_equal(p2.balance, 450 - 75)
     assert_equal(p2.bids_total, 0)
+  end
+  
+  def test_private_auction
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
+    p1 = inst.current_player
+    mid = inst.privates['mid']
+    assert(p1.bid_on_private(mid, 70))
+    inst.next_player
+    p2 = inst.current_player
+    assert(p2.bid_on_private(mid, 75))
+    inst.next_player
+    p3 = inst.current_player
+    assert(p3.bid_on_private(mid, 85))
+    assert_equal(mid.bids.length, 3)
+    assert_equal(mid.highest_bidder, p3)
+    inst.next_player
+    p4 = inst.current_player
+    cheap_private = inst.player_options[:buy_private][:private]
+    p4.buy(cheap_private, inst.bank, cheap_private.par)
+    options = inst.player_options
+    assert_equal(options.keys, [:auction_private])
+    assert_equal(options[:auction_private][:private], mid)
+    assert_equal(mid.bidders, [p1, p2, p3])
+    inst.next_player
+    assert_equal(inst.current_player, p1)
+    
   end
   
   

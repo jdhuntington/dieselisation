@@ -49,6 +49,17 @@ module Dieselisation
     
     def next_player
       # this will need a lot more conditions
+      options = player_options
+      if options.keys == [:auction_private]
+        # only players who have bid on the private, 
+        #   in seat order starting with the player after
+        #   the one who made the highest bid
+        high = options[:private].bidders.index(options[:private].highest_bidder)
+        @current_player = iterate_players(options[:private].bidders, 
+                          options[:private].bidders.index(high) + 1)
+        # @current_player = options[:private].highest_bidder
+      end
+            
       num = @current_player.seat_order + 1
       if num == @players.length + 1
         num = 1
@@ -59,6 +70,16 @@ module Dieselisation
           break
         end        
       end
+    end
+    
+    # takes the list of relavant players and the index of current one.  Returns the next.
+    # allows for iteration over a subset of players, for auctions, etc.
+    def iterate_players(list, current)
+      num = list[current] + 1
+      if num == list.length + 1
+        num = 0
+      end
+      list[num]
     end
     
     # this is very 18GA specific
