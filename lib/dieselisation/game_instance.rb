@@ -51,12 +51,18 @@ module Dieselisation
       # this will need a lot more conditions
       options = player_options
       if options.keys == [:auction_private]
+        pvt_for_auction = options[:auction_private][:private]
         # only players who have bid on the private, 
         #   in seat order starting with the player after
         #   the one who made the highest bid
-        high = options[:private].bidders.index(options[:private].highest_bidder)
-        @current_player = iterate_players(options[:private].bidders, 
-                          options[:private].bidders.index(high) + 1)
+        high_idx = pvt_for_auction.bidders.index(pvt_for_auction.highest_bidder)
+        if high_idx + 1 == pvt_for_auction.bidders.length
+          player_idx = 0
+        else
+          player_idx = high_idx + 1
+        end
+        @current_player = iterate_players(pvt_for_auction.bidders, 
+                                  pvt_for_auction.bidders[player_idx])
         # @current_player = options[:private].highest_bidder
       end
             
@@ -75,7 +81,7 @@ module Dieselisation
     # takes the list of relavant players and the index of current one.  Returns the next.
     # allows for iteration over a subset of players, for auctions, etc.
     def iterate_players(list, current)
-      num = list[current] + 1
+      num = list.index(current) + 1
       if num == list.length + 1
         num = 0
       end
@@ -139,9 +145,9 @@ module Dieselisation
       @players = {}
       starting_cash = @implementation::CONFIG[:player_init][@num_players][:start_money]
       order = (1..@num_players).to_a.sort{rand}
-      players.each_with_index do |player, id|
+      players.each do |player|
         seat = order.shift
-        @players["id#{seat}"] = Player.new({:name => player.display_name, :balance => starting_cash,
+        @players["id#{seat}"] = Player.new({:name => player, :balance => starting_cash,
                                    :seat_order => seat})
       end
     end

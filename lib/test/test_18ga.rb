@@ -35,7 +35,7 @@ class TestGameFlow < Test::Unit::TestCase
   end
   
   def test_bank
-    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     assert(inst.bank.balance == 6200)
     assert(inst.bank.withdrawl(200) == 6000)
     assert(inst.bank.deposit(325) == 6325)
@@ -53,7 +53,7 @@ class TestGameFlow < Test::Unit::TestCase
   end
   
   def test_player
-    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     assert(inst.players['id3'].balance == 450)
     pvt = inst.privates['mid']
     assert(!(inst.current_player.bid_on_private(pvt, 30)))
@@ -67,7 +67,7 @@ class TestGameFlow < Test::Unit::TestCase
   end
   
   def test_private
-    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     next_player = inst.players['id2']
     assert_equal(inst.privates['mid'].highest_bid, 35)
     assert_equal(inst.privates['mid'].bid(inst.current_player, 40), 
@@ -84,9 +84,10 @@ class TestGameFlow < Test::Unit::TestCase
   end
 
   def test_game_4p_setup
-    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     assert(inst.num_players == 4)
-    assert(PLAYERS.include?(inst.players['id1'].name), inst.players['id1'].name)
+    puts PLAYERS.inspect
+    assert(PLAYERS.include?(inst.players['id1'].name), inst.players['id1'].inspect)
     
     assert(inst.privates.length == 5)
     assert_equal(inst.privates['ltr'].par, 20)
@@ -195,7 +196,7 @@ class TestGameFlow < Test::Unit::TestCase
     assert_equal(options[:auction_private][:private], mid)
     assert_equal(mid.bidders, [p1, p2, p3])
     inst.next_player
-    assert_equal(inst.current_player, p1)
+    assert_equal(inst.current_player, p3)
     
   end
   
