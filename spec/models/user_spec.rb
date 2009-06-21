@@ -8,7 +8,11 @@ describe User do
       g2 = Factory.create(:game)
       g3 = Factory.create(:game)
       u = Factory.create(:player)
+      u0 = Factory.create(:player)
+      u1 = Factory.create(:player)
       [g0,g1,g2,g3].each do |g|
+        g.add_player u0
+        g.add_player u1
         g.add_player u
         g.start!
       end

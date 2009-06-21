@@ -33,6 +33,11 @@ class TestGameFlow < Test::Unit::TestCase
     end
     assert(PLAYERS.include?(seat['id1'].name))
   end
+
+  def test_player_should_keep_track_of_a_unique_identifier # For association with the logged in user
+    p = Dieselisation::Player.new({ :identifier => 'abcdef'})
+    assert_equal 'abcdef', p.unique_identifer
+  end
   
   def test_bank
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)

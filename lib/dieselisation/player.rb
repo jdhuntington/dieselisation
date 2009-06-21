@@ -1,12 +1,13 @@
 module Dieselisation
   class Player < Base
-    attr_reader :name, :balance, :assets, :seat_order, :bids
+    attr_reader :name, :balance, :assets, :seat_order, :bids, :unique_identifer
     
     def initialize(params={ })
       @name = params[:name]
       @balance = params[:balance]
       @assets = []
       @seat_order = params[:seat_order]
+      @unique_identifer = params[:identifier]
       @bids = {}
     end
     

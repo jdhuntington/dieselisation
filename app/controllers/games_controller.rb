@@ -63,6 +63,12 @@ class GamesController < ApplicationController
 
   def play
     @game = Game.find(params[:id])
-    @game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18GA, @game.users)
+    @game_instance = @game.game_instance
   end
+
+#   def act
+#     @game = Game.find(params[:id])
+#     @game.take_action(current_user.id, :this_is_a_message)
+#     @game.persist!
+#   end
 end

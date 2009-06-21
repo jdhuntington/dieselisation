@@ -1,6 +1,7 @@
 class Game < ActiveRecord::Base
   has_many :seatings
   has_many :users, :through => :seatings
+  has_one :game_state
   belongs_to :owner, :class_name => 'User'
 
   validates_presence_of :status, :owner_id, :name
@@ -11,6 +12,8 @@ class Game < ActiveRecord::Base
 
   before_save :strip_whitespace
   before_create :add_owner_to_game
+
+  attr_writer :game_instance
 
   def current_player=(player)
     new_seating = seatings.find_by_user_id(player.id)
@@ -41,7 +44,9 @@ class Game < ActiveRecord::Base
   def start!
     self.status = 'active'
     self.current_player = users[rand(users.length)]
-    self.save!
+    @game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18GA, users)
+    persist!
+    save!
   end
 
   def owner_name
@@ -56,6 +61,15 @@ class Game < ActiveRecord::Base
     raise "Unable to join game" unless joinable?
     users << player
     start! if users.length >= self.max_players
+  end
+
+  def game_instance
+    @game_instance ||= (game_state && game_state.game_instance)
+  end
+
+  def persist!
+    self.game_state = GameState.create!(:game_instance => game_instance)
+    self.save!
   end
 
   protected

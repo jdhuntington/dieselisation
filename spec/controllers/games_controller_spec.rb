@@ -88,6 +88,7 @@ describe GamesController do
     end
 
     it 'should not work if the game is not new' do
+      3.times { @game.add_player Factory(:player) }
       @game.start!
       post :join, :id => @game.id
       flash[:error].should include("started")
@@ -144,6 +145,7 @@ describe GamesController do
   describe '#start' do
     it "should set the game's status to active" do
       game = Factory.create(:game)
+      3.times { game.add_player Factory(:player) }
       session[:user_id] = game.owner.id
       put :start, :id => game.id
       game.reload

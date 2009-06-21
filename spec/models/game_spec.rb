@@ -43,6 +43,29 @@ describe Game do
       g.start!
       g.current_player.should_not be_nil
     end
+
+    it 'should persist a new game state' do
+      g = Factory(:game)
+      3.times { g.add_player Factory(:player) }
+      g.expects(:persist!)
+      g.start!
+    end
+  end
+
+  describe '#game_instance' do
+    it 'should load the game state from game_state' do
+      g = Factory(:game)
+      g.expects(:game_state).at_least_once.returns(stub_everything('gamestate', :game_instance => :something))
+      g.game_instance
+      assert_equal :something, g.game_instance
+    end
+    
+    it 'should cache the value' do
+      g = Factory(:game)
+      g.game_instance = :something
+      g.expects(:game_state).never
+      assert_equal :something, g.game_instance
+    end
   end
 
   describe 'owner' do
@@ -89,7 +112,9 @@ describe Game do
     end
 
     it 'should not be joinable if it has started' do
+      Dieselisation::GameInstance.stubs(:new).returns(:dummy)
       g = Factory.create(:game)
+      g.stubs(:persist!)
       g.start!
       g.should_not be_joinable
     end
