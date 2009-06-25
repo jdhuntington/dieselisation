@@ -16,7 +16,9 @@ module Dieselisation
         # puts asset.highest_bid + 5
         if bid >= (asset.highest_bid + 5)
           @bids[asset.name] = bid
-          asset.bid(self, bid)          
+          asset.bid(self, bid)
+        else
+          false
         end
       else
         false

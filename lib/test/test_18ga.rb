@@ -166,18 +166,34 @@ class TestGameFlow < Test::Unit::TestCase
     assert(p3.assets.include?(options[:buy_private][:private]))
     assert(!(inst.bank.assets.include?(cheap_private)))
     assert_equal(inst.bank.balance, 6220 + price)
-    assert_equal(inst.player_options.keys, [:auction_private])
     # should trigger immediate buy of wsr by p2
-    assert_equal(inst.auction_private, inst.privates['wsr'])
+    # assert_equal(inst.player_options.keys, [:private_auction_bid, :private_auction_pass])
+    assert(options.keys.include?(:bid_on_private))
+    assert(options.keys.include?(:buy_private))
+    assert_equal(inst.auction_private, false)
     assert(p2.assets.include?(inst.privates['wsr']))
     assert_equal(p2.balance, 450 - 75)
     assert_equal(p2.bids_total, 0)
+  end
+  
+  def test_instance_iterate_player
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
+    p1 = inst.current_player
+    p2 = inst.iterate_players(inst.players.map {|id, p| p}, p1)
+    assert_equal(p2, inst.players['id2'])
+    p3 = inst.iterate_players(inst.players.map {|id, p| p}, p2)
+    assert_equal(p3, inst.players['id3'])
+    p4 = inst.iterate_players(inst.players.map {|id, p| p}, p3)
+    assert_equal(p4, inst.players['id4'])
+    np = inst.iterate_players(inst.players.map {|id, p| p}, p4)
+    assert_equal(np, p1)
   end
   
   def test_private_auction
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, INST[:players])
     p1 = inst.current_player
     mid = inst.privates['mid']
+    # players 1-3 bid on mid
     assert(p1.bid_on_private(mid, 70))
     inst.next_player
     p2 = inst.current_player
@@ -189,14 +205,21 @@ class TestGameFlow < Test::Unit::TestCase
     assert_equal(mid.highest_bidder, p3)
     inst.next_player
     p4 = inst.current_player
+    # p4 buys ltr
     cheap_private = inst.player_options[:buy_private][:private]
     p4.buy(cheap_private, inst.bank, cheap_private.par)
+    # auction for mid starts with other 3 players
     options = inst.player_options
-    assert_equal(options.keys, [:auction_private])
-    assert_equal(options[:auction_private][:private], mid)
+    assert_equal(options.keys, [:private_auction_bid, :private_auction_pass])
+    assert_equal(options[:private_auction_bid], options[:private_auction_pass])
+    assert_equal(options[:private_auction_bid][:private], mid)
     assert_equal(mid.bidders, [p1, p2, p3])
-    inst.next_player
-    assert_equal(inst.current_player, p3)
+    # p1 starts the bidding
+    assert(inst.next_player)
+    assert_equal(inst.current_player, p1)
+    assert(p1.bid_on_private(mid, 90))
+    assert_equal(mid.highest_bid, 90)
+    
     
   end
   
