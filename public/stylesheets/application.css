@@ -16,7 +16,7 @@ body { background: #eaeaea; }
 #header a, #header a:link, #header a:visited { color: #fff }
 #header a:hover, #header a:active { background: #050; }
 #header a#dashboard { float: left; margin: 5px 0 0 40px; }
-#footer { margin: 20px 0px; font-size: 90%; color: #444; padding: 4px 20px; background: #ccc; }
+#footer { margin: 20px 0 0; font-size: 90%; color: #444; padding: 4px 20px; background: #ccc; }
 
 #content { margin: 10px 20px; }
 

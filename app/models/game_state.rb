@@ -1,3 +1,5 @@
+require 'dieselisation'
+
 class GameState < ActiveRecord::Base
   belongs_to :game
   attr_writer :game_instance
