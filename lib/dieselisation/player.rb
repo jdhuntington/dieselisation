@@ -6,7 +6,7 @@ module Dieselisation
       @name = params[:name]
       @balance = params[:balance]
       @assets = []
-      @identifer = params[:identifier]
+      @identifier = params[:identifier]
       @bids = {}
     end
     
@@ -44,7 +44,7 @@ module Dieselisation
     end
 
     def to_json
-     { :name => @name,
+     { :identifier => @identifier,
       :balance => @balance,
       :assets => @assets
     }.to_json

@@ -10,6 +10,15 @@ module Dieselisation
       @owner = 'bank'
       @bids = []
     end
+
+    def to_json
+      { :name => @name,
+      :par => @par,
+      :revenue => @revenue,
+      :special => @special,
+      :owner => @owner,
+      :bids => @bids }.to_json
+    end
     
     def bid(player, price)
       if price >= (highest_bid + 5)

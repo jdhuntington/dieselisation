@@ -3,7 +3,9 @@
   <% if @current_user == @game.owner %>
     <div class="owner-actions">
     <%= custom_button_to 'Edit', edit_game_url(@game), :class => 'edit' %>
-    <% unless @game.started? %>
+    <% if @game.started? %>
+      <%= custom_button_to 'Play!', play_game_url(@game), :class => 'start', :method => 'get' %>
+    <% else %>
       <%= custom_button_to 'Start game', start_game_url(@game), :class => 'start', :method => 'put' %>
     <% end %>
     </div>

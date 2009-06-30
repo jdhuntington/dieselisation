@@ -44,7 +44,7 @@ class Game < ActiveRecord::Base
   def start!
     self.status = 'active'
     self.current_player = users[rand(users.length)]
-    @game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18GA, users)
+    @game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18GA, users.map(&:id))
     persist!
     save!
   end
