@@ -154,8 +154,8 @@ module Dieselisation
       order = (1..@num_players).to_a.sort{rand}
       players.each do |player|
         seat = order.shift
-        @players["id#{seat}"] = Player.new({:name => player.id, :balance => starting_cash,
-                                   :seat_order => seat, :identifier => player.id})
+        @players["id#{seat}"] = Player.new({:name => player, :balance => starting_cash,
+                                   :seat_order => seat, :identifier => player.object_id})
       end
     end
     

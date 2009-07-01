@@ -200,7 +200,7 @@ class TestGameFlow < Test::Unit::TestCase
     mid = inst.privates['mid']
     # players 1-3 bid on mid
     assert(p1.bid_on_private(mid, 70))
-    inst.next_player
+    assert(inst.next_player)
     p2 = inst.current_player
     assert(p2.bid_on_private(mid, 75))
     inst.next_player
@@ -215,7 +215,7 @@ class TestGameFlow < Test::Unit::TestCase
     p4.buy(cheap_private, inst.bank, cheap_private.par)
     # auction for mid starts with other 3 players
     options = inst.player_options
-    assert_equal(options.keys, [:private_auction_bid, :private_auction_pass])
+    assert_equal(options.keys.sort, [:private_auction_bid, :private_auction_pass])
     assert_equal(options[:private_auction_bid], options[:private_auction_pass])
     assert_equal(options[:private_auction_bid][:private], mid)
     assert_equal(mid.bidders, [p1, p2, p3])
