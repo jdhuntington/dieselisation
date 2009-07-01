@@ -1,13 +1,12 @@
 module Dieselisation
   class Player < Base
-    attr_reader :name, :balance, :assets, :seat_order, :bids, :unique_identifer
+    attr_reader :name, :balance, :assets, :bids, :identifier
     
     def initialize(params={ })
       @name = params[:name]
       @balance = params[:balance]
       @assets = []
-      @seat_order = params[:seat_order]
-      @unique_identifer = params[:identifier]
+      @identifier = params[:identifier]
       @bids = {}
     end
     
@@ -45,11 +44,10 @@ module Dieselisation
     end
 
     def to_json
-     { :name => @name,
-      :balance => @balance,
-      :assets => @assets,
-      :seat_order => @seat_order
-    }.to_json
+      { :identifier => @identifier,
+       :balance => @balance,
+       :assets => @assets
+       }.to_json
     end
     
   end

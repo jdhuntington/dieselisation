@@ -63,6 +63,8 @@ class GamesController < ApplicationController
 
   def play
     @game = Game.find(params[:id])
+    @users_players = { }
+    @game.users.each { |p| @users_players[p.id] = p.display_name}
     @game_instance = @game.game_instance
   end
 

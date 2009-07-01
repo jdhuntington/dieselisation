@@ -1,15 +1,17 @@
 <% content_for :header do %>
-  <%= javascript_include_tag 'canvas', 'tiles', 'players' %>
+  <%= javascript_include_tag 'canvas', 'tiles', 'players', 'actions' %>
   <%= stylesheet_link_tag 'play', 'canvas' %>
 
   <script>
     var board = <%= @game_instance.board.to_json %>;
     var playersJson = <%= @game_instance.players.to_json %>;
-    var trains = null; // todo
-    var companies = null; // todo
-    var market = null; // todo
+    var actionsJson = <%= @game_instance.player_options.to_json %>;
+    var usersPlayers = <%= @users_players.to_json %>;
   </script>
 <% end %>
 
+<div id="actions"></div>
+<div class="clearall"></div>
 <div id="map"></div>
+<div class="clearall"></div>
 <div id="players"></div>

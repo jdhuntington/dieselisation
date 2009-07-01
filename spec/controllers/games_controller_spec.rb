@@ -162,4 +162,8 @@ describe GamesController do
       game.should_not be_started
     end
   end
+
+  describe '#act' do
+    it 'should only allow the game instance\'s current player to make an action'
+  end
 end

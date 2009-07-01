@@ -8,12 +8,10 @@ module Dieselisation
     SR = 'stock round'
     OR = 'operating round'
     
-    def initialize(implementation, players)
+    def initialize(implementation, player_ids)
       @implementation = implementation
-      @num_players = players.length
-      setup_players(players)
-      @priority = @players['id1']
-      @current_player = @priority
+      @num_players = player_ids.length
+      setup_players(player_ids)
       @current_round = @implementation::CONFIG[:rounds][0]
       @current_phase = @implementation::CONFIG[:phases][0]
       setup_privates
@@ -36,7 +34,15 @@ module Dieselisation
     end
     
     def current_player
-      @current_player
+      @players.first
+    end
+
+    # Set the current player
+    def current_player=(player) # TODO make sure player is actually a player, avoid loops
+      while current_player != player
+        go_to_next_player_skipping_checks!
+      end
+      player
     end
     
     def current_round
@@ -56,21 +62,14 @@ module Dieselisation
         #   in seat order starting with the player after
         #   the one who made the highest bid
 
-        @current_player = iterate_players(pvt_for_auction.bidders, 
+        self.current_player = iterate_players(pvt_for_auction.bidders, 
                                           pvt_for_auction.highest_bidder)
-        return @current_player
+        return current_player
       end
-            
-      num = @current_player.seat_order + 1
-      if num == @players.length + 1
-        num = 1
-      end
-      @players.each do |id,p|
-        if p.seat_order == num
-          @current_player = p
-          break
-        end        
-      end
+
+      player = @players.shift   # Get the first player, and take out of the players array
+      @players.push(player)     # Put the first player back in the array in last position
+      current_player
     end
     
     # takes the list of relavant players and the index of current one.  
@@ -82,7 +81,6 @@ module Dieselisation
         if num == list.length
           num = 0
         end
-        # puts "#{list.length}, #{num}"
         list[num]
       else
         false
@@ -106,9 +104,9 @@ module Dieselisation
             return options  
           elsif cheapest_pvt.bids.empty?
             # no bid on the cheapest private
-            options[:buy_private] = {:player => @current_player, :private => cheapest_pvt}
+            options[:buy_private] = {:player => current_player, :private => cheapest_pvt}
           end
-          options[:bid_on_private] = {:player => @current_player, 
+          options[:bid_on_private] = {:player => current_player, 
                                       :privates => @bank.assets - [cheapest_pvt]}
         end
         
@@ -148,15 +146,11 @@ module Dieselisation
       @board.normalize!
     end
     
-    def setup_players(players)
-      @players = {}
+    def setup_players(player_ids)
       starting_cash = @implementation::CONFIG[:player_init][@num_players][:start_money]
-      order = (1..@num_players).to_a.sort{rand}
-      players.each do |player|
-        seat = order.shift
-        @players["id#{seat}"] = Player.new({:name => player, :balance => starting_cash,
-                                   :seat_order => seat, :identifier => player.object_id})
-      end
+      @players = player_ids.map { |player_id| Player.new(:balance => starting_cash, 
+                                                         :identifier => player_id) }
+      @players.sort!{ rand }
     end
     
     def setup_privates
@@ -168,12 +162,15 @@ module Dieselisation
     end
     
     def setup_bank
-      starting_balance = @implementation::CONFIG[:bank] - 
-                                  (@players['id1'].balance * num_players)
-      @bank = Bank.new({:balance => starting_balance})
+      @bank = Bank.new(:balance => @implementation::CONFIG[:bank] - 
+                              (current_player.balance * num_players))
       @privates.each do |k, v|
         @bank << v
       end
+    end
+
+    def go_to_next_player_skipping_checks!
+      @players.push @players.shift
     end
   end
 end
