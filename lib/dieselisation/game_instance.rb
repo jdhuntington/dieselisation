@@ -37,6 +37,10 @@ module Dieselisation
       @players.first
     end
 
+    def current_player_identifier
+      current_player.identifier
+    end
+
     # Set the current player
     def current_player=(player) # TODO make sure player is actually a player, avoid loops
       while current_player != player

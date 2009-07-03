@@ -30,7 +30,7 @@ class Game < ActiveRecord::Base
   end
   
   def current_player
-    seatings.find_by_active(true).user
+    seatings.find_by_user_id(game_instance.current_player_identifier).user
   end
 
   def in_progress?

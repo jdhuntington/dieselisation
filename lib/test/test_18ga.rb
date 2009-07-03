@@ -1,5 +1,7 @@
 require "test/unit"
 require 'yaml'
+require 'rubygems'
+require 'mocha'
 
 require "../dieselisation"
 Dir.glob('../dieselisation/*.rb').each do |mod|
@@ -235,5 +237,11 @@ class TestGameFlow < Test::Unit::TestCase
     inst.send(:go_to_next_player_skipping_checks!)
     assert_equal second_player, inst.players.first
     assert_equal first_player, inst.players.last
+  end
+
+  def test_current_player_identifier_should_return_the_identifier_of_the_current_player
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
+    inst.stubs(:current_player).returns(stub_everything('player', :identifier => :theid))
+    assert_equal :theid, inst.current_player_identifier
   end
 end

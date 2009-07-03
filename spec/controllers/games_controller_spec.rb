@@ -164,6 +164,27 @@ describe GamesController do
   end
 
   describe '#act' do
-    it 'should only allow the game instance\'s current player to make an action'
+    before :each do
+      @game = Factory.create(:game)
+      2.times { @game.add_player(Factory.create(:player)) }
+      @game.start!
+      @current_player = @game.current_player
+      @non_current_player = (@game.users - [@current_player]).first
+      Game.stubs(:find).returns(@game)
+    end
+    
+    it 'should not allow the a non-current player to make an action' do
+      session[:user_id] = @non_current_player.id
+      @game.expects(:persist!).never
+      put :act, :id => @game.id, :action => 'something'
+      flash[:error].should include("not your turn")      
+    end
+    
+    it 'should allow the game instance\'s current player to make an action' do
+      session[:user_id] = @current_player.id
+      @game.expects(:persist!)
+      put :act, :id => @game.id, :action => 'something'
+      flash[:notice].should include("saved")
+    end
   end
 end
