@@ -147,12 +147,20 @@ describe Game do
   describe '#current_player' do
     it 'should return the player associated with the uniq_id of the game instaces current player' do
       g = Factory.create(:game)
+      g.stubs(:status).returns('active')
       instance = stub 'instance'
       g.stubs(:game_instance).returns(stub_everything('instance', :current_player_identifier => g.owner.id))
       g.current_player.should == g.owner
     end
 
-    it 'should raise an exception if called when game is not started' 
+    it 'should raise an exception if called when game is not started' do
+      g = Factory.create(:game)
+      instance = stub 'instance'
+      g.stubs(:game_instance).returns(stub_everything('instance', :current_player_identifier => g.owner.id))
+      lambda {
+        g.current_player
+      }.should raise_error
+    end
 
   end
 end
