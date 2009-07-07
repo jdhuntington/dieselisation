@@ -227,7 +227,7 @@ class TestGameFlow < Test::Unit::TestCase
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
     assert(!(inst.everybody_passed?))
     ltr = inst.privates['ltr']
-    assert(ltr.)
+    # assert(ltr.)
     
   end
   

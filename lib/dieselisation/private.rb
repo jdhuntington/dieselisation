@@ -28,8 +28,8 @@ module Dieselisation
       end
     end
     
-    def pass # need player
-      @bids << {'pass'}
+    def pass(player) # need player
+      @bids << {:player => player, :price => 'pass'}
     end
     
     def highest_bid
