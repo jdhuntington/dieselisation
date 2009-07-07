@@ -1,5 +1,5 @@
 <% content_for :header do %>
-  <%= javascript_include_tag 'canvas', 'tiles', 'players', 'actions' %>
+  <%= javascript_include_tag 'canvas', 'tiles', 'players' %>
   <%= stylesheet_link_tag 'play', 'canvas' %>
 
   <script>
@@ -10,7 +10,10 @@
   </script>
 <% end %>
 
-<div id="actions"></div>
+<div id="current-player"><%= @game.current_player.display_name %></div>
+<div id="actions">
+  <%= render :partial => 'action', :collection => @game_instance.player_options %>
+</div>
 <div class="clearall"></div>
 <div id="map"></div>
 <div class="clearall"></div>

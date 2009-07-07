@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
   end
 
   def login_as
-    raise "INTRUDER ALERT!" unless ENV['RAILS_ENV'] == 'development'
+    raise "INTRUDER ALERT!" unless %w{ development cucumber test}.include?(ENV['RAILS_ENV'])
     session[:user_id] = User.find_or_create_by_username params[:username]
     redirect_to dashboard_url
   end
