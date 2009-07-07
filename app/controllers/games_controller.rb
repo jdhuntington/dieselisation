@@ -68,9 +68,14 @@ class GamesController < ApplicationController
     @game_instance = @game.game_instance
   end
 
-#   def act
-#     @game = Game.find(params[:id])
-#     @game.take_action(current_user.id, :this_is_a_message)
-#     @game.persist!
-#   end
+  def act
+    @game = Game.find(params[:id])
+    if current_user == @game.current_player
+      @game.persist!
+      flash[:notice] = 'Action saved.'
+    else
+      flash[:error] = 'It is not your turn!'
+    end
+    redirect_to play_game_url(@game)
+  end
 end

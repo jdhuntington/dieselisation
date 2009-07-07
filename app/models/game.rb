@@ -30,7 +30,8 @@ class Game < ActiveRecord::Base
   end
   
   def current_player
-    seatings.find_by_active(true).user
+    raise "Cannot have current player without having a started game" if self.status == 'new'
+    seatings.find_by_user_id(game_instance.current_player_identifier).user
   end
 
   def in_progress?

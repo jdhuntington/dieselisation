@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/map_parser')
 
 module Dieselisation
   class GameInstance < Base
-    attr :players
+    attr_accessor :players
     attr_reader :num_players, :privates, :p_opts
     
     SR = 'stock round'
@@ -35,6 +35,10 @@ module Dieselisation
     
     def current_player
       @players.first
+    end
+
+    def current_player_identifier
+      current_player.identifier
     end
 
     # Set the current player
@@ -92,27 +96,27 @@ module Dieselisation
     # to be called frequently and can then invoke any non-player actions
     # and events that need to happen given the current game state
     def player_options
-      options = {}
+      options = []
       if @current_round == SR
         if (@bank.assets.map { |a| a.class == Dieselisation::Private }).include?(true)
           # the bank still owns a private
           cheapest_pvt = @bank.cheapest_private
-          if self.auction_private()
-            
-            options[:private_auction_bid] = {:players => cheapest_pvt.bidders, 
-                                             :private => cheapest_pvt}
-            options[:private_auction_pass] = options[:private_auction_bid]
+          if auction_private
+            options << Action.new(:private_auction_bid, cheapest_private)
+            options << Action.new(:private_auction_pass, cheapest_private)
             return options  
           elsif cheapest_pvt.bids.empty?
             # no bid on the cheapest private
-            options[:buy_private] = {:player => current_player, :private => cheapest_pvt}
+            options << Action.new(:buy_private, cheapest_pvt)
           end
-          options[:bid_on_private] = {:player => current_player, 
-                                      :privates => @bank.assets - [cheapest_pvt]}
+          options << Action.new(:buy_private, cheapest_pvt)
+          (@bank.assets - [cheapest_pvt]).each do |private|
+            options << Action.new(:bid_on_private, private)
+          end
         end
         
       elsif @current_round == OR
-        
+        raise 'unimplemented operating round'
       else
         raise 'Unknown round.'
       end
