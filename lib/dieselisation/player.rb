@@ -25,6 +25,10 @@ module Dieselisation
       end
     end
     
+    def pass(asset)
+      asset.pass
+    end
+    
     def buy(asset, owning_entity, price)
       @balance -= price
       owning_entity.sell(asset, price)

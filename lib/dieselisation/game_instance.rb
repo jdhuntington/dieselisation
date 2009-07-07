@@ -97,7 +97,8 @@ module Dieselisation
         if (@bank.assets.map { |a| a.class == Dieselisation::Private }).include?(true)
           # the bank still owns a private
           cheapest_pvt = @bank.cheapest_private
-          if auction_private
+          if self.auction_private()
+            
             options[:private_auction_bid] = {:players => cheapest_pvt.bidders, 
                                              :private => cheapest_pvt}
             options[:private_auction_pass] = options[:private_auction_bid]
@@ -133,6 +134,17 @@ module Dieselisation
           return false
         else
           return true
+        end
+      else
+        false
+      end
+    end
+    
+    def everybody_passed?(players_involved = num_players)
+      asset = @bank.cheapest_private
+      if asset.bids.length >= players_involved
+        if asset.bids[-(players_involved),players_involved].uniq == 'pass'
+          true
         end
       else
         false

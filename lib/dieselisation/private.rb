@@ -28,6 +28,10 @@ module Dieselisation
       end
     end
     
+    def pass # need player
+      @bids << {'pass'}
+    end
+    
     def highest_bid
       unless @bids.empty?
         (@bids.map { |b| b[:price] }).sort.last

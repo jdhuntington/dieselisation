@@ -26,7 +26,7 @@ class TestGameFlow < Test::Unit::TestCase
   # For association with the logged in user
   def test_player_should_keep_track_of_a_unique_identifier 
     p = Dieselisation::Player.new({ :identifier => "abcdef"})
-    puts p.inspect
+    # puts p.inspect
     assert_equal("abcdef", p.identifier)
   end
   
@@ -198,17 +198,34 @@ class TestGameFlow < Test::Unit::TestCase
     cheap_private = inst.player_options[:buy_private][:private]
     p4.buy(cheap_private, inst.bank, cheap_private.par)
     # auction for mid starts with other 3 players
+    assert(inst.next_player)
     options = inst.player_options
     assert_equal(options.keys.sort, [:private_auction_bid, :private_auction_pass])
     assert_equal(options[:private_auction_bid], options[:private_auction_pass])
     assert_equal(options[:private_auction_bid][:private], mid)
     assert_equal(mid.bidders, [p1, p2, p3])
     # p1 starts the bidding
-    assert(inst.next_player)
     assert_equal(inst.current_player, p1)
     assert(p1.bid_on_private(mid, 90))
     assert_equal(mid.highest_bid, 90)
+    assert(inst.next_player)
+    options = inst.player_options
+    assert_equal(options.keys.sort, [:private_auction_bid, :private_auction_pass])
+    assert_equal(options[:private_auction_bid], options[:private_auction_pass])
+    assert_equal(options[:private_auction_bid][:private], mid)
+    assert_equal(p2, inst.current_player)
+    # p2 passes - stays in the bidding
+    assert(inst.current_player.pass(mid))
+    options = inst.player_options
     
+    
+  end
+  
+  def test_inst_everybody_passed_on_a_turn
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
+    assert(!(inst.everybody_passed?))
+    ltr = inst.privates['ltr']
+    assert(ltr.)
     
   end
   
