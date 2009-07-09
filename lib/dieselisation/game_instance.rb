@@ -58,16 +58,12 @@ module Dieselisation
     end
     
     def next_player
-      # this will need a lot more conditions
-      options = player_options
-      if options.keys == [:private_auction_bid, :private_auction_pass]
-        pvt_for_auction = options[:private_auction_bid][:private]
-        # only players who have bid on the private, 
-        #   in seat order starting with the player after
-        #   the one who made the highest bid
-
-        self.current_player = iterate_players(pvt_for_auction.bidders, 
-                                          pvt_for_auction.highest_bidder)
+      if auction_private
+        # only players who have bid on the private, in seat order
+        # starting with the player after the one who made the highest
+        # bid
+        self.current_player = iterate_players(private_for_auction.bidders, 
+                                          private_for_auction.highest_bidder)
         return current_player
       end
 
@@ -122,6 +118,12 @@ module Dieselisation
       end
       
       return options
+    end
+
+    # TODO implement
+    # returns private currently being auctioned
+    def private_for_auction
+      raise "implement me"
     end
     
     # returns false if the private was bought or no auction

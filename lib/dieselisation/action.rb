@@ -12,5 +12,13 @@ module Dieselisation
     def id
       "#{@type}_#{@target.nickname}"
     end
+
+    def type
+      @type
+    end
+
+    def target
+      @target
+    end
   end
 end
