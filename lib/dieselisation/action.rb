@@ -8,5 +8,9 @@ module Dieselisation
     def description
       "Buy #{@target.name} ($#{@target.par})"
     end
+
+    def id
+      "#{@type}_#{@target.nickname}"
+    end
   end
 end

@@ -34,3 +34,9 @@ end
 Then /^I should see the option to buy the "([^\"]*)" for (\d+)$/ do |name, price|
   assert get_action_buttons_text.detect { |button| button.index(name) }
 end
+
+When /^I choose to buy the "([^\"]*)"$/ do |arg1|
+  button = get_action_buttons.detect { |button| button.css("span").inner_html.index(arg1) }
+  p button.css('a').id
+#  click_link button.css('a').id
+end
