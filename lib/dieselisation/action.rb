@@ -1,7 +1,9 @@
 module Dieselisation
   class Action
-    def initialize(type, target)
-      @type = type
+    attr_reader :name, :target
+    
+    def initialize(name, target)
+      @name = name
       @target = target
     end
 

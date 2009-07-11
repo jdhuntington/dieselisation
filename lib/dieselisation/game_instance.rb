@@ -60,8 +60,9 @@ module Dieselisation
     def next_player
       # this will need a lot more conditions
       options = player_options
-      if options.keys == [:private_auction_bid, :private_auction_pass]
-        pvt_for_auction = options[:private_auction_bid][:private]
+      if options.any? {|o| o.name == :private_auction_bid}
+        pvt_for_auction = (options.find {|o| o.name == :private_auction_bid}).target
+        # pvt_for_auction = options[:private_auction_bid][:private]
         # only players who have bid on the private, 
         #   in seat order starting with the player after
         #   the one who made the highest bid
@@ -109,7 +110,7 @@ module Dieselisation
             # no bid on the cheapest private
             options << Action.new(:buy_private, cheapest_pvt)
           end
-          options << Action.new(:buy_private, cheapest_pvt)
+          # options << Action.new(:buy_private, cheapest_pvt)
           (@bank.assets - [cheapest_pvt]).each do |private|
             options << Action.new(:bid_on_private, private)
           end

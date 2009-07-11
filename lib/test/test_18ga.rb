@@ -94,14 +94,17 @@ class TestGameFlow < Test::Unit::TestCase
     assert(inst.current_phase == 1)
   end
     
-  def test_game_instance
+  def test_game_instance_initial_state
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
-    assert(inst.player_options.keys.include?(:bid_on_private))
-    assert(inst.player_options.keys.include?(:buy_private))
-    assert_equal(inst.player_options[:buy_private][:player], inst.current_player)
-    cheap_private = inst.player_options[:buy_private][:private]
-    assert_equal(cheap_private.name, 'Lexington Terminal RR')
-    assert(inst.bank.assets.include?(cheap_private))
+    opts = inst.player_options # initial options
+    assert_equal(Array, opts.class)
+    cheap_private = opts.detect {|o| o.name == :buy_private}
+    assert_equal('Lexington Terminal RR', cheap_private.target.name)
+    assert_equal(1, (opts.find_all {|o| o.name == :buy_private}).length)
+    assert_equal(4, (opts.find_all {|o| o.name == :bid_on_private}).length)
+    
+    assert(inst.bank.assets.include?(cheap_private.target))
+    
   end
   
   def test_game_instance_next_player
@@ -123,6 +126,7 @@ class TestGameFlow < Test::Unit::TestCase
   def test_buy_private
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     cup = inst.current_player
+    # puts inst.player_options.inspect
     cheap_private = inst.player_options[:buy_private][:private]
     cup.buy(cheap_private, inst.bank, cheap_private.par)
     assert_equal(cup.balance, 430)
