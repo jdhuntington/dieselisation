@@ -1,24 +1,6 @@
-UI Side
- * Dashboard - show recently created games
-
-Game Side
- ??
-
-Open Questions
- - Users are unique by the rpx identifier. What constraints should be placed on username/real name?
-
--- Done --
- * Start game
- * Edit account details
- * Site navigation
- * Cool buttons for common actions
- * Game details
-   * player limit
-   * comment
- * Start game automatically when player limit is reached
- * game list - open games only
- * Dashboard - sections should be [my active games where I am to act, my active games, my waiting games, my recently finished games]
-
-
--- Ignore --
- * Kick player from game
+Private Auction:
+ - Show other players and their money
+ - Try to bid more money than I have
+ - Try to bid less than the minimum bid
+ - Pass
+ - Show bids on all privates
