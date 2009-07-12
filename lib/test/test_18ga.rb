@@ -107,8 +107,6 @@ class TestGameFlow < Test::Unit::TestCase
     
     player_options_keys = inst.player_options.map { |opt| opt.type }
     
-    # assert(player_options_keys.include?(:bid_on_private))
-    # assert(player_options_keys.include?(:buy_private))
     cheap_private = inst.player_options.detect { |opt| opt.type == :buy_private }.target
     assert_equal(cheap_private.name, 'Lexington Terminal RR')
     assert(inst.bank.assets.include?(cheap_private))
@@ -186,13 +184,13 @@ class TestGameFlow < Test::Unit::TestCase
   def test_instance_iterate_player
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     p1 = inst.current_player
-    p2 = inst.iterate_players(inst.players.map {|p| p}, p1)
+    p2 = inst.send(:iterate_players, inst.players.map {|p| p}, p1)
     assert_equal(p2, inst.players[1])
-    p3 = inst.iterate_players(inst.players.map {|p| p}, p2)
+    p3 = inst.send(:iterate_players, inst.players.map {|p| p}, p2)
     assert_equal(p3, inst.players[2])
-    p4 = inst.iterate_players(inst.players.map {|p| p}, p3)
+    p4 = inst.send(:iterate_players, inst.players.map {|p| p}, p3)
     assert_equal(p4, inst.players[3])
-    np = inst.iterate_players(inst.players.map {|p| p}, p4)
+    np = inst.send(:iterate_players, inst.players.map {|p| p}, p4)
     assert_equal(np, p1)
   end
 

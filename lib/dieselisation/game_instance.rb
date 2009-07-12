@@ -83,21 +83,6 @@ module Dieselisation
       current_player
     end
     
-    # takes the list of relavant players and the index of current one.  
-    # Returns the next.
-    # allows for iteration over a subset of players, for auctions, etc.
-    def iterate_players(list, current)
-      if list.include?(current)
-        num = list.index(current) + 1
-        if num == list.length
-          num = 0
-        end
-        list[num]
-      else
-        false
-      end
-    end
-    
     # this is very 18GA specific
     # this is becoming the main event loop for the game.  I expect it
     # to be called frequently and can then invoke any non-player actions
@@ -201,5 +186,21 @@ module Dieselisation
     def go_to_next_player_skipping_checks!
       @players.push @players.shift
     end
+    
+    # takes the list of relavant players and the index of current one.  
+    # Returns the next.
+    # allows for iteration over a subset of players, for auctions, etc.
+    def iterate_players(list, current)
+      if list.include?(current)
+        num = list.index(current) + 1
+        if num == list.length
+          num = 0
+        end
+        list[num]
+      else
+        false
+      end
+    end
+    
   end
 end
