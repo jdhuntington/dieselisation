@@ -61,7 +61,7 @@ module Dieselisation
       # this will need a lot more conditions
       options = player_options
       if options.any? {|o| o.type == :private_auction_bid}
-        pvt_for_auction = (options.find {|o| o.name == :private_auction_bid}).target
+        pvt_for_auction = (options.find {|o| o.type == :private_auction_bid}).target
         # pvt_for_auction = options[:private_auction_bid][:private]
         # only players who have bid on the private, 
         #   in seat order starting with the player after
@@ -94,8 +94,8 @@ module Dieselisation
           # the bank still owns a private
           cheapest_pvt = @bank.cheapest_private
           if auction_private
-            options << Action.new(:private_auction_bid, cheapest_private)
-            options << Action.new(:private_auction_pass, cheapest_private)
+            options << Action.new(:private_auction_bid, cheapest_pvt)
+            options << Action.new(:private_auction_pass, cheapest_pvt)
             return options  
           elsif cheapest_pvt.bids.empty?
             # no bid on the cheapest private

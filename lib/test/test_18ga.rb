@@ -194,49 +194,53 @@ class TestGameFlow < Test::Unit::TestCase
     assert_equal(np, p1)
   end
 
-  # TODO fix
-#   def test_private_auction
-#     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
-#     p1 = inst.current_player
-#     mid = inst.privates['mid']
-#     # players 1-3 bid on mid
-#     assert(p1.bid_on_private(mid, 70))
-#     assert(inst.next_player)
-#     p2 = inst.current_player
-#     assert(p2.bid_on_private(mid, 75))
-#     inst.next_player
-#     p3 = inst.current_player
-#     assert(p3.bid_on_private(mid, 85))
-#     assert_equal(mid.bids.length, 3)
-#     assert_equal(mid.highest_bidder, p3)
-#     inst.next_player
-#     p4 = inst.current_player
-#     # p4 buys ltr
-#     cheap_private = inst.player_options[:buy_private][:private]
-#     p4.buy(cheap_private, inst.bank, cheap_private.par)
-#     # auction for mid starts with other 3 players
-#     assert(inst.next_player)
-#     options = inst.player_options
-#     assert_equal(options.keys.sort, [:private_auction_bid, :private_auction_pass])
-#     assert_equal(options[:private_auction_bid], options[:private_auction_pass])
-#     assert_equal(options[:private_auction_bid][:private], mid)
-#     assert_equal(mid.bidders, [p1, p2, p3])
-#     # p1 starts the bidding
-#     assert_equal(inst.current_player, p1)
-#     assert(p1.bid_on_private(mid, 90))
-#     assert_equal(mid.highest_bid, 90)
-#     assert(inst.next_player)
-#     options = inst.player_options
-#     assert_equal(options.keys.sort, [:private_auction_bid, :private_auction_pass])
-#     assert_equal(options[:private_auction_bid], options[:private_auction_pass])
-#     assert_equal(options[:private_auction_bid][:private], mid)
-#     assert_equal(p2, inst.current_player)
-#     # p2 passes - stays in the bidding
-#     assert(inst.current_player.pass(mid))
-#     options = inst.player_options
+  # TODO finish
+  def test_private_auction
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
+    p1 = inst.current_player
+    mid = inst.privates['mid']
+    # players 1-3 bid on mid
+    assert(p1.bid_on_private(mid, 70))
+    assert(inst.next_player)
+    p2 = inst.current_player
+    assert(p2.bid_on_private(mid, 75))
+    inst.next_player
+    p3 = inst.current_player
+    assert(p3.bid_on_private(mid, 85))
+    assert_equal(mid.bids.length, 3)
+    assert_equal(mid.highest_bidder, p3)
+    inst.next_player
+    p4 = inst.current_player
+    # p4 buys ltr
+    cheap_private = (inst.player_options.detect {|o| o.type == :buy_private}).target
+    p4.buy(cheap_private, inst.bank, cheap_private.par)
+    # auction for mid starts with other 3 players
+    assert(inst.next_player)
+    options = inst.player_options
+    option_keys = options.map { |opt| opt.type }
+    assert(option_keys.include?(:private_auction_bid))
+    assert(option_keys.include?(:private_auction_pass))
+    assert_equal(options[0].target, options[1].target)
     
+    assert_equal(options[0].target, mid)
+    assert_equal(mid.bidders, [p1, p2, p3])
+    # p1 starts the bidding
+    assert_equal(inst.current_player, p1)
+    assert(p1.bid_on_private(mid, 90)) # p1 bid
+    assert_equal(mid.highest_bid, 90)
+    assert(inst.next_player)
+    options = inst.player_options
+    option_keys = options.map { |opt| opt.type }
+    assert(option_keys.include?(:private_auction_bid))
+    assert(option_keys.include?(:private_auction_pass))
+    assert_equal(options[0].target, options[1].target)
+    assert_equal(options[0].target, mid)
+    assert_equal(p2, inst.current_player)
+    # p2 passes - stays in the bidding
+    # assert(inst.current_player.pass(mid))
+    options = inst.player_options
     
-# end
+end
   
   def test_inst_everybody_passed_on_a_turn
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
