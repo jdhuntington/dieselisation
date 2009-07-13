@@ -221,7 +221,6 @@ class TestGameFlow < Test::Unit::TestCase
     assert(option_keys.include?(:private_auction_bid))
     assert(option_keys.include?(:private_auction_pass))
     assert_equal(options[0].target, options[1].target)
-    
     assert_equal(options[0].target, mid)
     assert_equal(mid.bidders, [p1, p2, p3])
     # p1 starts the bidding
@@ -237,8 +236,10 @@ class TestGameFlow < Test::Unit::TestCase
     assert_equal(options[0].target, mid)
     assert_equal(p2, inst.current_player)
     # p2 passes - stays in the bidding
-    # assert(inst.current_player.pass(mid))
-    options = inst.player_options
+    assert(inst.current_player.pass(mid))
+    assert_equal({:player => p2, :price => 0}, mid.bids.last)
+    assert(inst.next_player)
+    # options = inst.player_options
     
 end
   

@@ -26,7 +26,7 @@ module Dieselisation
     end
     
     def pass(asset)
-      asset.pass
+      asset.pass(self)
     end
     
     def buy(asset, owning_entity, price)

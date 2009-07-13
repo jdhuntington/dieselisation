@@ -145,7 +145,8 @@ module Dieselisation
     def everybody_passed?(players_involved = num_players)
       asset = @bank.cheapest_private
       if asset.bids.length >= players_involved
-        if asset.bids[-(players_involved),players_involved].uniq == 'pass'
+        # treat 0 as a pass
+        if asset.bids[-(players_involved),players_involved].uniq == 0
           true
         end
       else
