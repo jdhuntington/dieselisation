@@ -9,6 +9,7 @@ module Dieselisation
       @special = params[:special]
       @owner = 'bank'
       @bids = []
+      @nickname = params[:nickname]
     end
 
     def to_json
@@ -18,6 +19,10 @@ module Dieselisation
       :special => @special,
       :owner => @owner,
       :bids => @bids }.to_json
+    end
+
+    def nickname
+      "private_#{@nickname}"
     end
     
     def bid(player, price)

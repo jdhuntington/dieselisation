@@ -1,4 +1,4 @@
-game = Dieselisation::GameInstance.new(Dieselisation::Game18GA)
+game = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3,4])
 
 game.board.sorted_rows.each do |row|
   row.each do |cell|

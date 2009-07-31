@@ -10,11 +10,16 @@
   </script>
 <% end %>
 
-<div id="current-player"><%= @game.current_player.display_name %></div>
-<div id="actions">
-  <%= render :partial => 'action', :collection => @game_instance.player_options %>
+<% if flash[:notice] %>
+<div class="notice">
+  <%= h flash[:notice] %>
 </div>
-<div class="clearall"></div>
-<div id="map"></div>
-<div class="clearall"></div>
-<div id="players"></div>
+<% end %>
+<% if flash[:error] %>
+<div class="error">
+  <%= h flash[:error] %>
+</div>
+<% end %>
+
+
+<%= render :partial => @game_instance.round_name, :locals => { :game => @game } %>

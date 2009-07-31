@@ -8,7 +8,8 @@ require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
   # Add additional load paths for your own custom dirs
-  config.load_paths += %W( #{RAILS_ROOT}/lib/game )
+  config.load_paths += %W( #{RAILS_ROOT}/lib )
+  config.load_paths += %W( #{RAILS_ROOT}/lib/dieselisation )
   config.load_paths += %W( #{RAILS_ROOT}/lib/implementations )
 
   config.gem "thoughtbot-factory_girl",

@@ -37,6 +37,6 @@ end
 
 When /^I choose to buy the "([^\"]*)"$/ do |arg1|
   button = get_action_buttons.detect { |button| button.css("span").inner_html.index(arg1) }
-  p button.css('a').id
+  p button
 #  click_link button.css('a').id
 end

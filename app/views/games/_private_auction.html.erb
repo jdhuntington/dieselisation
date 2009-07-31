@@ -1,0 +1,8 @@
+<div id="current-player"><%= @game.current_player.display_name %></div>
+<div id="actions">
+  <%= render :partial => 'action', :collection => @game_instance.player_options, :locals => { :game => game } %>
+</div>
+<div class="clearall"></div>
+<div id="map"></div>
+<div class="clearall"></div>
+<div id="players"></div>

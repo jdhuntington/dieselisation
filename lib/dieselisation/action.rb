@@ -1,4 +1,7 @@
 module Dieselisation
+  # Actions
+  # characterized by:
+  # 
   class Action
     attr_reader :type, :target
     
@@ -21,6 +24,10 @@ module Dieselisation
 
     def target
       @target
+    end
+
+    def target_nickname
+      target.nickname
     end
   end
 end

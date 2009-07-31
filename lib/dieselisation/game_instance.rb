@@ -116,6 +116,10 @@ module Dieselisation
       return options
     end
 
+    def round_name
+      'private_auction'
+    end
+
     # TODO implement
     # returns private currently being auctioned
     def private_for_auction
@@ -172,7 +176,7 @@ module Dieselisation
       @privates = {}
       @implementation::CONFIG[:private_companies].each do |id, p|
         @privates[id] = Private.new({:name => p[:name], :par => p[:par], 
-                                    :revenue => p[:revenue], :special => p[:special]})
+                                      :revenue => p[:revenue], :special => p[:special], :nickname => id})
       end
     end
     

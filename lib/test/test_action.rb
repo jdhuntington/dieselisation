@@ -14,4 +14,6 @@ class TestAction < Test::Unit::TestCase
     a = Dieselisation::Action.new(:buy_private, private)
     assert_equal "Buy foobar ($9)", a.description
   end
+
+  
 end
