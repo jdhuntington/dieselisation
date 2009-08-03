@@ -1,0 +1,21 @@
+<% first = true %>
+<div id="players">
+<% @game_instance.players.each do |player| %>
+  <div class="player <%= first ? 'expanded' : 'collapsed' -%>" id="<%= dom_id player -%>">
+    <div class="toggler"><input type="button" value="+/-" /></div>
+    <div class="main-stats">
+      <div class="name"><%= h @users_players[player.identifier] %></div>
+      <div class="cash"><%= number_to_currency player.balance, :precision => 0 %></div>
+    </div>
+    <div class="secondary-stats">
+      <div class="certificates">
+	<h3>Certificates:</h3>
+	Something goes here.
+      </div>
+    </div>
+    <div class="clearall"></div>
+  </div>
+  <% first = false %>
+<% end %>
+</div>
+<div class="clearall"></div>

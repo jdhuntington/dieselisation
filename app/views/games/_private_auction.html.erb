@@ -1,8 +1,24 @@
-<div id="current-player"><%= @game.current_player.display_name %></div>
-<div id="actions">
-  <%= render :partial => 'action', :collection => @game_instance.player_options, :locals => { :game => game } %>
+<%= render :partial => 'players' %>
+
+<div id="privates">
+<% @game_instance.bank.privates.each do |private| %>
+  <div class="private">
+    <div class="name"><%= private.name %></div>
+    <div class="main-stats">
+    <div class="revenue">Revenue: <span class="value"><%= number_to_currency private.revenue, :precision => 0 %></span></div>
+
+    <% if private.special && (private.special != 'nil') %>
+      <div class="special"><%= render :partial => 'private_special', :locals => { :special => private.special } %></div>
+    <% end %>
+    </div>
+
+    <div class="purchase">
+      <div class="par"><%= number_to_currency private.par, :precision => 0 %></div>
+      <div class="act"><input type="button" value=" buy " /></div>
+    </div>
+  <div class="clearall"></div>
+  </div>
+<% end %>
 </div>
 <div class="clearall"></div>
-<div id="map"></div>
-<div class="clearall"></div>
-<div id="players"></div>
+<%= render :partial => 'map' %>

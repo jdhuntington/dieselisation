@@ -1,25 +1,21 @@
 <% content_for :header do %>
-  <%= javascript_include_tag 'canvas', 'tiles', 'players' %>
+  <%= javascript_include_tag 'canvas', 'tiles', 'game' %>
   <%= stylesheet_link_tag 'play', 'canvas' %>
 
   <script>
     var board = <%= @game_instance.board.to_json %>;
-    var playersJson = <%= @game_instance.players.to_json %>;
-    var actionsJson = <%= @game_instance.player_options.to_json %>;
-    var usersPlayers = <%= @users_players.to_json %>;
   </script>
 <% end %>
-
-<% if flash[:notice] %>
-<div class="notice">
-  <%= h flash[:notice] %>
-</div>
-<% end %>
-<% if flash[:error] %>
-<div class="error">
-  <%= h flash[:error] %>
-</div>
-<% end %>
-
+<h2><%= @game.name %></h2>
+<%= render :partial => 'notifications' %>
 
 <%= render :partial => @game_instance.round_name, :locals => { :game => @game } %>
+
+<div id="log-window-stand-in"></div>
+<div id="log-window-container">
+<div id="log-window">
+<%= render :partial => 'log' %>
+<%= render :partial => 'chat' %>
+<%= render :partial => 'notes' %>
+</div>
+</div>

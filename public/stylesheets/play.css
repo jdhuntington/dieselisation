@@ -1,5 +1,167 @@
+div#log-window h2
+{
+    font-size: 120%;
+}
+div#log-window
+{
+    margin: 20px auto 0;
+    width: 1000px;
+}
+
+div#chat textarea, div#notes textarea
+{
+    width: 250px;
+    height: 140px;
+}
+div#chat, div#notes
+{
+    float: left;
+    width: 300px;
+    height: 240px;
+}
+div#log ul#game-log-entries
+{
+    overflow: auto;
+    height: 190px;
+}
+div#log
+{
+    float: left;
+    width: 400px;
+    height: 200px;
+}
+
+div#log-window-stand-in
+{
+    height: 268px;
+}
+div#log-window-container
+{
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+    left: 0px;
+    height: 260px;
+    background: url(/images/gamelog_background.png);
+}
+
+div#players
+{
+    margin-bottom: 10px;
+}
+
 div.player
 {
-    border: 2px solid #aaa; background: #ddd; margin-bottom: 10px; 
+    border: 1px solid #aaa;
+    border-bottom: none;
+    background: #fff;
+    margin-bottom: 0px; 
     padding: 10px;
 }
+
+div.player:last-child
+{
+    border-bottom: 1px solid #aaa;
+}
+
+div.player div.toggler
+{
+    float: left;
+    width: 90px;
+}
+
+
+div.player.expanded .main-stats
+{
+    font-weight: bold; 
+    width: 390px;
+    float: left;
+}
+div.player.expanded .cash
+{
+    font-size: 120%;
+    color: #1a1;
+
+}
+div.player.expanded .name
+{
+    font-size: 190%;
+}
+
+div.player.expanded .secondary-stats h3
+{
+    border: none; 
+}
+
+
+div.player.collapsed .main-stats
+{
+    font-weight: normal; 
+}
+div.player.collapsed .cash
+{
+    font-size: 90%;
+    color: #1a1;
+
+}
+div.player.collapsed .name
+{
+    font-size: 110%;
+    float: left;
+    width: 390px;
+}
+
+div.player.collapsed .secondary-stats
+{
+    display: none;
+}
+
+
+div#privates {margin-bottom: 10px; }
+div.private
+{
+    border: 1px solid #aaa;
+    border-bottom: none;
+    background: #fff;
+    margin-bottom: 0px; 
+    padding: 10px;
+}
+
+div.private:last-child
+{
+    border-bottom: 1px solid #aaa;
+}
+
+div.private div.toggler
+{
+    float: left;
+    width: 90px;
+}
+
+
+div.private .main-stats
+{
+
+    width: 480px;
+    float: left;
+}
+div.private .revenue .value
+{
+    color: #1a1;
+    font-weight: bold; 
+}
+div.private .revenue
+{
+    font-size: 120%;
+}
+div.private .name
+{
+    font-size: 190%;
+    font-weight: bold;
+}
+
+div.private .secondary-stats h3
+{
+    border: none; 
+}
+
