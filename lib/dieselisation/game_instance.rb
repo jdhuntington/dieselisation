@@ -17,7 +17,6 @@ module Dieselisation
       setup_privates
       setup_bank
       @p_opts = @implementation::CONFIG[:player_options]
-      
       parse_map!
     end
     
@@ -173,18 +172,17 @@ module Dieselisation
     end
     
     def setup_privates
-      @privates = {}
-      @implementation::CONFIG[:private_companies].each do |id, p|
-        @privates[id] = Private.new({:name => p[:name], :par => p[:par], 
-                                      :revenue => p[:revenue], :special => p[:special], :nickname => id})
-      end
+      @privates = @implementation::CONFIG[:private_companies].collect do |id, p|
+        Private.new(:name => p[:name], :par => p[:par], :revenue => p[:revenue],
+                    :special => p[:special], :nickname => id)
+      end.sort_by { |r| r.par }
     end
     
     def setup_bank
       @bank = Bank.new(:balance => @implementation::CONFIG[:bank] - 
                               (current_player.balance * num_players))
-      @privates.each do |k, v|
-        @bank << v
+      @privates.each do |private|
+        @bank << private
       end
     end
 

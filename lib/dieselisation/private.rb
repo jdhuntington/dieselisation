@@ -22,7 +22,7 @@ module Dieselisation
     end
 
     def nickname
-      "private_#{@nickname}"
+      @nickname
     end
     
     def bid(player, price)
