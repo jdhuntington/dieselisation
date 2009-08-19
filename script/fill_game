@@ -1,4 +1,5 @@
 game = Game.find(ARGV.first)
+names = %w{ fred john bob tom paul }
 (game.max_players - game.users.count).times do |x|
-  game.add_player(User.create!(:username => "user-#{rand}"))
+  game.add_player(User.find_or_create_by_username(names.shift))
 end

@@ -35,5 +35,9 @@ module Dieselisation
     def cheapest_private
       !@assets.empty? && @assets.first
     end
+
+    def purchasable_asset?(asset)
+      asset == cheapest_private
+    end
   end
 end
