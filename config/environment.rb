@@ -27,6 +27,10 @@ end
 require 'game_18ga'
 
 require 'rpx'
-rpx_filename = RAILS_ENV == 'test' ? 'rpx.yml.for_testing' : 'rpx.yml'
+rpx_filename = if File.exist?(File.read(File.join(File.dirname(__FILE__), 'rpx.yml')))
+                 'rpx.yml'
+                 else
+                 'rpx.yml.for_testing'
+               end
 rpx_config = YAML.load(File.read(File.join(File.dirname(__FILE__), rpx_filename)))
 $rpx = Rpx::RpxHelper.new rpx_config['api_key'], rpx_config['base_url'], rpx_config['realm']
