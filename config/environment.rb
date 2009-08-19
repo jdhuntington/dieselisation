@@ -27,7 +27,7 @@ end
 require 'game_18ga'
 
 require 'rpx'
-rpx_filename = if File.exist?(File.read(File.join(File.dirname(__FILE__), 'rpx.yml')))
+rpx_filename = if File.exist?(File.join(File.dirname(__FILE__), 'rpx.yml'))
                  'rpx.yml'
                  else
                  'rpx.yml.for_testing'
