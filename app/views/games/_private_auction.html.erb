@@ -2,7 +2,7 @@
 
 <div id="privates">
 <% @game_instance.bank.privates.each do |private| %>
-  <div class="private">
+  <div class="private" id="private-<%= private.nickname -%>">
     <div class="name"><%= private.name %></div>
     <div class="main-stats">
     <div class="revenue">Revenue: <span class="value"><%= number_to_currency private.revenue, :precision => 0 %></span></div>
@@ -20,7 +20,7 @@
     <% else %>
     <div class="bid">
       <div class="par"><input type="text" value="<%= number_to_currency private.par, :precision => 0 -%>" /></div>
-      <div class="act"><input type="button" value=" bid " /></div>
+      <div class="act"><input type="button" value=" bid " id="bid-<%= private.nickname -%>" /></div>
     </div>    
     <% end %>
   <div class="clearall"></div>
