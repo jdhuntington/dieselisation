@@ -176,15 +176,28 @@ describe GamesController do
     it 'should not allow the a non-current player to make an action' do
       session[:user_id] = @non_current_player.id
       @game.expects(:persist!).never
-      put :act, :id => @game.id, :action => 'something'
+      put :act, :id => @game.id
       flash[:error].should include("not your turn")      
     end
     
     it 'should allow the game instance\'s current player to make an action' do
       session[:user_id] = @current_player.id
       @game.expects(:persist!)
-      put :act, :id => @game.id, :action => 'something'
+      @game.stubs(:act)
+      put :act, :id => @game.id, :action_data => { 'verb' => 'nop' }
       flash[:notice].should include("saved")
+    end
+
+    describe 'while logged in' do
+      before :each do
+        session[:user_id] = @current_player.id
+      end
+
+      it 'should pass the parameters to the game along with the player id' do
+        action_info = { 'verb' => 'bid', 'target' => 'mid' }
+        @game.expects(:act).with(action_info.merge({ 'player_id' => @current_player.id }))
+        put :act, :id => @game.id, :action_data => action_info
+      end
     end
   end
 end

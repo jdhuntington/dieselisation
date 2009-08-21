@@ -73,6 +73,9 @@ class Game < ActiveRecord::Base
     self.save!
   end
 
+  def act(options)
+  end
+
   protected
   def add_owner_to_game
     add_player owner

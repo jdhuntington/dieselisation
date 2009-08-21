@@ -71,6 +71,8 @@ class GamesController < ApplicationController
   def act
     @game = Game.find(params[:id])
     if current_user == @game.current_player
+      raise "Error: Missing Action" unless params['action_data'] && params['action_data']['verb']
+      @game.act(params['action_data'].merge({'player_id' => @game.current_player.id}))
       @game.persist!
       flash[:notice] = 'Action saved.'
     else
