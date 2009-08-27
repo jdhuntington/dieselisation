@@ -156,6 +156,19 @@ module Dieselisation
         false
       end
     end
+
+    def handle_bid(options)
+
+    end
+
+    # main event loop?
+    # ActionController will forward requests to Game, which calls this method
+    def act(options)
+      case options['verb']
+        when 'bid_on_private' then handle_bid(options)
+      end
+      raise "No action '#{options['verb']}'"
+    end
     
     protected
     def parse_map!

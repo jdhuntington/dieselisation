@@ -74,6 +74,7 @@ class Game < ActiveRecord::Base
   end
 
   def act(options)
+    @game_instance.act(options)
   end
 
   protected
