@@ -56,6 +56,12 @@ module Dieselisation
       @current_phase
     end
     
+    def next_player!
+      player = @players.shift   # Get the first player, and take out of the players array
+      @players.push(player)     # Put the first player back in the array in last position
+      current_player
+    end
+    
     def next_player
       # this will need a lot more conditions
       options = player_options
@@ -163,7 +169,10 @@ module Dieselisation
 
     def handle_bid(options)
       # options = { 'target' => nickname, 'bid' => value }
-      current_player.bid_on_private(lookup_private(options['target']), options['bid'].to_i)
+      bid = options['bid'].sub(/^\$/, '').to_i
+      private = lookup_private(options['target'])
+      current_player.bid_on_private private, bid
+      next_player!
     end
 
     # main event loop?

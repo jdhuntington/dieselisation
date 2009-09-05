@@ -26,10 +26,10 @@ module Dieselisation
     end
     
     def bid(player, price)
-      if price >= (highest_bid + 5)
+      if price >= minimum_bid
         @bids << {:player => player, :price => price}
       else
-        false
+        raise "Can't bid that"
       end
     end
     
@@ -38,9 +38,17 @@ module Dieselisation
       @bids << {:player => player, :price => 0}
     end
     
-    def highest_bid
+    def minimum_bid
       if @bids.empty?
         self.par
+      else
+        (@bids.map { |b| b[:price] }).sort.last + 5
+      end
+    end
+    
+    def highest_bid
+      if @bids.empty?
+        nil
       else
         (@bids.map { |b| b[:price] }).sort.last
       end

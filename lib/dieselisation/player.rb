@@ -11,11 +11,11 @@ module Dieselisation
     end
     
     def bid_on_private(asset, bid)
-      if bid <= (@balance - bids_total) && bid >= (asset.highest_bid + 5)
+      if bid <= (@balance - bids_total) && bid >= (asset.minimum_bid)
         @bids[asset.name] = bid
         asset.bid(self, bid)
       else
-        false
+        raise "Can't bid #{bid} on #{asset.inspect}"
       end
     end
     

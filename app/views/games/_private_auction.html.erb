@@ -25,6 +25,16 @@
       <div class="par"><input type="text" value="<%= number_to_currency private.par, :precision => 0 -%>" name="action_data[bid]" /></div>
       <div class="act"><input type="submit" value=" bid " id="bid-<%= private.nickname -%>" /></div>
       <% end %>
+      <div>
+	<strong>Bids:</strong>
+	<ul class="bids">
+	  <% private.bids.each do |bid| %>
+	  <li class="bid-<%= bid[:player].identifier -%>">
+	    <%= h @users_players[bid[:player].identifier] %> - $<%= bid[:price] -%>
+	  </li>
+	  <% end %>
+	  </ul>
+      </div>
     </div>    
     <% end %>
   <div class="clearall"></div>

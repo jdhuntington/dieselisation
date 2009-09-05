@@ -48,28 +48,14 @@ class TestGameFlow < Test::Unit::TestCase
     assert_equal(20, inst.bank.cheapest_private.par)
   end
   
-  def test_player
-    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
-    assert(inst.players[2].balance == 450)
-    pvt = inst.privates[1]
-    assert(!(inst.current_player.bid_on_private(pvt, 30)))
-    assert(!(inst.current_player.bid_on_private(pvt, 452)))
-    assert(inst.current_player.bid_on_private(pvt, 40))
-    assert_equal(pvt.bidders, [inst.current_player])
-    pvt2 = inst.privates[2]
-    assert(!(inst.current_player.bid_on_private(pvt2, 412)))
-    assert(inst.current_player.bid_on_private(pvt2, 400))
-    assert_equal(inst.current_player.bids_total, 440)
-  end
-  
   def test_private
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     next_player = inst.players[1]
-    assert_equal(inst.privates[1].highest_bid, 35)
+    assert_nil inst.privates[1].highest_bid
+    assert_equal 40, inst.privates[1].minimum_bid
     assert_equal(inst.privates[1].bid(inst.current_player, 40), 
                     [{:price => 40, :player => inst.current_player}])
     assert_equal(inst.privates[1].highest_bid, 40)
-    assert(!(inst.privates[1].bid(inst.current_player, 42)))
     assert_equal(inst.privates[1].bid(next_player, 45), 
                     [{:price => 40, :player => inst.current_player},
                      {:price => 45, :player => next_player}])
@@ -289,14 +275,21 @@ end
 
   def test_handle_bid_should_add_a_bid_to_the_target
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
+    player = inst.current_player
     inst.handle_bid({ 'target' => 'ltr', 'bid' => '300' })
     # get the private
     private = inst.lookup_private 'ltr'
-    assert_equal [{:player => inst.current_player, :price => 300}], private.bids
+    assert_equal [{:player => player, :price => 300}], private.bids
   end
 
   def test_lookup_private_should_load_the_desired_private
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
     assert_not_nil inst.lookup_private('ltr')
+  end
+
+  def test_minimum_bid_should_be_the_par_value_if_there_are_no_bids
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
+    private = inst.lookup_private 'mid'
+    assert_equal 40, private.minimum_bid
   end
 end
