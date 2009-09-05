@@ -11,15 +11,9 @@ module Dieselisation
     end
     
     def bid_on_private(asset, bid)
-        # puts (@balance - bids_total)
-      if bid <= (@balance - bids_total)
-        # puts asset.highest_bid + 5
-        if bid >= (asset.highest_bid + 5)
-          @bids[asset.name] = bid
-          asset.bid(self, bid)
-        else
-          false
-        end
+      if bid <= (@balance - bids_total) && bid >= (asset.highest_bid + 5)
+        @bids[asset.name] = bid
+        asset.bid(self, bid)
       else
         false
       end

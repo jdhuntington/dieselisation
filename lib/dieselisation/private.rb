@@ -39,11 +39,10 @@ module Dieselisation
     end
     
     def highest_bid
-      unless @bids.empty?
-        (@bids.map { |b| b[:price] }).sort.last
+      if @bids.empty?
+        self.par
       else
-        # bids must exceed previous bid by at least $5,j or == par
-        self.par - 5
+        (@bids.map { |b| b[:price] }).sort.last
       end
     end 
     

@@ -157,17 +157,24 @@ module Dieselisation
       end
     end
 
-    def handle_bid(options)
+    def lookup_private(nickname)
+      privates.detect{ |p| p.nickname == nickname }
+    end
 
+    def handle_bid(options)
+      # options = { 'target' => nickname, 'bid' => value }
+      current_player.bid_on_private(lookup_private(options['target']), options['bid'].to_i)
     end
 
     # main event loop?
     # ActionController will forward requests to Game, which calls this method
     def act(options)
       case options['verb']
-        when 'bid_on_private' then handle_bid(options)
+
+      when 'bid_on_private' then handle_bid(options)
+      else raise "No action '#{options['verb']}'"
+
       end
-      raise "No action '#{options['verb']}'"
     end
     
     protected

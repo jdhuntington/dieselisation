@@ -286,4 +286,17 @@ end
     expected_private_nicknames = %w{ ltr mid wsr osr mbr }
     assert_equal expected_private_nicknames, actual_private_nicknames
   end
+
+  def test_handle_bid_should_add_a_bid_to_the_target
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
+    inst.handle_bid({ 'target' => 'ltr', 'bid' => '300' })
+    # get the private
+    private = inst.lookup_private 'ltr'
+    assert_equal [{:player => inst.current_player, :price => 300}], private.bids
+  end
+
+  def test_lookup_private_should_load_the_desired_private
+    inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
+    assert_not_nil inst.lookup_private('ltr')
+  end
 end
