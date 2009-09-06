@@ -1,15 +1,8 @@
-require "test/unit"
-require 'yaml'
-require 'rubygems'
-require 'mocha'
+require File.dirname(__FILE__) + '/../implementation_test_helper'
 
-require "../dieselisation"
-Dir.glob('../dieselisation/*.rb').each do |mod|
-  require mod
-end
 
 class TestGameFlow < Test::Unit::TestCase
-  GA = YAML.load_file('../dieselisation/18GA/game_18ga.yml')
+  GA = YAML.load_file("#{DIESEL_DIR}/18GA/game_18ga.yml")
   PLAYERS = [1337,42,0xDEADBEEF,13] # The game instance expects an array of player ids from the rails app
   NUM_PLAYERS = PLAYERS.length
   PLAYER_INIT = GA[:player_init][NUM_PLAYERS]

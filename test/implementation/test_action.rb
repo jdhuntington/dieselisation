@@ -1,11 +1,4 @@
-require "test/unit"
-require 'yaml'
-
-require "../dieselisation"
-Dir.glob('../dieselisation/*.rb').each do |mod|
-  require mod
-end
-require "../implementations/game_18ga"
+require File.dirname(__FILE__) + '/../implementation_test_helper'
 
 ActionStub = Struct.new(:name, :par)
 class TestAction < Test::Unit::TestCase
