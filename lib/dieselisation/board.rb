@@ -24,7 +24,7 @@ module Dieselisation
     end
 
     def normalize!
-      @max_length = @rows.values.collect(&:length).inject(0) { |max, current| [max,current].max }
+      @max_length = @rows.values.collect{ |val| val.length }.inject(0) { |max, current| [max,current].max }
     end
 
     def width
