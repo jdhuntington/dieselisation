@@ -1,7 +1,7 @@
 <% first = true %>
 <div id="players">
 <% @game_instance.players.each do |player| %>
-  <div class="player <%= first ? 'expanded' : 'collapsed' -%>" id="<%= dom_id player -%>">
+  <div class="player <%= first ? 'expanded' : 'collapsed' -%>" id="dieselisation_player_<%=  player.identifier -%>">
     <div class="toggler"><input type="button" value="+/-" /></div>
     <div class="main-stats">
       <div class="name"><%= h @users_players[player.identifier] %></div>
