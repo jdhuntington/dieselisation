@@ -5,35 +5,35 @@ div#log-window h2
 div#log-window
 {
     margin: 20px auto 0;
-    width: 1000px;
+    width: 800px;
 }
 
-div#chat textarea, div#notes textarea
+div#notes textarea
 {
     width: 250px;
-    height: 140px;
+    height: 90px;
 }
-div#chat, div#notes
+div#chat
+{
+    float: left;
+    width: 500px;
+    height: 240px;
+}
+ul#game-log-entries
+{
+    overflow: auto;
+    height: 94px;
+}
+div#notes
 {
     float: left;
     width: 300px;
     height: 240px;
 }
-div#log ul#game-log-entries
-{
-    overflow: auto;
-    height: 190px;
-}
-div#log
-{
-    float: left;
-    width: 400px;
-    height: 200px;
-}
 
 div#log-window-stand-in
 {
-    height: 268px;
+    height: 218px;
 }
 div#log-window-container
 {
@@ -41,7 +41,7 @@ div#log-window-container
     width: 100%;
     bottom: 0px;
     left: 0px;
-    height: 260px;
+    height: 210px;
     background: url(/images/gamelog_background.png);
 }
 
