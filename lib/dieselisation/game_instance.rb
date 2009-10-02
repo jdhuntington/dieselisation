@@ -167,6 +167,13 @@ module Dieselisation
       privates.detect{ |p| p.nickname == nickname }
     end
 
+    def handle_private_purchase(options)
+      # options { "target"=> nickname }
+      private = lookup_private(options['target'])
+      current_player.buy private, bank, private.par
+      next_player!      
+    end
+    
     def handle_bid(options)
       # options = { 'target' => nickname, 'bid' => value }
       bid = options['bid'].sub(/^\$/, '').to_i
@@ -181,6 +188,7 @@ module Dieselisation
       case options['verb']
 
       when 'bid_on_private' then handle_bid(options)
+      when 'buy_private' then handle_private_purchase(options)
       else raise "No action '#{options['verb']}'"
 
       end

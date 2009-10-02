@@ -9,8 +9,12 @@
     </div>
     <div class="secondary-stats">
       <div class="certificates">
-	<h3>Certificates:</h3>
-	Something goes here.
+	<h3>Assets:</h3>
+	<ul>
+	<% player.assets.each do |asset| %>
+	  <li><strong><%= asset.name %></strong></li>
+	<% end %>
+	</ul>
       </div>
     </div>
     <div class="clearall"></div>
