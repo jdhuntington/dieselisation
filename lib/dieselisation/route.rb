@@ -36,7 +36,7 @@ module Dieselisation
     end
 
     def whistle_stops_on_route
-      @nodes.select { |n| n.whistle_stop }.count
+      @nodes.select { |n| n.whistle_stop }.length
     end
 
     def value(train_length)
