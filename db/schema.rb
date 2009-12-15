@@ -30,16 +30,6 @@ ActiveRecord::Schema.define(:version => 20090620163359) do
     t.integer  "game_state_id"
   end
 
-  create_table "maps", :force => true do |t|
-    t.integer  "game_id"
-    t.integer  "rows"
-    t.integer  "columns"
-    t.text     "tiles"
-    t.string   "orientation"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "seatings", :force => true do |t|
     t.integer  "position"
     t.integer  "user_id"
