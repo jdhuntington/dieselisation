@@ -7,7 +7,6 @@ RAILS_GEM_VERSION = '2.3.2' unless defined? RAILS_GEM_VERSION
 require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
-  # Add additional load paths for your own custom dirs
   config.load_paths += %W( #{RAILS_ROOT}/lib )
   config.load_paths += %W( #{RAILS_ROOT}/lib/dieselisation )
   config.load_paths += %W( #{RAILS_ROOT}/lib/implementations )
@@ -16,17 +15,12 @@ Rails::Initializer.run do |config|
              :lib    => "factory_girl",
              :source => "http://gems.github.com"
 
-  # Only load the plugins named here, in the order given (default is alphabetical).
-  # :all can be used as a placeholder for all plugins not explicitly named
-  # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
-
   config.time_zone = 'UTC'
 end
 
-# $:.unshift File.join(File.dirname(__FILE__), '..', 'lib', 'game')
 require 'game_18ga'
-
 require 'rpx'
+
 rpx_filename = if File.exist?(File.join(File.dirname(__FILE__), 'rpx.yml'))
                  'rpx.yml'
                  else
