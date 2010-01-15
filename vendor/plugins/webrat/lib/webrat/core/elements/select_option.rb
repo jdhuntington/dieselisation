@@ -12,6 +12,15 @@ module Webrat
       select.set(value)
     end
 
+    def unchoose
+      select.raise_error_if_disabled
+      select.unset(value)
+    end
+
+    def inner_text
+      @element.inner_text
+    end
+
   protected
 
     def select
@@ -29,6 +38,10 @@ module Webrat
 
     def value
       @element["value"] || @element.inner_html
+    end
+
+    def label
+      @element.inner_html
     end
 
   end

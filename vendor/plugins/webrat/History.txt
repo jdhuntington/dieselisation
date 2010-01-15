@@ -1,10 +1,15 @@
-== Git
+* Bug fixes
+
+  * Make "should contain" ignore extra whitespace when doing string comparisons (Noah Davis)
+  * Make selenium matchers handle negative match more consistently with positive match (Luke Melia)
+   
+== 0.6.0 / 2009-11-28
 
 REMOVED: Support for Hpricot + REXML as an alternative to Nokogiri.
 
   Hpricot and REXML were difficult to work with, REXML is terribly slow,
   and Nokogiri is recommended even by the author of Hpricot (_why). Now
-  that Nokogiri works on JRuby, Webrat is going to use it as it's sole
+  that Nokogiri works on JRuby, Webrat is going to use it as its sole
   XML backend.
 
 CHANGED: Due to a reorganization, if you're currently requiring "webrat/rspec-rails",
@@ -12,7 +17,26 @@ CHANGED: Due to a reorganization, if you're currently requiring "webrat/rspec-ra
 
 * Minor enhancements
 
+  * Support Rails 2.3.4 JavaScript form authenticity tokens in simulated mode (Jonathan Weiss)
+  * When a timeout occurs in wait_for, include the HTML from Selenium in the exception
   * Update the Merb support to be based directly on Rack (Simon Rozet)
+  * Support multiple select fields (Kieran P)
+  * When locating select options, always match against text, not HTML
+
+* Bug fixes
+
+  * Remove newlines from HTTP Basic authentication credentials (Michael Klett)
+  * Require nokogiri form rspec-rails.rb (David Chelimsky)
+  * Fix logger issue when running inside Cucumber (Damian Janowski)
+  * Fix various issues related to submitting values with HTML entities (Kieran P)
+  * Call #to_i on the :count option in matchers (Michael Christenson II)
+  * Fix bug where multiline param values were getting truncated
+
+== 0.5.3 / 2009-08-27
+
+* Minor enhancements
+
+  * Remove unnecessary requires which are to the wrong paths on Edge Rails
 
 == 0.5.1 / 2009-08-18
 
