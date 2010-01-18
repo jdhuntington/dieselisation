@@ -6,7 +6,7 @@ Feature: Manage private auctions
     And the game has started
     And the player order is Fred, Bob, Joe, and Jim
 
-    When I am logged in as Fred
+    When I log in as Fred
     And I navigate to the current game's play interface
     Then I should see that it is my turn
     And I should see the option to buy the "Lexington Terminal RR" for 20
@@ -14,7 +14,7 @@ Feature: Manage private auctions
     And I confirm my action
     Then I should see that it is Bob's turn
 
-    When I am logged in as Bob
+    When I log in as Bob
     And I navigate to the current game's play interface
     Then I should see that it is my turn
     And I should see the option to buy the "Midland Railroad Co." for 40
@@ -22,7 +22,7 @@ Feature: Manage private auctions
     And I confirm my action
     Then I should see that it is Joe's turn
 
-    When I am logged in as Joe
+    When I log in as Joe
     And I navigate to the current game's play interface
     Then I should see that it is my turn
     And I should see the option to buy the "Waycross & Southern RR" for 70
@@ -30,7 +30,7 @@ Feature: Manage private auctions
     And I confirm my action
     Then I should see that it is Jim's turn
 
-    When I am logged in as Jim
+    When I log in as Jim
     And I navigate to the current game's play interface
     Then I should see that it is my turn
     And I should see the option to buy the "Ocilla Southern RR" for 100
@@ -38,10 +38,35 @@ Feature: Manage private auctions
     And I confirm my action
     Then I should see that it is Fred's turn
   
-    When I am logged in as Fred
+    When I log in as Fred
     And I navigate to the current game's play interface
     Then I should see that it is my turn
     And I should see the option to buy the "Macon & Birmingham RR" for 150
     When I choose to buy the "Macon & Birmingham RR"
     And I confirm my action
     Then I should see that it is Bob's turn
+
+  Scenario: Bid on the second, someone buys the first, the rest progresses normally
+    Given there is a game with Fred, Bob, Joe, and Jim
+    And the game has started
+    And the player order is Fred, Bob, Joe, and Jim
+
+    When I log in as Fred
+    And I navigate to the current game's play interface
+    Then I should see that it is my turn
+    And I should see the option to buy the "Lexington Terminal RR" for 20
+    And I should see the option to bid on "Midland Railroad Co." for 40
+    When I choose to bid "40" on "Midland Railroad Co."
+    And I confirm my action
+    Then I should see that I have "410" dollars left
+    Then I should see that it is Bob's turn
+
+    When I log in as Bob
+    And I navigate to the current game's play interface
+    Then I should see that it is my turn
+    And I should see the option to buy the "Lexington Terminal RR" for 20
+    When I choose to buy the "Lexington Terminal RR"
+    And I confirm my action
+    Then Fred should be in posession of "Midland Railroad Co."
+    And I should see that it is Joe's turn
+

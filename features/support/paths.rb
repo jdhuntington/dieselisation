@@ -10,7 +10,10 @@ module NavigationHelpers
     
     when /the home\s?page/
       '/'
-    
+    when /the new private auctions page/
+      new_private auctions_path
+    when /the login_as for (\w+)/
+      login_as_path(:username => $1)
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

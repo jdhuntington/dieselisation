@@ -18,9 +18,9 @@ Given /^the player order is (\w+), (\w+), (\w+), and (\w+)$/ do |player1, player
   @current_game.persist!
 end
 
-When /^I am logged in as (\w+)$/ do |name|
-  @current_player = User.find_by_username name
-  Given "I am on the login_as for #{name}"
+When /^I log in as (\w+)$/ do |username|
+  @current_player = User.find_by_username username
+  Given "I am on the login_as for #{username}"
 end
 
 When /^I navigate to the current game's play interface$/ do # '
@@ -32,11 +32,17 @@ Then /^I should see that it is my turn$/ do
 end
 
 Then /^I should see the option to buy the "([^\"]*)" for (\d+)$/ do |name, price|
-  assert get_action_buttons_text.detect { |button| button.index(name) }
+  nickname = lookup_private_nickname name
+  Then "I should see \"#{price}\" within \"#private-#{nickname} .purchase .par\""
+  assert_have_selector "#buy-#{nickname}"
 end
 
 When /^I choose to buy the "([^\"]*)"$/ do |arg1|
   button = get_action_buttons.detect { |button| button.css("span").inner_html.index(arg1) }
   p button
 #  click_link button.css('a').id
+end
+
+When /^I confirm my action$/ do
+  click_button "confirm"
 end
