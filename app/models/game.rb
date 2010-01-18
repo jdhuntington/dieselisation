@@ -68,6 +68,10 @@ class Game < ActiveRecord::Base
     @game_instance ||= (game_state && game_state.game_instance)
   end
 
+  def requires_confirmation?
+    game_state.requires_confirmation?
+  end
+
   def persist!
     self.game_state = GameState.create!(:game_instance => game_instance, :active_player => current_player, :previous => game_state)
     self.save!

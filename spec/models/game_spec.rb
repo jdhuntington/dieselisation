@@ -186,5 +186,17 @@ describe Game do
       new_game_state.previous.should == original_game_state
     end
   end
+
+  describe '#requires_confirmation?' do
+    it 'should return the current game state\'s response' do
+      g = Factory(:game)
+      g.stubs(:game_state).returns(stub_everything(:requires_confirmation? => :thevalue))
+      g.requires_confirmation?.should == :thevalue
+    end
+  end
+
+  describe '#act' do
+    it 'should raise an exception if the game requires confirmation'
+  end
   
 end

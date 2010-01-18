@@ -172,6 +172,9 @@ describe GamesController do
       @non_current_player = (@game.users - [@current_player]).first
       Game.stubs(:find).returns(@game)
     end
+
+    it 'should redirect to confirm if the existing game state requires confirmation'
+    it 'should redirect to confirm if the new game state requires confirmation'
     
     it 'should not allow the a non-current player to make an action' do
       session[:user_id] = @non_current_player.id
@@ -199,5 +202,9 @@ describe GamesController do
         put :act, :id => @game.id, :action_data => action_info
       end
     end
+  end
+
+  describe '#play' do
+    it 'should redirect to confirm if the game state requires confirmation'
   end
 end
