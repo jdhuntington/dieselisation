@@ -11,3 +11,7 @@ Factory.define :game, :class => 'game' do |g|
   g.status 'new'
 end
 
+Factory.define :game_state, :class => 'GameState' do |gs|
+  
+end
+

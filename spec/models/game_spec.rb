@@ -196,7 +196,17 @@ describe Game do
   end
 
   describe '#act' do
-    it 'should raise an exception if the game requires confirmation'
+    it 'should raise an exception if the game requires confirmation' do
+      game = Factory(:game)
+      game_state = Factory(:game_state)
+      game.game_state = game_state
+
+      game_state.stubs(:requires_confirmation?).returns(true)
+      illegal_action = lambda {
+        game.act({ })
+      }
+      illegal_action.should raise_error(GameStateNeedsConfirmation)
+    end
   end
   
 end

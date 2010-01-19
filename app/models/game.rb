@@ -1,3 +1,6 @@
+class GameStateNeedsConfirmation < StandardError
+end
+
 class Game < ActiveRecord::Base
   has_many :seatings
   has_many :users, :through => :seatings
@@ -78,6 +81,7 @@ class Game < ActiveRecord::Base
   end
 
   def act(options)
+    raise GameStateNeedsConfirmation.new if requires_confirmation?
     @game_instance.act(options)
   end
 
