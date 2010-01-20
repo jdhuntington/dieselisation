@@ -4,7 +4,7 @@ end
 class Game < ActiveRecord::Base
   has_many :seatings
   has_many :users, :through => :seatings
-  has_one :game_state
+  belongs_to :game_state
   belongs_to :owner, :class_name => 'User'
 
   validates_presence_of :status, :owner_id, :name
@@ -34,7 +34,11 @@ class Game < ActiveRecord::Base
   
   def current_player
     raise "Cannot have current player without having a started game" if self.status == 'new'
-    seatings.find_by_user_id(game_instance.current_player_identifier).user
+    if game_state && game_state.requires_confirmation?
+      game_state.confirmer
+    else
+      seatings.find_by_user_id(game_instance.current_player_identifier).user
+    end
   end
 
   def in_progress?
@@ -78,6 +82,10 @@ class Game < ActiveRecord::Base
   def persist!
     self.game_state = GameState.create!(:game_instance => game_instance, :active_player => current_player, :previous => game_state)
     self.save!
+  end
+
+  def confirm!
+    game_state.confirm!
   end
 
   def act(options)

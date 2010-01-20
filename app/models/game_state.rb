@@ -1,7 +1,7 @@
 require 'dieselisation'
 
 class GameState < ActiveRecord::Base
-  belongs_to :game
+  has_one :game
   belongs_to :active_player, :class_name => 'User'
   belongs_to :previous, :class_name => 'GameState'
   
@@ -19,8 +19,16 @@ class GameState < ActiveRecord::Base
     true
   end
 
+  def confirmer
+    previous && previous.active_player
+  end
+
+  def confirm!
+    update_attribute(:confirmed, true)
+  end
+
   private
   def marshal_data
-    self.game_state = Marshal.dump(@game_instance)
+    self.game_state = Marshal.dump(game_instance)
   end
 end

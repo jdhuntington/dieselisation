@@ -16,6 +16,8 @@ Given /^the player order is (\w+), (\w+), (\w+), and (\w+)$/ do |player1, player
     @current_game.game_instance.players.detect { |diesel_player| diesel_player.identifier == player.id }
   end
   @current_game.persist!
+  @current_game.game_state.previous = nil # Make sure that we're not going to have confirmation required
+  @current_game.game_state.save!
 end
 
 When /^I log in as (\w+)$/ do |username|
@@ -38,11 +40,12 @@ Then /^I should see the option to buy the "([^\"]*)" for (\d+)$/ do |name, price
 end
 
 When /^I choose to buy the "([^\"]*)"$/ do |arg1|
-  button = get_action_buttons.detect { |button| button.css("span").inner_html.index(arg1) }
-  p button
-#  click_link button.css('a').id
+  within "div.private#private-#{lookup_private_nickname(arg1)}" do |scope|
+    scope.click_button "Buy"
+  end
+
 end
 
 When /^I confirm my action$/ do
-  click_button "confirm"
+  click_button "Confirm"
 end

@@ -38,6 +38,16 @@ describe GameState do
       gs_current.requires_confirmation?.should be_true
     end
 
+    describe '#confirmer' do
+      it 'should return the user who can confirm' do
+        p0 = Factory.create(:player)
+        p1 = Factory.create(:player)
+        gs_original = GameState.create!(:active_player => p0)
+        gs_current = GameState.create!(:previous => gs_original, :active_player => p1)
+        gs_current.confirmer.should == p0
+      end
+    end
+
     it 'should not require confirmation if the last two game states' +
       'have a different active player, but the last state has' +
       'already been confirmed' do
@@ -52,6 +62,17 @@ describe GameState do
       player = Factory.create(:player)
       gs = GameState.create!(:active_player => player)
       gs.requires_confirmation?.should be_false
+    end
+  end
+
+  describe '#confirm!' do
+    it 'should mark the record as confirmed' do
+      p0 = Factory.create(:player)
+      p1 = Factory.create(:player)
+      gs_original = GameState.create!(:active_player => p0)
+      gs_current = GameState.create!(:previous => gs_original, :active_player => p1)
+      gs_current.confirm!
+      GameState.find(gs_current).confirmed.should == true
     end
   end
 end

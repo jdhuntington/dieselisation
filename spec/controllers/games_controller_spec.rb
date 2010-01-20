@@ -173,8 +173,14 @@ describe GamesController do
       Game.stubs(:find).returns(@game)
     end
 
-    it 'should redirect to confirm if the existing game state requires confirmation'
-    it 'should redirect to confirm if the new game state requires confirmation'
+    it 'should redirect to play' do
+      session[:user_id] = @current_player.id
+      @game.expects(:persist!)
+      @game.expects(:act)
+      @game.expects(:requires_confirmation?).at_least_once.returns(false).then.returns(true)
+      put :act, :id => @game.id, :action_data => { 'verb' => 'nop' }
+      response.should redirect_to(play_game_url(@game))
+    end
     
     it 'should not allow the a non-current player to make an action' do
       session[:user_id] = @non_current_player.id
@@ -205,6 +211,50 @@ describe GamesController do
   end
 
   describe '#play' do
-    it 'should redirect to confirm if the game state requires confirmation'
+    before :each do
+      @game = Factory.create(:game)
+      2.times { @game.add_player(Factory.create(:player)) }
+      @game.start!
+      @current_player = @game.current_player
+      Game.stubs(:find).returns(@game)      
+    end
+    
+    it 'should render succes, even if the game state requires confirmation' do
+      @game.stubs(:requires_confirmation?).returns(true)
+      session[:user_id] = @current_player.id
+      get :play, :id => @game.id
+      response.should be_success
+    end
+  end
+
+  describe '#confirm' do
+    before :each do
+      @game = Factory.create(:game)
+      2.times { @game.add_player(Factory.create(:player)) }
+      @game.start!
+      player_ids = @game.game_instance.players.map(&:identifier)
+      @last_player_to_act = @game.current_player
+      @next_player_up_after_confirm = User.find(player_ids.last)
+      @game.persist!
+      current_game_state = @game.game_state
+      current_game_state.active_player = @next_player_up_after_confirm
+      Game.stubs(:find).returns(@game)
+    end
+    
+    it 'should not let the non-confirming user confirm' do
+      session[:user_id] = @next_player_up_after_confirm.id
+      @game.expects(:confirm!).never
+      post :confirm, :id => @game.id
+      response.should be_redirect
+      flash[:error].should include("not your turn")
+    end
+    
+    it 'should confirm the game state and redirect to play' do
+      session[:user_id] = @last_player_to_act.id
+      @game.expects(:confirm!)
+      post :confirm, :id => @game.id
+      response.should be_redirect
+      flash[:notice].should include("confirmed")
+    end
   end
 end

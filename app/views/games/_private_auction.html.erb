@@ -18,7 +18,7 @@
         <input type="hidden" value="buy_private" name="action_data[verb]">
         <input type="hidden" value="<%= private.nickname -%>" name="action_data[target]">
         <div class="par"><%= number_to_currency private.par, :precision => 0 -%></div>
-        <div class="act"><input type="submit" value=" buy " id="buy-<%= private.nickname -%>" /></div>
+        <div class="act"><input type="submit" value="Buy" id="buy-<%= private.nickname -%>" /></div>
       <% end %>
     </div>
     <% else %>

@@ -63,13 +63,20 @@ class GamesController < ApplicationController
 
   def play
     @game = Game.find(params[:id])
+    
     @users_players = { }
-    @game.users.each { |p| @users_players[p.id] = p.display_name}
+    @game.users.each { |p| @users_players[p.id] = p.display_name }
     @game_instance = @game.game_instance
   end
 
   def act
     @game = Game.find(params[:id])
+
+    if @game.requires_confirmation?
+      redirect_to confirm_game_url(@game)
+      return
+    end
+    
     if current_user == @game.current_player
       raise "Error: Missing Action" unless params['action_data'] && params['action_data']['verb']
       @game.act(params['action_data'].merge({'player_id' => @game.current_player.id}))
@@ -77,6 +84,20 @@ class GamesController < ApplicationController
       flash[:notice] = 'Action saved.'
     else
       flash[:error] = 'It is not your turn!'
+    end
+
+    redirect_to play_game_url(@game)
+  end
+
+  def confirm
+    @game = Game.find params[:id]
+    if @game.requires_confirmation?
+      if current_user == @game.current_player
+        @game.confirm!
+        flash[:notice] = 'Your turn has been confirmed.'
+      else
+        flash[:error] = 'It is not your turn!'
+      end
     end
     redirect_to play_game_url(@game)
   end

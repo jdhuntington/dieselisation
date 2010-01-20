@@ -42,6 +42,7 @@ describe Game do
       g.add_player u1
       g.start!
       g.current_player.should_not be_nil
+
     end
 
     it 'should persist a new game state' do
@@ -149,6 +150,7 @@ describe Game do
       g = Factory.create(:game)
       g.stubs(:status).returns('active')
       instance = stub 'instance'
+      g.stubs(:game_state).returns(stub_everything)
       g.stubs(:game_instance).returns(stub_everything('instance', :current_player_identifier => g.owner.id))
       g.current_player.should == g.owner
     end
@@ -162,6 +164,13 @@ describe Game do
       }.should raise_error
     end
 
+    it 'should return the \'confirmer\' if the game needs confirmation' do
+      g = Factory.create(:game)
+      g.stubs(:status).returns('active')
+      state = stub_everything('state', :requires_confirmation? => true, :confirmer => :theplayer)
+      g.stubs(:game_state).returns(state)
+      g.current_player.should == :theplayer
+    end
   end
 
   describe '#persist' do
@@ -187,6 +196,16 @@ describe Game do
     end
   end
 
+  describe '#confirm!' do
+    it 'should confirm the latest game state' do
+      g = Factory(:game)
+      gs = stub_everything
+      gs.expects(:confirm!)
+      g.stubs(:game_state).returns(gs)
+      g.confirm!
+    end
+  end
+  
   describe '#requires_confirmation?' do
     it 'should return the current game state\'s response' do
       g = Factory(:game)
