@@ -9,7 +9,7 @@ class GameState < ActiveRecord::Base
   before_save :marshal_data
 
   def game_instance
-    @game_instance ||= Marshal.load(self.game_state)
+    @game_instance ||= game_state && Marshal.load(game_state)
   end
 
   def requires_confirmation?
