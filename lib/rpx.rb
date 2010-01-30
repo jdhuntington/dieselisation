@@ -40,7 +40,7 @@ module Rpx
     end
 
     def signin_url(dest)
-      "#{rp_url}/openid/signin?token_url=#{CGI.escape(dest)}"
+      "#{rp_url}/openid/embed?token_url=#{CGI.escape(dest)}"
     end
 
     private
