@@ -11,3 +11,4 @@ config/rpx.yml
 .emacs-project
 webrat*.html
 rerun.txt
+.rake_tasks

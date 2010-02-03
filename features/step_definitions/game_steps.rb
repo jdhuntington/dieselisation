@@ -33,6 +33,11 @@ Then /^I should see that it is my turn$/ do
   get_element_via_selector("#current-player").inner_html.should == @current_player.display_name
 end
 
+Then /^I should see that it is (\w+)\'s turn$/ do |arg1|
+  get_element_via_selector("#current-player").inner_html.should == arg1
+end
+
+
 Then /^I should see the option to buy the "([^\"]*)" for (\d+)$/ do |name, price|
   nickname = lookup_private_nickname name
   Then "I should see \"#{price}\" within \"#private-#{nickname} .purchase .par\""

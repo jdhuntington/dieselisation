@@ -13,6 +13,7 @@ class PrivateAuctionTest < ActionController::IntegrationTest
     visit login_as_path(:username => @current_player.username)
     visit play_game_path(@game)
     click_button 'bid-mid'
+    click_button 'confirm'
 
     # assertions
     @game = Game.find(@game.id)
@@ -34,6 +35,7 @@ class PrivateAuctionTest < ActionController::IntegrationTest
     # precondition
     assert_have_selector "#privates #private-ltr"
     click_button 'buy-ltr'
+    click_button 'confirm'
     
     # assertions
     @game = Game.find(@game.id)
