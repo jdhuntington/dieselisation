@@ -25,7 +25,7 @@ When /^I log in as (\w+)$/ do |username|
   Given "I am on the login_as for #{username}"
 end
 
-When /^I navigate to the current game's play interface$/ do # '
+When /^I navigate to the current game\'s play interface$/ do
   visit play_game_path(@current_game)
 end
 
@@ -35,20 +35,6 @@ end
 
 Then /^I should see that it is (\w+)\'s turn$/ do |arg1|
   get_element_via_selector("#current-player").inner_html.should == arg1
-end
-
-
-Then /^I should see the option to buy the "([^\"]*)" for (\d+)$/ do |name, price|
-  nickname = lookup_private_nickname name
-  Then "I should see \"#{price}\" within \"#private-#{nickname} .purchase .par\""
-  assert_have_selector "#buy-#{nickname}"
-end
-
-When /^I choose to buy the "([^\"]*)"$/ do |arg1|
-  within "div.private#private-#{lookup_private_nickname(arg1)}" do |scope|
-    scope.click_button "Buy"
-  end
-
 end
 
 When /^I confirm my action$/ do

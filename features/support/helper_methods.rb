@@ -22,3 +22,13 @@ def lookup_private_nickname(name)
     "Ocilla Southern RR" => 'osr',
     "Macon & Birmingham RR" => 'mbr' }[name]
 end
+
+def field_value(selector)
+  elements = noko_doc.css selector
+  raise "expected to recieve 1 element whilst using selector #{selector.inspect}" unless elements.length == 1
+  elements.first['value']
+end
+
+def trim_currency_marker(currency_as_string)
+  return currency_as_string[1 .. -1] if currency_as_string[0,1] == "$"
+end

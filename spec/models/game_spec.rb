@@ -226,6 +226,8 @@ describe Game do
       }
       illegal_action.should raise_error(GameStateNeedsConfirmation)
     end
+
+    it 'should let game state errors bubble and not save a new state'
   end
   
 end

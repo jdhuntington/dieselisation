@@ -197,6 +197,8 @@ describe GamesController do
       flash[:notice].should include("saved")
     end
 
+    it 'should display any errors to the user via flash'
+
     describe 'while logged in' do
       before :each do
         session[:user_id] = @current_player.id
