@@ -32,6 +32,18 @@ module Dieselisation
         raise "Can't bid that"
       end
     end
+
+    def has_one_bid?
+      @bids.length == 1
+    end
+
+    # used when there is one bid on self
+    def autopurchase(from)
+      bid = @bids.first
+      bid[:player].buy(self, from, bid[:price])
+      clear_bids
+      true
+    end
     
     def pass(player) # need player
       # treat 0 as a pass

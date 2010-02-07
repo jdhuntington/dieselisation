@@ -67,7 +67,7 @@ Feature: Manage private auctions
     And I should see the option to buy the "Lexington Terminal RR" for 20
     When I choose to buy the "Lexington Terminal RR"
     And I confirm my action
-    Then Fred should be in posession of "Midland Railroad Co."
+    Then player Fred should be in posession of "Midland Railroad Co."
     And I should see that it is Joe's turn
 
   @purple

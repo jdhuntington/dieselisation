@@ -26,7 +26,7 @@
       <% form_tag act_game_url do %>
         <input type="hidden" value="bid_on_private" name="action_data[verb]">
         <input type="hidden" value="<%= private.nickname -%>" name="action_data[target]">
-        <div class="par"><input type="text" value="<%= number_to_currency private.par, :precision => 0 -%>" name="action_data[bid]" class="bid-value" /></div>
+        <div class="par"><input type="text" value="<%= number_to_currency private.minimum_bid, :precision => 0 -%>" name="action_data[bid]" class="bid-value" /></div>
         <div class="act"><input type="submit" value="Bid" id="bid-<%= private.nickname -%>" /></div>
       <% end %>
       <div>

@@ -2,8 +2,16 @@ def noko_doc
   Nokogiri::HTML(response.body)
 end
 
+def get_content_of_selector(selector)
+  get_element_via_selector(selector).inner_html
+end
+
 def get_element_via_selector(selector)
   noko_doc.css(selector).first # TODO might be able to make this a tad faster
+end
+
+def get_elements_via_selector(selector)
+  noko_doc.css selector
 end
 
 def get_action_buttons_text

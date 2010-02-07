@@ -33,7 +33,11 @@ module Dieselisation
     end
     
     def cheapest_private
-      !@assets.empty? && @assets.first
+      any_privates_unsold? && @assets.first
+    end
+
+    def any_privates_unsold?
+      !@assets.empty?
     end
 
     def purchasable_asset?(asset)

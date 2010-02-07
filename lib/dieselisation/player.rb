@@ -11,7 +11,7 @@ module Dieselisation
     end
     
     def bid_on_private(asset, bid)
-      if bid <= (@balance - bids_total) && bid >= (asset.minimum_bid)
+      if bid <= available_balance && bid >= (asset.minimum_bid)
         @bids[asset.name] = bid
         asset.bid(self, bid)
       else
@@ -27,6 +27,10 @@ module Dieselisation
       @balance -= price
       owning_entity.sell(asset, price)
       @assets << asset
+    end
+
+    def available_balance
+      @balance - bids_total
     end
     
     def bids_total

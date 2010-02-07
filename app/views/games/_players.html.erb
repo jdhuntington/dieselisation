@@ -5,14 +5,14 @@
     <div class="toggler"><input type="button" value="+/-" /></div>
     <div class="main-stats">
       <div class="name"><%= h @users_players[player.identifier] %></div>
-      <div class="cash"><%= number_to_currency player.balance, :precision => 0 %></div>
+      <div class="cash"><%= number_to_currency player.available_balance, :precision => 0 %></div>
     </div>
     <div class="secondary-stats">
       <div class="certificates">
 	<h3>Assets:</h3>
 	<ul>
 	<% player.assets.each do |asset| %>
-	  <li><strong><%= asset.name %></strong></li>
+	  <li><%= asset.name %></li>
 	<% end %>
 	</ul>
       </div>

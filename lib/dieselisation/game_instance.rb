@@ -182,6 +182,13 @@ module Dieselisation
       next_player!
     end
 
+    # handle any automatic effects
+    def handle_effects
+      if @bank.any_privates_unsold?
+        @bank.cheapest_private.autopurchase(@bank) if @bank.cheapest_private.has_one_bid?
+      end
+    end
+
     # main event loop?
     # ActionController will forward requests to Game, which calls this method
     def act(options)
@@ -192,6 +199,7 @@ module Dieselisation
       else raise "No action '#{options['verb']}'"
 
       end
+      handle_effects
     end
     
     protected

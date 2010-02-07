@@ -40,3 +40,17 @@ end
 When /^I confirm my action$/ do
   click_button "Confirm"
 end
+
+Then /^I should see that I have "([^\"]*)" dollars left$/ do |arg1|
+  cash_node = get_content_of_selector "#dieselisation_player_#{@current_player.id} .main-stats .cash"
+  assert_equal arg1, trim_currency_marker(cash_node)
+end
+
+Transform /^player (\w+)$/ do |username|
+  User.find_by_username username
+end
+
+Then /^(player \w+) should be in posession of "([^\"]*)"$/ do |user, arg2|
+  asset_names = get_elements_via_selector("#dieselisation_player_#{user.id} .certificates ul li").map(&:inner_html)
+  asset_names.should include(arg2)
+end
