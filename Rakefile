@@ -9,4 +9,4 @@ require 'rake/rdoctask'
 
 require 'tasks/rails'
 
-task :default => [:spec, 'test:implementation', 'test:integration']
+task :default => ['spec', 'test:implementation', 'test:integration', 'cucumber:all']
