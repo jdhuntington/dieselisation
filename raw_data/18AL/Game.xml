@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<ComponentManager>
+	<Component name="GameManager" class="rails.game.GameManager">
+		<Game name="18AL"/>
+		<GameOption name="UnlimitedTopTrains" parm="4D" type="toggle" default="no"/>
+		<GameOption name="Obsolete4Trains" type="toggle" default="yes"/>
+		<GameOption name="UnlimitedTiles" type="toggle" default="no"/>
+		<GameOption name="LeaveAuctionOnPass" type="toggle" default="no"/>
+		<GameParameters>
+			<OperatingRound class="rails.game.specific._18AL.OperatingRound_18AL"/>
+			<PlayerShareLimit percentage="60"/>
+			<BankPoolLimit percentage="50"/>
+			<StockRound>
+				 <NoSaleInFirstSR/>
+			</StockRound>
+		</GameParameters>
+		<GuiClasses>
+			<ORUIManager class="rails.ui.swing.gamespecific._18AL.ORUIManager_18AL"/>
+		</GuiClasses>
+		<EndOfGame>
+			<Bankruptcy/>
+			<BankBreaks limit="0" finish="currentOR"/>
+			<!-- "Runs out"; when "broken", -1 is the limit -->
+			<!-- Also when the share value reaches $300; this is configured in teh stock market XML -->
+		</EndOfGame>
+	</Component>
+	<Component name="PlayerManager" class="rails.game.PlayerManager">
+		<Players number="3" cash="600" certLimit="15"/>
+		<Players number="4" cash="500" certLimit="12"/>
+		<Players number="5" cash="400" certLimit="10"/>
+	</Component>
+	<Component name="Bank" class="rails.game.Bank">
+		<Bank amount="8000"/>
+	</Component>
+	<Component name="TileManager" class="rails.game.TileManager" 
+		file="TileSet.xml"/>
+	<Component name="Map" class="rails.game.MapManager" file="Map.xml"/>
+	<Component name="CompanyManager" class="rails.game.CompanyManager" 
+		file="CompanyManager.xml"/>
+	<Component name="StockMarket" class="rails.game.StockMarket" 
+		file="StockMarket.xml"/>
+	<Component name="TrainManager" class="rails.game.TrainManager">
+		<Defaults class="rails.game.specific._18AL.NameableTrain">
+			<Reach base="stops" countTowns="yes"/>
+			<Score towns="yes"/>
+		</Defaults>
+		<Train name="2" majorStops="2" cost="100" amount="5"/>
+		<Train name="3" majorStops="3" cost="180" amount="4" startPhase="3"/>
+		<Train name="4" majorStops="4" cost="300" amount="3" startPhase="4" 
+			rustedTrain="2" >
+			<IfOption name="Obsolete4Trains" value="yes">
+				<Attributes obsoleting="yes"/>
+			</IfOption>
+			<IfOption name="Obsolete4Trains" value="no">
+				<Attributes obsoleting="no"/>
+			</IfOption>
+		</Train>/>
+		<Train name="5" majorStops="5" cost="450" amount="2" startPhase="5"/>
+		<Train name="6" majorStops="6" cost="630" amount="1" startPhase="6" 
+			rustedTrain="3"/>
+		<Train name="7" majorStops="7" cost="700" amount="1" startPhase="7" 
+			rustedTrain="4"/>
+		<Train name="4D" majorStops="4" cost="800" startPhase="4D">
+			<IfOption name="UnlimitedTopTrains" value="yes">
+				<Attributes amount="-1"/>
+			</IfOption>
+			<IfOption name="UnlimitedTopTrains" value="no">
+				<Attributes amount="5"/>
+			</IfOption>
+			<Reach countTowns="no"/>
+			<Score cities="double"/>
+			<Exchange cost="800"/>
+		</Train>
+	</Component>
+	<Component name="PhaseManager" class="rails.game.PhaseManager">
+		<Phase name="2" >
+			<Tiles colour="yellow"/>
+			<OperatingRounds number="1"/>
+			<Trains onePerTurn="yes" tradingAllowed="yes"/>
+		</Phase>
+		<Phase name="3">
+			<Tiles colour="yellow,green"/>
+			<Privates sellingAllowed="yes"/>
+			<OperatingRounds number="2"/>
+		</Phase>
+		<Phase name="4">
+			<Tiles colour="yellow,green"/>
+			<Trains onePerTurn="no"/>
+		</Phase>
+		<Phase name="5">
+			<Tiles colour="yellow,green,brown"/>
+			<OperatingRounds number="3"/>
+			<Privates close="yes"/>
+			<OffBoardRevenue step="2"/>
+		</Phase>
+		<Phase name="6">
+			<Tiles colour="yellow,green,brown"/>
+		</Phase>
+		<Phase name="7">
+			<Tiles colour="yellow,green,brown"/>
+		</Phase>
+		<Phase name="4D">
+			<Tiles colour="yellow,green,brown,grey"/>
+		</Phase>
+	</Component>
+</ComponentManager>
