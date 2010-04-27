@@ -4,7 +4,7 @@ class GameState < ActiveRecord::Base
   has_one :game
   belongs_to :active_player, :class_name => 'User'
   belongs_to :previous, :class_name => 'GameState'
-  
+
   attr_writer :game_instance
   before_save :marshal_data
 
