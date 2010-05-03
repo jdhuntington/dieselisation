@@ -165,3 +165,13 @@ div.private .secondary-stats h3
     border: none; 
 }
 
+div#status
+{
+    border: 1px solid #aaa;
+    border-bottom: none;
+    background: #fff;
+    margin-bottom: 5px; 
+/*    padding: 10px;*/
+}
+
+

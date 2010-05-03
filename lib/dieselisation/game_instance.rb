@@ -35,6 +35,10 @@ module Dieselisation
     def current_player
       @players.first
     end
+    
+    def imp_name
+      @implementation::CONFIG[:name]
+    end
 
     def current_player_identifier
       current_player.identifier

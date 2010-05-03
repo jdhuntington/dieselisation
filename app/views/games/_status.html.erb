@@ -1,0 +1,13 @@
+<div id="status">
+	<table>
+		<tr>
+			<th>Current Player:</th><th>Phase:</th><th>Bank:</th>
+		</tr>
+		<tr>
+			<td id="current-player"><%= @game.current_player.display_name %></td>
+			<td id="current-phase"><%= @game_instance.round_name %></td>
+			<td id="bank-balance">$<%= @game_instance.bank.balance %></td>
+		</tr>
+	</table>
+	
+</div>

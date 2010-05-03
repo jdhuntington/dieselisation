@@ -6,8 +6,8 @@
     var board = <%= @game_instance.board.to_json %>;
   </script>
 <% end %>
-<h2><%= @game.name %></h2>
-<h4 id="current-player"><%= @game.current_player.display_name %></h4>
+<h2><%= @game.name %>(<%= @game_instance.imp_name %>)</h2>
+<%= render :partial => 'status' %>
 <%= render :partial => 'notifications' %>
 
 <% if @game.requires_confirmation? %>
@@ -18,8 +18,9 @@
 
 <div id="log-window-stand-in"></div>
 <div id="log-window-container">
-<div id="log-window">
-<%= render :partial => 'chat' %>
-<%= render :partial => 'notes' %>
+	<div id="log-window">
+		<%= render :partial => 'chat' %>
+		<%= render :partial => 'notes' %>
+	</div>
 </div>
-</div>
+

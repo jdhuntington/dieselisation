@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(:version => 20100118152502) do
     t.string  "email"
     t.string  "password"
     t.string  "actual_name"
-    t.string  "identifier",         :limit => nil
+    t.string  "identifier"
     t.boolean "email_notification"
   end
 
