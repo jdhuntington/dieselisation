@@ -1,4 +1,5 @@
 require 'dieselisation'
+require 'base64'
 
 class GameState < ActiveRecord::Base
   has_one :game
@@ -9,7 +10,7 @@ class GameState < ActiveRecord::Base
   before_save :marshal_data
 
   def game_instance
-    @game_instance ||= game_state && Marshal.load(game_state)
+    @game_instance ||= game_state && Marshal.load(Base64.decode64(game_state))
   end
 
   def requires_confirmation?
@@ -29,6 +30,6 @@ class GameState < ActiveRecord::Base
 
   private
   def marshal_data
-    self.game_state = Marshal.dump(game_instance)
+    self.game_state = Base64.encode64(Marshal.dump(game_instance))
   end
 end

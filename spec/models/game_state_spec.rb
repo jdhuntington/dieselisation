@@ -10,7 +10,7 @@ describe GameState do
       gs.game_instance = :something
       Marshal.expects(:dump).with(:something).returns('some_data')
       gs.save!
-      assert_equal 'some_data', GameState.find(gs.id).game_state
+      assert_equal Base64.encode64('some_data'), GameState.find(gs.id).game_state
     end
   end
 
