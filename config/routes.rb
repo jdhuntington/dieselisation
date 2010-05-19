@@ -3,6 +3,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :session
   map.resource :dashboard
   map.resource :account
+  map.resources :scenarios
   map.create_session_remotely 'session/create_remote', :controller => 'sessions', :action => 'create_remote'
   map.login_as 'session/login_as/:username', :controller => 'sessions', :action => 'login_as'
   map.root :controller => 'dashboards', :action => 'show'

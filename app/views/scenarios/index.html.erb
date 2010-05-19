@@ -1,0 +1,9 @@
+<div id="left-side">
+<h1>Run a scenario</h1>
+
+<ul>
+<% @scenarios.each do |scenario| %>
+  <li><%= link_to scenario.name, scenario_path(scenario.to_param) %></li>
+<% end %>
+</ul>
+</div>
