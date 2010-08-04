@@ -8,10 +8,10 @@ module Dieselisation
     SR = 'stock round'
     OR = 'operating round'
     
-    def initialize(implementation, player_ids)
+    def initialize(implementation, player_ids, options = {})
       @implementation = implementation
       @num_players = player_ids.length
-      setup_players(player_ids)
+      setup_players(player_ids, :shuffle_players => options[:shuffle_players])
       @current_round = @implementation::CONFIG[:rounds][0]
       @current_phase = @implementation::CONFIG[:phases][0]
       setup_privates
@@ -213,11 +213,11 @@ module Dieselisation
       @board.normalize!
     end
     
-    def setup_players(player_ids)
+    def setup_players(player_ids, options={})
       starting_cash = @implementation::CONFIG[:player_init][@num_players][:start_money]
       @players = player_ids.map { |player_id| Player.new(:balance => starting_cash, 
                                                          :identifier => player_id) }
-      @players.sort!{ rand }
+      @players.sort!{ rand } unless options[:shuffle_players]
     end
     
     def setup_privates

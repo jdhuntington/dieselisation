@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + '/../config/environment'
+
+order, ignore, *steps = File.read(ARGV.first).split("\n")
+players = order.split(/:\s*/).last.split(/,\s*/).map do |username|
+  User.find_or_create_by_username(username)
+end
+p players
+
+
+g = Game.create!({ :owner  => players.first,
+                   :name   => "#{File.basename(ARGV.first)} - #{Time.new.to_s}",
+                   :status => 'new' })
+
+
+players[1 .. -1].each { |player| g.add_player player }
+g.start_without_shuffle!
+
+steps.each_with_index do |step, i|
+  printf("step %3d - %s\n", i, step)
+  username, step_action = step.split(/:\s*/)
+  # A little paranoid, making sure state is clean
+  g = Game.find(g)
+  if username != g.current_player.username
+    STDERR.puts "Current player expectation mismatch at step #{i} (#{step}). Game reports current player as \"#{g.current_player.username}\"."
+    exit 1
+  end
+
+  step_action_parts = step_action.split
+  g.act({
+          'verb'      => step_action_parts[0],
+          'target'    => step_action_parts[1],
+          'player_id' => g.current_player.id
+        })
+
+end

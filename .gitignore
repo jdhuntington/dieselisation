@@ -12,3 +12,4 @@ config/rpx.yml
 webrat*.html
 rerun.txt
 .rake_tasks
+.dir-locals

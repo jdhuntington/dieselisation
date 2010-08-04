@@ -31,7 +31,7 @@ class Game < ActiveRecord::Base
       new_seating.save!
     end
   end
-  
+
   def current_player
     raise "Cannot have current player without having a started game" if self.status == 'new'
     if game_state && game_state.requires_confirmation?
@@ -44,17 +44,29 @@ class Game < ActiveRecord::Base
   def in_progress?
     self.status == 'active'
   end
-  
+
   def started?
     self.status != 'new'
   end
 
   def start!
     self.status = 'active'
-    self.current_player = users[rand(users.length)]
-    @game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18GA, users.map(&:id))
+    self.current_player = ordered_users.first
+    @game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18AL, ordered_users.map(&:id))
     persist!
     save!
+  end
+
+  def start_without_shuffle!
+    self.status = 'active'
+    self.current_player = ordered_users.first
+    @game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18AL, ordered_users.map(&:id), :shuffle_players => false)
+    persist!
+    save!
+  end
+
+  def ordered_users
+    seatings.sort_by(&:id).reverse.map(&:user)
   end
 
   def owner_name
