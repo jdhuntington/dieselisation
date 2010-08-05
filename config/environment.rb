@@ -18,7 +18,6 @@ Rails::Initializer.run do |config|
   config.time_zone = 'UTC'
 end
 
-require 'game_18ga'
 require 'rpx'
 
 rpx_filename = if File.exist?(File.join(File.dirname(__FILE__), 'rpx.yml'))
