@@ -32,5 +32,7 @@ steps.each_with_index do |step, i|
           'target'    => step_action_parts[1],
           'player_id' => g.current_player.id
         })
-
+  
+  g.persist!
+  g.confirm!
 end

@@ -165,7 +165,10 @@ module Dieselisation
     end
 
     def lookup_private(nickname)
-      privates.detect{ |p| p.nickname == nickname }
+      found = privates.detect{ |p| p.nickname == nickname }
+      return found if found
+      known = privates.map {|x| x.nickname}
+      raise "Unkonwn private #{nickname.inspect}. (Privates are: #{known.inspect})"
     end
 
     def handle_private_purchase(options)
