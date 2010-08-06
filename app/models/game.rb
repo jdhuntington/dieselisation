@@ -83,6 +83,11 @@ class Game < ActiveRecord::Base
     start! if users.length >= self.max_players
   end
 
+  def lookup_player(username)
+    user_id = users.find_by_username(username).id
+    game_instance.players.detect { |x| x.identifier == user_id }
+  end
+
   def game_instance
     @game_instance ||= (game_state && game_state.game_instance)
   end

@@ -1,7 +1,15 @@
 Order: JD, Matt, Mike
 
 JD: buy_private tusc
+* player_cash('JD') == 580
+* bank_cash == 6220
 Matt: buy_private sna
+* player_cash('Matt') == 560
+* bank_cash == 6260
 Mike: buy_private bslc
 JD: buy_private mc
 Matt: buy_private ndy
+* player_cash('JD') == 480
+* player_cash('Matt') == 440
+* player_cash('Mike') == 530
+* bank_cash == 6550

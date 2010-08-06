@@ -5,34 +5,60 @@ order, ignore, *steps = File.read(ARGV.first).split("\n")
 players = order.split(/:\s*/).last.split(/,\s*/).map do |username|
   User.find_or_create_by_username(username)
 end
-p players
+
+$g = Game.create!({ :owner  => players.first,
+                    :name   => "#{File.basename(ARGV.first)} - #{Time.new.to_s}",
+                    :status => 'new' })
 
 
-g = Game.create!({ :owner  => players.first,
-                   :name   => "#{File.basename(ARGV.first)} - #{Time.new.to_s}",
-                   :status => 'new' })
+players[1 .. -1].each { |player| $g.add_player player }
+$g.start_without_shuffle!
 
-
-players[1 .. -1].each { |player| g.add_player player }
-g.start_without_shuffle!
-
-steps.each_with_index do |step, i|
-  printf("step %3d - %s\n", i, step)
+def turn step
   username, step_action = step.split(/:\s*/)
-  # A little paranoid, making sure state is clean
-  g = Game.find(g)
-  if username != g.current_player.username
-    STDERR.puts "Current player expectation mismatch at step #{i} (#{step}). Game reports current player as \"#{g.current_player.username}\"."
-    exit 1
-  end
+
+  assert "current_player", "'#{username}'" # Eww
 
   step_action_parts = step_action.split
-  g.act({
-          'verb'      => step_action_parts[0],
-          'target'    => step_action_parts[1],
-          'player_id' => g.current_player.id
-        })
-  
-  g.persist!
-  g.confirm!
+  $g.act({ 'verb'      => step_action_parts[0],
+           'target'    => step_action_parts[1],
+           'player_id' => $g.current_player.id })
+
+  $g.persist!
+  $g.confirm!
+end
+
+# assertion methods
+def current_player
+  $g.current_player.username
+end
+
+def player_cash username
+  player = $g.lookup_player username
+  player.balance
+end
+
+def bank_cash
+  $g.game_instance.bank.balance
+end
+
+def assert actual, expected
+  actual_eval   = eval actual
+  expected_eval = eval expected
+  unless actual_eval == expected_eval
+    STDERR.puts "Failed assertion! [#{actual} == #{expected} // #{actual_eval} == #{expected_eval}]"
+    exit 1
+  end
+end
+
+count = 0
+steps.each do |step|
+  if step =~ /^\*\s*(.*)\s*==\s*(.*)$/
+    puts "    #{step}"
+    assert $1, $2
+  else
+    count += 1
+    printf "%3d - %s\n", count, step
+    turn step
+  end
 end
