@@ -63,65 +63,6 @@ module Dieselisation
       current_player
     end
 
-    def next_player
-      # this will need a lot more conditions
-      options = player_options
-      if options.any? {|o| o.type == :private_auction_bid}
-        pvt_for_auction = (options.find {|o| o.type == :private_auction_bid}).target
-        # pvt_for_auction = options[:private_auction_bid][:private]
-        # only players who have bid on the private,
-        #   in seat order starting with the player after
-        #   the one who made the highest bid
-
-        self.current_player = iterate_players(pvt_for_auction.bidders,
-                                              pvt_for_auction.highest_bidder)
-        # if auction_private
-        # only players who have bid on the private, in seat order
-        # starting with the player after the one who made the highest
-        # bid
-        # self.current_player = iterate_players(private_for_auction.bidders,
-        # private_for_auction.highest_bidder)
-        return current_player
-      end
-
-      player = @players.shift   # Get the first player, and take out of the players array
-      @players.push(player)     # Put the first player back in the array in last position
-      current_player
-    end
-
-    # this is very 18GA specific
-    # this is becoming the main event loop for the game.  I expect it
-    # to be called frequently and can then invoke any non-player actions
-    # and events that need to happen given the current game state
-    def player_options
-      options = []
-      if @current_round == SR
-        if (@bank.assets.map { |a| a.class == Dieselisation::Private }).include?(true)
-          # the bank still owns a private
-          cheapest_pvt = @bank.cheapest_private
-          if auction_private
-            options << Action.new(:private_auction_bid, cheapest_pvt)
-            options << Action.new(:private_auction_pass, cheapest_pvt)
-            return options
-          elsif cheapest_pvt.bids.empty?
-            # no bid on the cheapest private
-            options << Action.new(:buy_private, cheapest_pvt)
-          end
-          # options << Action.new(:buy_private, cheapest_pvt)
-          (@bank.assets - [cheapest_pvt]).each do |private|
-            options << Action.new(:bid_on_private, private)
-          end
-        end
-
-      elsif @current_round == OR
-        raise 'unimplemented operating round'
-      else
-        raise 'Unknown round.'
-      end
-
-      return options
-    end
-
     def round_name
       'private_auction'
     end
@@ -188,13 +129,16 @@ module Dieselisation
 
     # handle any automatic effects
     def handle_effects
-      if @bank.any_privates_unsold?
-        @bank.cheapest_private.autopurchase(@bank) if @bank.cheapest_private.has_one_bid?
+      # Handle one effect at a time, let recursion take care of the rest
+      if @bank.any_privates_unsold? && @bank.cheapest_private.has_one_bid?
+        @bank.cheapest_private.autopurchase(@bank)
+      else
+        return
       end
+      # call until this method does nothing
+      handle_effects
     end
 
-    # main event loop?
-    # ActionController will forward requests to Game, which calls this method
     def act(options)
       case options['verb']
 

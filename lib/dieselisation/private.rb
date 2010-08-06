@@ -1,6 +1,6 @@
 module Dieselisation
   class Private
-    attr_reader :name, :par, :revenue, :special, :owner, :bids
+    attr_accessor :name, :par, :revenue, :special, :owner, :bids
     
     def initialize(params={ })
       @name = params[:name]
@@ -39,20 +39,16 @@ module Dieselisation
 
     # used when there is one bid on self
     def autopurchase(from)
+      raise "Can't autopurchase me!" unless self.has_one_bid?
       bid = @bids.first
       bid[:player].buy(self, from, bid[:price])
       clear_bids
       true
     end
     
-    def pass(player) # need player
-      # treat 0 as a pass
-      @bids << {:player => player, :price => 0}
-    end
-    
     def minimum_bid
       if @bids.empty?
-        self.par
+        self.par + 5 # TODO make sure this is actually the rule
       else
         (@bids.map { |b| b[:price] }).sort.last + 5
       end

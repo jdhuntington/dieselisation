@@ -13,7 +13,8 @@ module Dieselisation
     
     def sell(asset, price)
       deposit(price)
-      @assets.delete(asset)
+      deleted = @assets.delete(asset)
+      raise "Can't sell something I don't have" unless deleted
     end
     
     def deposit(deposit)

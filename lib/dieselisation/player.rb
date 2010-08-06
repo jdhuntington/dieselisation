@@ -27,6 +27,7 @@ module Dieselisation
       @balance -= price
       owning_entity.sell(asset, price)
       @assets << asset
+      asset.owner = self
     end
 
     def available_balance

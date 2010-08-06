@@ -22,6 +22,7 @@ def turn step
   step_action_parts = step_action.split
   $g.act({ 'verb'      => step_action_parts[0],
            'target'    => step_action_parts[1],
+           'bid'       =>  step_action_parts[2],
            'player_id' => $g.current_player.id })
 
   $g.persist!
@@ -38,8 +39,18 @@ def player_cash username
   player.balance
 end
 
+def available_cash username
+  player = $g.lookup_player username
+  player.available_balance
+end
+
 def bank_cash
   $g.game_instance.bank.balance
+end
+
+def owner asset_nickname
+  user_id = $g.game_instance.lookup_private(asset_nickname).owner.identifier
+  User.find(user_id).username
 end
 
 def assert actual, expected

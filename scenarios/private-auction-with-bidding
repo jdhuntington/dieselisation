@@ -1,0 +1,23 @@
+Order: JD, Matt, Mike
+
+JD: bid_on_private ndy 125
+* available_cash('JD') == 475
+Matt: bid_on_private ndy 130
+* available_cash('Matt') == 470
+Mike: bid_on_private mc 105
+* available_cash('Mike') == 495
+JD: bid_on_private mc 115
+* available_cash('JD') == 360
+Matt: bid_on_private mc 120
+* available_cash('Matt') == 350
+Mike: bid_on_private bslc 100
+* available_cash('Mike') == 395
+JD: bid_on_private sna 50
+* available_cash('JD') == 310
+Matt: buy_private tusc
+* owner('tusc') == 'Matt'
+* player_cash('Matt') == 580
+* owner('sna') == 'JD'
+* player_cash('JD') == 550
+* owner('bslc') == 'Mike'
+* player_cash('Mike') == 500
