@@ -1,10 +1,12 @@
 #!/usr/bin/env ruby
 require File.dirname(__FILE__) + '/../config/environment'
+require 'scenario_runner'
 
 order, ignore, *steps = File.read(ARGV.first).split("\n")
 players = order.split(/:\s*/).last.split(/,\s*/).map do |username|
   User.find_or_create_by_username(username)
 end
+
 
 $g = Game.create!({ :owner  => players.first,
                     :name   => "#{File.basename(ARGV.first)} - #{Time.new.to_s}",
@@ -14,62 +16,16 @@ $g = Game.create!({ :owner  => players.first,
 players[1 .. -1].each { |player| $g.add_player player }
 $g.start_without_shuffle!
 
-def turn step
-  username, step_action = step.split(/:\s*/)
 
-  assert "current_player", "'#{username}'" # Eww
-
-  step_action_parts = step_action.split
-  $g.act({ 'verb'      => step_action_parts[0],
-           'target'    => step_action_parts[1],
-           'bid'       =>  step_action_parts[2],
-           'player_id' => $g.current_player.id })
-
-  $g.persist!
-  $g.confirm!
-end
-
-# assertion methods
-def current_player
-  $g.current_player.username
-end
-
-def player_cash username
-  player = $g.lookup_player username
-  player.balance
-end
-
-def available_cash username
-  player = $g.lookup_player username
-  player.available_balance
-end
-
-def bank_cash
-  $g.game_instance.bank.balance
-end
-
-def owner asset_nickname
-  user_id = $g.game_instance.lookup_private(asset_nickname).owner.identifier
-  User.find(user_id).username
-end
-
-def assert actual, expected
-  actual_eval   = eval actual
-  expected_eval = eval expected
-  unless actual_eval == expected_eval
-    STDERR.puts "Failed assertion! [#{actual} == #{expected} // #{actual_eval} == #{expected_eval}]"
-    exit 1
+ScenarioRunner::Formatter.init File.basename(ARGV.first)
+begin
+  steps.each do |step|
+    if step =~ /^\*\s*(.*)\s==\s(.*)$/
+      ScenarioRunner::Assertions.assert $1, $2
+    else
+      ScenarioRunner.turn step
+    end
   end
-end
-
-count = 0
-steps.each do |step|
-  if step =~ /^\*\s*(.*)\s*==\s*(.*)$/
-    puts "    #{step}"
-    assert $1, $2
-  else
-    count += 1
-    printf "%3d - %s\n", count, step
-    turn step
-  end
+ensure
+  ScenarioRunner::Formatter.terminate
 end

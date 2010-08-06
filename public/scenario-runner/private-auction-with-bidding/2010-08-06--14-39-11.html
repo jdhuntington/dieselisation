@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>2010-08-06--14-39-11.html</title>
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/stylesheets/blueprint/screen.css" type="text/css" />
+</head>
+<body>
+<ol>
+        <li class="action"><span class="username">JD</span> <span class="action">bid_on_private ndy 125</action></li>  
+        <li class="assertion passed">current_player == 'JD'</li>  
+        <li class="assertion passed">available_cash('JD') == 475</li>  
+        <li class="action"><span class="username">Matt</span> <span class="action">bid_on_private ndy 130</action></li>  
+        <li class="assertion passed">current_player == 'Matt'</li>  
+        <li class="assertion passed">available_cash('Matt') == 470</li>  
+        <li class="action"><span class="username">Mike</span> <span class="action">bid_on_private mc 105</action></li>  
+        <li class="assertion passed">current_player == 'Mike'</li>  
+        <li class="assertion passed">available_cash('Mike') == 495</li>  
+        <li class="action"><span class="username">JD</span> <span class="action">bid_on_private mc 115</action></li>  
+        <li class="assertion passed">current_player == 'JD'</li>  
+        <li class="assertion passed">available_cash('JD') == 360</li>  
+        <li class="action"><span class="username">Matt</span> <span class="action">bid_on_private mc 120</action></li>  
+        <li class="assertion passed">current_player == 'Matt'</li>  
+        <li class="assertion passed">available_cash('Matt') == 350</li>  
+        <li class="action"><span class="username">Mike</span> <span class="action">bid_on_private bslc 100</action></li>  
+        <li class="assertion passed">current_player == 'Mike'</li>  
+        <li class="assertion passed">available_cash('Mike') == 395</li>  
+        <li class="action"><span class="username">JD</span> <span class="action">bid_on_private sna 50</action></li>  
+        <li class="assertion passed">current_player == 'JD'</li>  
+        <li class="assertion passed">available_cash('JD') == 310</li>  
+        <li class="action"><span class="username">Matt</span> <span class="action">buy_private tusc</action></li>  
+        <li class="assertion passed">current_player == 'Matt'</li>  
+        <li class="assertion passed">owner('tusc') == 'Matt'</li>  
+        <li class="assertion passed">player_cash('Matt') == 580</li>  
+        <li class="assertion passed">owner('sna') == 'JD'</li>  
+        <li class="assertion passed">player_cash('JD') == 550</li>  
+        <li class="assertion passed">owner('bslc') == 'Mike'</li>  
+        <li class="assertion passed">player_cash('Mike') == 500</li>  
+</ol></body></html>
