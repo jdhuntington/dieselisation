@@ -17,5 +17,6 @@ module ScenarioRunner
 
     $g.persist!
     $g.confirm!
+    Formatter.game_link $g.game_state
   end
 end

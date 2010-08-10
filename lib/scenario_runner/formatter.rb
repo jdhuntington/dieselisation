@@ -7,6 +7,7 @@ module ScenarioRunner
     def init scenario_name
       @turn_count = 0
       interactive_logfile_path = File.join(RAILS_ROOT, 'public', 'scenario-runner', scenario_name)
+      @scenario_name = scenario_name
       FileUtils.mkdir_p interactive_logfile_path
       interactive_logfile_filename = [Time.new.strftime("%Y-%m-%d--%H-%M-%S"), 'html'].join('.')
       @logfile = File.open(File.join(interactive_logfile_path, interactive_logfile_filename), 'w')
@@ -36,37 +37,60 @@ module ScenarioRunner
 <head>
    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
    <title>#{filename}</title>
-   <!-- syntax highlighting CSS -->
    <link rel="stylesheet" href="/stylesheets/blueprint/screen.css" type="text/css" />
+   <link rel="stylesheet" href="/stylesheets/scenario.css" type="text/css" />
 </head>
 <body>
-<ol>
+<div class="container">
+<h1>#{@scenario_name}</h1>
+<hr />
+<h2 class="alt">#{Time.new.to_s}</h2>
+<hr />
+<h4>Toggle:</h4>
+<a href="#" id="toggle-actions">Actions</a>
+<a href="#" id="toggle-assertions">Assertions</a>
+<a href="#" id="toggle-links">Links</a>
+<hr />
       EOF
     end
 
     def write_interactive_footer
-      @logfile.puts "</ol></body></html>"
+      @logfile.puts <<-EOF
+        </div>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+        <script src="/javascripts/scenario.js" type="text/javascript"></script>
+        </body></html>
+      EOF
     end
 
     def log_turn username, step_action
       @turn_count += 1
       printf "%3d - %7s: %s\n", @turn_count, username, step_action
       @logfile.puts <<-EOF
-        <li class="action"><span class="username">#{username}</span> <span class="action">#{step_action}</action></li>  
+        <div class="notice action">
+          <span class="username">#{username}</span>
+          <span class="description">#{step_action}</action>
+        </div>
+      EOF
+    end
+
+    def game_link game_state
+      @logfile.puts <<-EOF
+        <div class="game-link"><a href="/scenario/load?gamestate=#{game_state.id}">link</a></div>
       EOF
     end
 
     def log_assertion actual, expected
       printf "    * %s %25s == %s\n", (' ' * 30), actual, expected
       @logfile.puts <<-EOF
-        <li class="assertion passed">#{actual} == #{expected}</li>  
+        <div class="assertion success">#{actual} == #{expected}</div>  
       EOF
     end
 
     def log_failure actual, expected, actual_eval, expected_eval
       puts "Failed assertion! [#{actual} == #{expected} // #{actual_eval} == #{expected_eval}]"
       @logfile.puts <<-EOF
-        <li class="assertion failed">#{actual} != #{expected} <span class="evaled">#{actual_eval} != #{expected_eval}</span></li>  
+        <div class="assertion error">#{actual} != #{expected} <span class="evaled">#{actual_eval} != #{expected_eval}</span></div>  
       EOF
     end
   end

@@ -97,7 +97,7 @@ class Game < ActiveRecord::Base
   end
 
   def persist!
-    self.game_state = GameState.create!(:game_instance => game_instance, :active_player => current_player, :previous => game_state)
+    self.game_state = GameState.create!(:game_instance => game_instance, :active_player => current_player, :previous => game_state, :game_id => self.id)
     self.save!
   end
 
@@ -108,6 +108,11 @@ class Game < ActiveRecord::Base
   def act(options)
     raise GameStateNeedsConfirmation.new if requires_confirmation?
     @game_instance.act(options)
+  end
+
+  def rollback(game_state)
+    self.game_state = game_state
+    save!
   end
 
   protected
