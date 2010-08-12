@@ -6,8 +6,8 @@ module ScenarioRunner
   def turn step
     username, step_action = step.split(/:\s*/)
 
-    Formatter.log_turn username, step_action
     Assertions.assert "current_player", "'#{username}'" # Eww
+    Formatter.log_turn username, step_action
 
     step_action_parts = step_action.split
     $g.act({ 'verb'      => step_action_parts[0],
