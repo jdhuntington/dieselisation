@@ -10,8 +10,8 @@ class Game < ActiveRecord::Base
   validates_presence_of :status, :owner_id, :name
   validates_uniqueness_of :name
 
-  named_scope :open_for_registration, :conditions => ['status = ?', 'new']
-  named_scope :unfinished, :conditions => ['status <> ?', 'finished']
+  scope :open_for_registration, :conditions => ['status = ?', 'new']
+  scope :unfinished, :conditions => ['status <> ?', 'finished']
 
   before_save :strip_whitespace
   before_create :add_owner_to_game

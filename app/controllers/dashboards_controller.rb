@@ -1,6 +1,5 @@
 class DashboardsController < ApplicationController
-
-  before_filter :current_user
+  before_filter :authorize
 
   def show
     @games = current_user.current_games_preferred_list

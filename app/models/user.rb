@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+
+  include Clearance::User
+
   has_many :seatings
   has_many :games, :through => :seatings
 

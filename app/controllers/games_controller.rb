@@ -1,6 +1,5 @@
 class GamesController < ApplicationController
-
-  before_filter :current_user
+  before_filter :authorize
 
   def index
     @games = Game.open_for_registration
