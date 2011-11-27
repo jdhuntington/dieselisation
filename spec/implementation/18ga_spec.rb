@@ -1,13 +1,13 @@
-require File.dirname(__FILE__) + '/../implementation_test_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
-class TestGameFlow < Test::Unit::TestCase
+describe 'TestGameFlow < Test::Unit::TestCase' do
   GA = YAML.load_file("#{DIESEL_DIR}/18GA/game_18ga.yml")
   PLAYERS = [1337,42,0xDEADBEEF,13] # The game instance expects an array of player ids from the rails app
   NUM_PLAYERS = PLAYERS.length
   PLAYER_INIT = GA[:player_init][NUM_PLAYERS]
 
-  def test_player_setup
+  it 'test_player_setup' do
     PLAYERS.each do |id|
       # puts player.inspect
       player = Dieselisation::Player.new({:identifier => id, 
@@ -18,12 +18,12 @@ class TestGameFlow < Test::Unit::TestCase
   end
   
   # For association with the logged in user
-  def test_player_should_keep_track_of_a_unique_identifier 
+  it 'test_player_should_keep_track_of_a_unique_identifier ' do
     p = Dieselisation::Player.new({ :identifier => "abcdef"})
     assert_equal("abcdef", p.identifier)
   end
   
-  def test_bank
+  it 'test_bank' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     assert(inst.bank.balance == 6200)
     assert(inst.bank.withdrawl(200) == 6000)
@@ -41,7 +41,7 @@ class TestGameFlow < Test::Unit::TestCase
     assert_equal(20, inst.bank.cheapest_private.par)
   end
   
-  def test_private
+  it 'test_private' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     next_player = inst.players[1]
     assert_nil inst.privates[1].highest_bid
@@ -59,7 +59,7 @@ class TestGameFlow < Test::Unit::TestCase
     assert_equal(inst.bank.cheapest_private, inst.privates[1])
   end
 
-  def test_game_4p_setup
+  it 'test_game_4p_setup' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     assert(inst.num_players == 4)
     
@@ -71,7 +71,7 @@ class TestGameFlow < Test::Unit::TestCase
     assert(inst.current_phase == 1)
   end
     
-  def test_game_instance_initial_state
+  it 'test_game_instance_initial_state' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     opts = inst.player_options # initial options
     assert_equal(Array, opts.class)
@@ -89,7 +89,7 @@ class TestGameFlow < Test::Unit::TestCase
     assert(inst.bank.assets.include?(cheap_private))
   end
   
-  def test_game_instance_next_player
+  it 'test_game_instance_next_player' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     p1 = inst.current_player
     inst.next_player
@@ -105,7 +105,7 @@ class TestGameFlow < Test::Unit::TestCase
     assert(p1 == inst.current_player)
   end
   
-  def test_buy_private
+  it 'test_buy_private' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     cup = inst.current_player
     # puts inst.player_options.inspect
@@ -120,7 +120,7 @@ class TestGameFlow < Test::Unit::TestCase
     assert(player_options_keys.include?(:buy_private))
   end
     
-  def test_buy_private_trigger_auction
+  it 'test_buy_private_trigger_auction' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     p1 = inst.current_player
     cheap_private = inst.player_options.detect { |opt| opt.type == :buy_private }.target
@@ -158,7 +158,7 @@ class TestGameFlow < Test::Unit::TestCase
     assert_equal(p2.bids_total, 0)
   end
   
-  def test_instance_iterate_player
+  it 'test_instance_iterate_player' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     p1 = inst.current_player
     p2 = inst.send(:iterate_players, inst.players.map {|p| p}, p1)
@@ -172,7 +172,7 @@ class TestGameFlow < Test::Unit::TestCase
   end
 
   # TODO finish
-  def test_private_auction
+  it 'test_private_auction' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, PLAYERS)
     p1 = inst.current_player
     mid = inst.privates[1]
@@ -220,7 +220,7 @@ class TestGameFlow < Test::Unit::TestCase
     
 end
   
-  def test_inst_everybody_passed_on_a_turn
+  it 'test_inst_everybody_passed_on_a_turn' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
     assert(!(inst.everybody_passed?))
     ltr = inst.privates[0]
@@ -228,12 +228,12 @@ end
     
   end
   
-  def test_current_player_should_return_first_player_from_players_list
+  it 'test_current_player_should_return_first_player_from_players_list' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
     assert_equal inst.current_player, inst.players.first
   end
 
-  def test_next_player_should_progress_the_player_track_so_that_the_first_player_is_now_the_last_player
+  it 'test_next_player_should_progress_the_player_track_so_that_the_first_player_is_now_the_last_player' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
     players = inst.players
     first_player = players[0]
@@ -243,7 +243,7 @@ end
     assert_equal first_player, inst.players.last
   end
 
-  def test_go_to_next_player_skipping_checks_should_shift_the_current_player
+  it 'test_go_to_next_player_skipping_checks_should_shift_the_current_player' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
     players = inst.players
     first_player = players[0]
@@ -253,20 +253,20 @@ end
     assert_equal first_player, inst.players.last
   end
 
-  def test_current_player_identifier_should_return_the_identifier_of_the_current_player
+  it 'test_current_player_identifier_should_return_the_identifier_of_the_current_player' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
     inst.stubs(:current_player).returns(stub_everything('player', :identifier => :theid))
     assert_equal :theid, inst.current_player_identifier
   end
 
-  def test_ga_should_load_the_privates_in_order
+  it 'test_ga_should_load_the_privates_in_order' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
     actual_private_nicknames = inst.bank.privates.map { |priv| priv.nickname }
     expected_private_nicknames = %w{ ltr mid wsr osr mbr }
     assert_equal expected_private_nicknames, actual_private_nicknames
   end
 
-  def test_handle_bid_should_add_a_bid_to_the_target
+  it 'test_handle_bid_should_add_a_bid_to_the_target' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
     player = inst.current_player
     inst.handle_bid({ 'target' => 'ltr', 'bid' => '300' })
@@ -275,12 +275,12 @@ end
     assert_equal [{:player => player, :price => 300}], private.bids
   end
 
-  def test_lookup_private_should_load_the_desired_private
+  it 'test_lookup_private_should_load_the_desired_private' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
     assert_not_nil inst.lookup_private('ltr')
   end
 
-  def test_minimum_bid_should_be_the_par_value_if_there_are_no_bids
+  it 'test_minimum_bid_should_be_the_par_value_if_there_are_no_bids' do
     inst = Dieselisation::GameInstance.new(Dieselisation::Game18GA, [1,2,3])
     private = inst.lookup_private 'mid'
     assert_equal 40, private.minimum_bid

@@ -5,7 +5,7 @@ describe GamesController do
   describe '#new' do
     it 'should return success' do
       user = Factory.create(:player)
-      session[:user_id] = user.id
+      @controller.current_user = user
       
       get :new
       response.should be_success
@@ -20,7 +20,7 @@ describe GamesController do
   describe '#create' do
     before(:each) do
       @user = Factory.create(:player)
-      session[:user_id] = @user.id
+      @controller.current_user = @user
     end
     
     it 'should redirect to the new form with a flash message if the game is not valid' do
@@ -44,7 +44,7 @@ describe GamesController do
   describe '#show' do
     before(:each) do
       @user = Factory.create(:player)
-      session[:user_id] = @user.id
+      @controller.current_user = @user
       @game = Factory.create(:game)
     end
     
@@ -58,7 +58,7 @@ describe GamesController do
   describe '#index' do
     it 'should show all games that are open for registration' do
       user = Factory.create(:player)
-      session[:user_id] = user.id
+      @controller.current_user = user
       Game.expects(:open_for_registration).returns([Factory.create(:game, :name => 'checkforthis')])
       get :index
       assigns[:games].first.name.should == 'checkforthis'
@@ -68,7 +68,7 @@ describe GamesController do
   describe '#join' do
     before(:each) do
       @user = Factory.create(:player)
-      session[:user_id] = @user.id
+      @controller.current_user = @user
       @game = Factory.create(:game)
     end
 
@@ -99,7 +99,7 @@ describe GamesController do
   describe '#edit' do
     before(:each) do
       @user = Factory.create(:player)
-      session[:user_id] = @user.id
+      @controller.current_user = @user
       @game = Factory.create(:game)
     end
     
@@ -114,7 +114,7 @@ describe GamesController do
   describe '#update' do
     before(:each) do
       @user = Factory.create(:player)
-      session[:user_id] = @user.id
+      @controller.current_user = @user
       @game = Factory.create(:game)
     end
     
@@ -146,7 +146,7 @@ describe GamesController do
     it "should set the game's status to active" do
       game = Factory.create(:game)
       3.times { game.add_player Factory(:player) }
-      session[:user_id] = game.owner.id
+      @controller.current_user = game.owner
       put :start, :id => game.id
       game.reload
       game.should be_started
@@ -155,7 +155,7 @@ describe GamesController do
     it 'should only be accessible to the owner' do
       game = Factory.create(:game)
       user = Factory.create(:player)
-      session[:user_id] = user.id  
+      @controller.current_user = user
       put :start, :id => game.id
       flash[:error].should include("owner")
       game.reload
@@ -174,7 +174,7 @@ describe GamesController do
     end
 
     it 'should redirect to play' do
-      session[:user_id] = @current_player.id
+      @controller.current_user = @current_player
       @game.expects(:persist!)
       @game.expects(:act)
       @game.expects(:requires_confirmation?).at_least_once.returns(false).then.returns(true)
@@ -183,14 +183,14 @@ describe GamesController do
     end
     
     it 'should not allow the a non-current player to make an action' do
-      session[:user_id] = @non_current_player.id
+      @controller.current_user = @non_current_player
       @game.expects(:persist!).never
       put :act, :id => @game.id
       flash[:error].should include("not your turn")      
     end
     
     it 'should allow the game instance\'s current player to make an action' do
-      session[:user_id] = @current_player.id
+      @controller.current_user = @current_player
       @game.expects(:persist!)
       @game.stubs(:act)
       put :act, :id => @game.id, :action_data => { 'verb' => 'nop' }
@@ -201,7 +201,7 @@ describe GamesController do
 
     describe 'while logged in' do
       before :each do
-        session[:user_id] = @current_player.id
+        @controller.current_user = @current_player
       end
 
       it 'should pass the parameters to the game along with the player id' do
@@ -223,7 +223,7 @@ describe GamesController do
     
     it 'should render succes, even if the game state requires confirmation' do
       @game.stubs(:requires_confirmation?).returns(true)
-      session[:user_id] = @current_player.id
+      @controller.current_user = @current_player
       get :play, :id => @game.id
       response.should be_success
     end
@@ -244,7 +244,7 @@ describe GamesController do
     end
     
     it 'should not let the non-confirming user confirm' do
-      session[:user_id] = @next_player_up_after_confirm.id
+      @controller.current_user = @next_player_up_after_confirm
       @game.expects(:confirm!).never
       post :confirm, :id => @game.id
       response.should be_redirect
@@ -252,7 +252,7 @@ describe GamesController do
     end
     
     it 'should confirm the game state and redirect to play' do
-      session[:user_id] = @last_player_to_act.id
+      @controller.current_user = @last_player_to_act
       @game.expects(:confirm!)
       post :confirm, :id => @game.id
       response.should be_redirect

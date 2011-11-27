@@ -1,7 +1,8 @@
 Factory.sequence(:identifier) { |n| Digest::MD5.hexdigest(n.to_s) }
 
 Factory.define :player, :class => 'user' do |u|
-  u.identifier {  Factory.next :identifier }
+  u.email    { Factory.next :email }
+  u.password { "password" }
   u.sequence(:username) { |n| "user-#{n}" }
 end
 

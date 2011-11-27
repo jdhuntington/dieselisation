@@ -5,9 +5,9 @@ describe DashboardsController do
   describe '#show' do
     it 'should show the users current games' do
       game = Factory.create(:game, :status => 'new')
-      user = User.create!
+      user = Factory.create(:user)
       game.users << user
-      session[:user_id] = user.id
+      @controller.current_user = user
       get :show
       assigns[:games].should == [game]
     end

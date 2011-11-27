@@ -1,5 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+require File.expand_path(File.join(Rails.root, 'lib', 'dieselisation'))
+
 describe Dieselisation::Map do
   it 'should give me an array containing the connections' do
     a = Dieselisation::Node.new
