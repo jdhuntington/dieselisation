@@ -1,5 +1,5 @@
 <div class="action">
-  <% form_for :action, action, :url => { :action => 'act' }, :method => 'post' do |f| %>
+  <%= form_for :action, action, :url => { :action => 'act' }, :method => 'post' do |f| %>
     <%= f.hidden_field :id %>
     <%= f.submit action.description %>
   <% end %>

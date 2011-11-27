@@ -9,7 +9,7 @@
       </ul>
 
       <% if signed_in? %>
-        <div id="profile">you are logged in as <%= link_to @current_user.display_name, edit_account_url %> | <%= link_to 'logout', session_url, :method => 'delete' %></div>
+        <div id="profile">you are logged in as <%= link_to current_user.display_name, "#" %> | <%= link_to 'logout', session_url, :method => 'delete' %></div>
      <% end %>
     </div>
   </div>

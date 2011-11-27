@@ -32,11 +32,7 @@ class User < ActiveRecord::Base
   end
 
   def display_name
-    if self.actual_name && !self.actual_name.empty?
-      self.actual_name
-    else
-      self.username
-    end
+    [actual_name, username, email].detect { |x| !x.blank? }
   end
 
   def in_game?(game)

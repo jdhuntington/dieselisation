@@ -1,6 +1,17 @@
 <h2>Edit game</h2>
-<% form_for @game do |f| %>
-  <%= f.error_messages :class => 'error', :header_message => nil %>
+<%= form_for @game do |f| %>
+  <% if @game.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@game.errors.count, "error") %> prohibited this game from being saved:</h2>
+
+      <ul>
+      <% @game.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
 
   <p>
     <%= f.label :name %>

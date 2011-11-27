@@ -1,15 +1,15 @@
 <div id="<%= dom_id @game %>" class="<%= dom_class @game %>">
   <h2><%= h @game.name %></h2>
-  <% if @current_user == @game.owner %>
+  <% if current_user == @game.owner %>
     <div class="owner-actions">
-     <%= custom_button_to 'Edit', edit_game_url(@game), :class => 'edit' %>
+     <%= link_to 'Edit', edit_game_url(@game), :class => 'edit' %>
     </div>
   <% end %>
   
 <% if @game.started? %>
-      <%= custom_button_to 'Play!', play_game_url(@game), :class => 'start', :method => 'get' %>
+      <%= link_to 'Play!', play_game_url(@game), :class => 'start', :method => 'get' %>
     <% else %>
-      <%= custom_button_to 'Start game', start_game_url(@game), :class => 'start', :method => 'put' %>
+      <%= button_to 'Start game', start_game_url(@game), :class => 'start btn primary', :method => 'put' %>
   <% end %>
   
   <div class="clearall"></div>
