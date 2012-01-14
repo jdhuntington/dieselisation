@@ -1,16 +1,21 @@
 require 'dieselisation'
-require 'base64'
+require 'json'
 
 class GameState < ActiveRecord::Base
   has_one :game
   belongs_to :active_player, :class_name => 'User'
   belongs_to :previous, :class_name => 'GameState'
 
-  attr_writer :game_instance
-  before_save :marshal_data
-
   def game_instance
-    @game_instance ||= game_state && Marshal.load(Base64.decode64(game_state))
+    @game_instance ||= eval(game.implementation).new
+  end
+
+  def act(options)
+    game_instance.act(options)
+    succ = GameState.create!({ :game => game, :previous => self, :action => options.to_json })
+    game.game_state = succ
+    game.save!
+    true
   end
 
   def requires_confirmation?
@@ -26,10 +31,5 @@ class GameState < ActiveRecord::Base
 
   def confirm!
     update_attribute(:confirmed, true)
-  end
-
-  private
-  def marshal_data
-    self.game_state = Base64.encode64(Marshal.dump(game_instance))
   end
 end

@@ -3,6 +3,7 @@ class CreateGamesTable < ActiveRecord::Migration
     create_table 'games' do |t|
       t.string 'name'
       t.string 'status'
+      t.string 'implementation'
       t.timestamps
     end
   end

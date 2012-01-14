@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(:version => 20111126185227) do
 
   create_table "game_states", :force => true do |t|
     t.integer  "game_id"
-    t.binary   "game_state"
+    t.text     "action"
     t.integer  "player_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -27,10 +27,11 @@ ActiveRecord::Schema.define(:version => 20111126185227) do
   create_table "games", :force => true do |t|
     t.string   "name"
     t.string   "status"
+    t.string   "implementation"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "owner_id"
-    t.integer  "max_players",   :default => 4
+    t.integer  "max_players",    :default => 4
     t.text     "comment"
     t.integer  "game_state_id"
   end
@@ -47,7 +48,6 @@ ActiveRecord::Schema.define(:version => 20111126185227) do
   create_table "users", :force => true do |t|
     t.string  "username"
     t.string  "email"
-    t.string  "password"
     t.string  "actual_name"
     t.string  "identifier"
     t.boolean "email_notification"
