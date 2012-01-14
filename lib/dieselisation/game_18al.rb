@@ -6,7 +6,9 @@ module Dieselisation
 
     def starting_cash(num_players)
       player_rows = xml('Game.xml').css('Component[name=PlayerManager] Players').to_a
-      player_rows.detect{ |x| x['number'].to_i == num_players }['cash'].to_i
+      config = player_rows.detect{ |x| x['number'].to_i == num_players }
+      raise ArgumentError.new("Can't find config for #{num_players} players.") unless config
+      config['cash'].to_i
     end
 
     def private_companies

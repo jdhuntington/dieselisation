@@ -1,3 +1,5 @@
+require File.expand_path(File.join(Rails.root, 'lib', 'dieselisation'))
+
 class GameStateNeedsConfirmation < StandardError
 end
 
