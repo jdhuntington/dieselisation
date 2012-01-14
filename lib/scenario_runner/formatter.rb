@@ -4,18 +4,18 @@ require 'fileutils'
 module ScenarioRunner
   module Formatter
     module_function
-    def init scenario_name
+    def init(scenario_name)
       @turn_count = 0
-      interactive_logfile_path = File.join(RAILS_ROOT, 'public', 'scenario-runner', scenario_name)
+      interactive_logfile_path = File.join(Rails.root, 'public', 'scenario-runner')
       @scenario_name = scenario_name
       FileUtils.mkdir_p interactive_logfile_path
-      interactive_logfile_filename = [Time.new.strftime("%Y-%m-%d--%H-%M-%S"), 'html'].join('.')
+      interactive_logfile_filename = [scenario_name, 'html'].join('.')
       @logfile = File.open(File.join(interactive_logfile_path, interactive_logfile_filename), 'w')
       write_interactive_header(interactive_logfile_filename)
     end
 
     def interactive_logfile_relative_path
-      base = File.expand_path(File.join(RAILS_ROOT, 'public'))
+      base = File.expand_path(File.join(Rails.root, 'public'))
       full = File.expand_path(@logfile.path)
       full[(base.length + 1) .. -1]
     end
@@ -37,8 +37,10 @@ module ScenarioRunner
 <head>
    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
    <title>#{filename}</title>
-   <link rel="stylesheet" href="/stylesheets/blueprint/screen.css" type="text/css" />
-   <link rel="stylesheet" href="/stylesheets/scenario.css" type="text/css" />
+  <link href="/assets/application.css?body=1" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/bootstrap.css?body=1" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/overrides.css?body=1" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/scenario.css?body=1" media="screen" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div class="container">
@@ -57,7 +59,7 @@ module ScenarioRunner
     def write_interactive_footer
       @logfile.puts <<-EOF
         </div>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+        <script src="/assets/application.js" type="text/javascript"></script>
         <script src="/javascripts/scenario.js" type="text/javascript"></script>
         </body></html>
       EOF

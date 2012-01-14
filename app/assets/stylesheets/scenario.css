@@ -1,0 +1,24 @@
+.game-link {
+    padding:.8em;margin-bottom:1em;border:2px solid #ddd;background:#BACEFB;color:#1C346B;border-color:#7292DB;
+}
+
+.assertion {
+  text-align: right;
+  padding:.8em;margin-bottom:1em;
+}
+
+.success {
+  background: #afa;
+  border: 2px solid #494;
+}
+
+.error {
+  background: #faa;
+  border: 2px solid #822;
+}
+
+.action {
+  background: #eee;
+  border: 2px solid #bbb;
+  padding:.8em;margin-bottom:1em;
+}

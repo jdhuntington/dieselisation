@@ -34,7 +34,7 @@ module Dieselisation
     end
 
     def imp_name
-      @implementation::CONFIG[:name]
+      @implementation.name
     end
 
     def current_player_identifier

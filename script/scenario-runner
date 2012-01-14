@@ -1,21 +1,23 @@
 #!/usr/bin/env ruby
-require File.dirname(__FILE__) + '/../config/environment'
+require File.expand_path(File.dirname(__FILE__) + '/../config/environment')
 require 'scenario_runner'
 
 order, ignore, *steps = File.read(ARGV.first).split("\n")
 players = order.split(/:\s*/).last.split(/,\s*/).map do |username|
-  User.find_or_create_by_username(username)
+  u = User.find_or_create_by_username(username)
+  u.password = 'abcdef'
+  u.email = "#{username}@example.com"
+  u.save!
+  u
 end
 
-
-$g = Game.create!({ :owner  => players.first,
-                    :name   => "#{File.basename(ARGV.first)} - #{Time.new.to_s}",
-                    :status => 'new' })
+$g = Game.create!({ :owner    => players.first,
+                    :name     => [File.basename(ARGV.first), Time.new.strftime("%Y-%m-%d--%H-%M-%S")].join('-'),
+                    :status   => 'new' })
 
 
 players[1 .. -1].each { |player| $g.add_player player }
 $g.start_without_shuffle!
-
 
 ScenarioRunner::Formatter.init File.basename(ARGV.first)
 begin

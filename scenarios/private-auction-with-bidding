@@ -21,3 +21,9 @@ Matt: buy_private tusc
 * player_cash('JD') == 550
 * owner('bslc') == 'Mike'
 * player_cash('Mike') == 500
+* round == 'private_auction'
+Mike: buy_private mc
+* owner('mc') == 'Mike'
+JD: pass
+* owner('ndy') == 'Matt
+* round == 'stock'

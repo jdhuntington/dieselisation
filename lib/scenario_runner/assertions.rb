@@ -24,7 +24,12 @@ module ScenarioRunner
       User.find(user_id).username
     end
 
+    def round
+      $g.game_instance.current_round
+    end
+
     def assert actual, expected
+      STDERR.puts({ :actual => actual, :expected => expected }.inspect)
       ::ScenarioRunner::Formatter.log_assertion actual, expected
       actual_eval   = eval actual
       expected_eval = eval expected

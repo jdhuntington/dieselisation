@@ -18,10 +18,14 @@ module Dieselisation
           :name     => company['name'],
           :par      => company['basePrice'].to_i,
           :revenue  => company['revenue'].to_i,
-          :special  => 'SPECIAL-FIXME',
+          :special  => company.css('SpecialProperties'),
           :nickname => company['name'].gsub(/\s*/, '').gsub(/&/,'').downcase
         }
       end
+    end
+
+    def name
+      '18AL'
     end
 
     def bank_size
