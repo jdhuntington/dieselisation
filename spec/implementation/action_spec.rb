@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../implementation_test_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 describe 'TestAction < Test::Unit::TestCase' do

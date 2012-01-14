@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(:version => 20111126185227) do
   create_table "users", :force => true do |t|
     t.string  "username"
     t.string  "email"
+    t.string  "password"
     t.string  "actual_name"
     t.string  "identifier"
     t.boolean "email_notification"
