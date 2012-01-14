@@ -102,7 +102,7 @@ class Game < ActiveRecord::Base
   end
 
   def persist!
-    self.game_state = GameState.create!(:game_instance => game_instance, :active_player => current_player, :previous => game_state, :game_id => self.id)
+    self.game_state = GameState.create!(:active_player => current_player, :previous => game_state, :game_id => self.id)
     self.save!
   end
 
