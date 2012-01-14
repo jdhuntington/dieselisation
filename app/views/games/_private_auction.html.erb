@@ -7,7 +7,7 @@
     <div class="main-stats">
     <div class="revenue">Revenue: <span class="value"><%= number_to_currency private.revenue, :precision => 0 %></span></div>
 
-    <% if private.special && (private.special != 'nil') %>
+    <% if private.special %>
       <div class="special"><%= render :partial => 'private_special', :locals => { :special => private.special } %></div>
     <% end %>
     </div>

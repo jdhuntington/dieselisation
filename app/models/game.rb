@@ -1,7 +1,8 @@
 require File.expand_path(File.join(Rails.root, 'lib', 'dieselisation'))
 
-class GameStateNeedsConfirmation < StandardError
-end
+class InvalidGameState < StandardError; end
+class GameStateNeedsConfirmation < StandardError; end
+class PlayerNotFound < StandardError; end
 
 class Game < ActiveRecord::Base
   has_many :seatings
@@ -23,7 +24,7 @@ class Game < ActiveRecord::Base
   def current_player=(player)
     new_seating = seatings.find_by_user_id(player.id)
     old_seating = seatings.find_by_active(true)
-    raise unless new_seating
+    raise PlayerNotFound.new unless new_seating
     Game.transaction do
       if old_seating
         old_seating.active = false
@@ -35,11 +36,13 @@ class Game < ActiveRecord::Base
   end
 
   def current_player
-    raise "Cannot have current player without having a started game" if self.status == 'new'
+    raise InvalidGameState.new("Cannot have current player without having a started game") if self.status == 'new'
     if game_state && game_state.requires_confirmation?
       game_state.confirmer
-    else
+    elsif game_instance
       seatings.find_by_user_id(game_instance.current_player_identifier).user
+    else
+      ordered_users.first
     end
   end
 
@@ -54,7 +57,7 @@ class Game < ActiveRecord::Base
   def start!
     self.status = 'active'
     self.current_player = ordered_users.first
-    @game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18AL, ordered_users.map(&:id))
+    self.game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18AL, ordered_users.map(&:id))
     persist!
     save!
   end
@@ -62,7 +65,7 @@ class Game < ActiveRecord::Base
   def start_without_shuffle!
     self.status = 'active'
     self.current_player = ordered_users.first
-    @game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18AL, ordered_users.map(&:id), :shuffle_players => false)
+    self.game_instance = Dieselisation::GameInstance.new(Dieselisation::Game18AL, ordered_users.map(&:id), :shuffle_players => false)
     persist!
     save!
   end
@@ -80,7 +83,7 @@ class Game < ActiveRecord::Base
   end
 
   def add_player(player)
-    raise "Unable to join game" unless joinable?
+    raise InvalidGameState.new("Unable to join game") unless joinable?
     users << player
     start! if users.length >= self.max_players
   end
@@ -91,7 +94,7 @@ class Game < ActiveRecord::Base
   end
 
   def game_instance
-    @game_instance ||= (game_state && game_state.game_instance)
+    @game_instance ||= game_state && game_state.game_instance
   end
 
   def requires_confirmation?
@@ -109,7 +112,7 @@ class Game < ActiveRecord::Base
 
   def act(options)
     raise GameStateNeedsConfirmation.new if requires_confirmation?
-    @game_instance.act(options)
+    game_instance.act(options)
   end
 
   def rollback(game_state)

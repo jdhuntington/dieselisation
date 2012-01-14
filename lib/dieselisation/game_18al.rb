@@ -18,7 +18,7 @@ module Dieselisation
           :name     => company['name'],
           :par      => company['basePrice'].to_i,
           :revenue  => company['revenue'].to_i,
-          :special  => company.css('SpecialProperties'),
+          :special  => 'special-todo',
           :nickname => company['name'].gsub(/\s*/, '').gsub(/&/,'').downcase
         }
       end

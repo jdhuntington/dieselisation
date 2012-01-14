@@ -60,13 +60,6 @@ describe Game do
       g.game_instance
       assert_equal :something, g.game_instance
     end
-    
-    it 'should cache the value' do
-      g = Factory(:game)
-      g.game_instance = :something
-      g.expects(:game_state).never
-      assert_equal :something, g.game_instance
-    end
   end
 
   describe 'owner' do

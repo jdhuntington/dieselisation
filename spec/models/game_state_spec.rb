@@ -1,16 +1,20 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe GameState do
-  describe 'saving state' do
-    it 'should marshal the game state before save' do
-      g = Factory.create(:game)
-      p = Factory.create(:player)
-      g.stubs(:current_player).returns(p)
-      gs = GameState.new(:game => g)
-      gs.game_instance = :something
-      Marshal.expects(:dump).with(:something).returns('some_data')
-      gs.save!
-      assert_equal Base64.encode64('some_data'), GameState.find(gs.id).game_state
+  describe 'statefulness' do
+    before do
+      @game = Factory.create(:game)
+      @player = Factory.create(:player)
+      @game.stubs(:current_player).returns(@player)
+    end
+
+    describe '#act' do
+      it 'should apply the action to the game instance'
+      it 'should create a new game state for game'
+    end
+
+    describe '#game_instance' do
+      it 'should return an instance with all previous actions applied'
     end
   end
 
