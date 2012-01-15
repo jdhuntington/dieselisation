@@ -15,7 +15,6 @@ module ScenarioRunner
              'bid'       =>  step_action_parts[2],
              'player_id' => $g.current_player.id })
 
-    $g.persist!
     $g.confirm!
     Formatter.game_link $g.game_state
   end

@@ -13,6 +13,7 @@ end
 
 $g = Game.create!({ :owner    => players.first,
                     :name     => [File.basename(ARGV.first), Time.new.strftime("%Y-%m-%d--%H-%M-%S")].join('-'),
+                    :implementation => '::Dieselisation::Game18AL',
                     :status   => 'new' })
 
 

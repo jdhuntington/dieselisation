@@ -75,11 +75,10 @@ class GamesController < ApplicationController
       redirect_to confirm_game_url(@game)
       return
     end
-    
+
     if current_user == @game.current_player
       raise "Error: Missing Action" unless params['action_data'] && params['action_data']['verb']
       @game.act(params['action_data'].merge({'player_id' => @game.current_player.id}))
-      @game.persist!
       flash[:notice] = 'Action saved.'
     else
       flash[:error] = 'It is not your turn!'
@@ -97,6 +96,8 @@ class GamesController < ApplicationController
       else
         flash[:error] = 'It is not your turn!'
       end
+    else
+      raise 'no need'
     end
     redirect_to play_game_url(@game)
   end

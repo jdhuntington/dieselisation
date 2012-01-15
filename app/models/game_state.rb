@@ -7,15 +7,25 @@ class GameState < ActiveRecord::Base
   belongs_to :previous, :class_name => 'GameState'
 
   def game_instance
-    @game_instance ||= eval(game.implementation).new
+    @game_instance ||= if previous
+                         raise ArgumentError.new('Expected #action') if action.blank?
+                         previous.apply(JSON.parse(action))
+                       else
+                         eval(game.implementation).new(game.ordered_users.map(&:id), :shuffle_players => false)
+                       end
   end
 
   def act(options)
-    game_instance.act(options)
-    succ = GameState.create!({ :game => game, :previous => self, :action => options.to_json })
+    apply(options)
+    succ = GameState.create!({ :game => game, :previous => self, :action => options.to_json, :active_player => game_instance.current_player })
     game.game_state = succ
     game.save!
-    true
+    succ
+  end
+
+  def apply(options)
+    game_instance.act(options)
+    game_instance
   end
 
   def requires_confirmation?
@@ -23,6 +33,10 @@ class GameState < ActiveRecord::Base
     return false if confirmed
     return false if previous.active_player == active_player
     true
+  end
+
+  def update_active_player
+    update_attribute(:active_player_id, game_instance.current_player_identifier)
   end
 
   def confirmer

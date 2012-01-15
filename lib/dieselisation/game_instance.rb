@@ -8,8 +8,7 @@ module Dieselisation
     SR = 'stock round'
     OR = 'operating round'
 
-    def initialize(implementation, player_ids, options = {})
-      @implementation = implementation.new
+    def initialize(player_ids, options = {})
       @num_players = player_ids.length
       setup_players(player_ids, :shuffle_players => options[:shuffle_players])
       @current_round = 'SR'
@@ -31,10 +30,6 @@ module Dieselisation
 
     def current_player
       @players.first
-    end
-
-    def imp_name
-      @implementation.name
     end
 
     def current_player_identifier
@@ -151,21 +146,21 @@ module Dieselisation
     end
 
     def setup_players(player_ids, options={})
-      starting_cash = @implementation.starting_cash(@num_players)
+      starting_cash = self.starting_cash(@num_players)
       @players = player_ids.map { |player_id| Player.new(:balance => starting_cash,
                                                          :identifier => player_id) }
       @players.sort!{ rand } unless options[:shuffle_players]
     end
 
     def setup_privates
-      @privates = @implementation.private_companies.collect do |company|
+      @privates = self.private_companies.collect do |company|
         Private.new(:name => company[:name], :par => company[:par], :revenue => company[:revenue],
                     :special => company[:special], :nickname => company[:nickname])
       end.sort_by { |r| r.par }
     end
 
     def setup_bank
-      @bank = Bank.new(:balance => @implementation.bank_size -
+      @bank = Bank.new(:balance => self.bank_size -
                        (current_player.balance * num_players))
       @privates.each do |private|
         @bank << private

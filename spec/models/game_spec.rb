@@ -42,14 +42,6 @@ describe Game do
       g.add_player u1
       g.start!
       g.current_player.should_not be_nil
-
-    end
-
-    it 'should persist a new game state' do
-      g = Factory(:game)
-      3.times { g.add_player Factory(:player) }
-      g.expects(:persist!)
-      g.start!
     end
   end
 
@@ -106,9 +98,8 @@ describe Game do
     end
 
     it 'should not be joinable if it has started' do
-      Dieselisation::GameInstance.stubs(:new).returns(:dummy)
       g = Factory.create(:game)
-      g.stubs(:persist!)
+      2.times { g.add_player Factory(:player) }
       g.start!
       g.should_not be_joinable
     end
@@ -139,15 +130,6 @@ describe Game do
   end
 
   describe '#current_player' do
-    it 'should return the player associated with the uniq_id of the game instaces current player' do
-      g = Factory.create(:game)
-      g.stubs(:status).returns('active')
-      instance = stub 'instance'
-      g.stubs(:game_state).returns(stub_everything)
-      g.stubs(:game_instance).returns(stub_everything('instance', :current_player_identifier => g.owner.id))
-      g.current_player.should == g.owner
-    end
-
     it 'should raise an exception if called when game is not started' do
       g = Factory.create(:game)
       instance = stub 'instance'
@@ -166,26 +148,14 @@ describe Game do
     end
   end
 
-  describe '#persist' do
-    it 'should save the current player on persist' do
+  describe '#start!' do
+    it 'should save the current player on starting' do
       g = Factory(:game)
       u0, u1 = Factory(:player), Factory(:player)
       g.add_player u0
       g.add_player u1
       g.start!
       g.game_state.active_player.should == g.current_player
-    end
-    
-    it 'should add the state to the list of game instance histories' do
-      g = Factory(:game)
-      u0, u1 = Factory(:player), Factory(:player)
-      g.add_player u0
-      g.add_player u1
-      g.start!
-      original_game_state = g.game_state
-      g.persist!
-      new_game_state = g.game_state
-      new_game_state.previous.should == original_game_state
     end
   end
 

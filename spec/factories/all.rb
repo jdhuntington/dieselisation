@@ -10,6 +10,7 @@ Factory.define :game, :class => 'game' do |g|
   g.association :owner, :factory => :player
   g.sequence(:name) { |n| "game-#{n}" }
   g.status 'new'
+  g.implementation '::Dieselisation::Game18AL'
 end
 
 Factory.define :game_state, :class => 'GameState' do |gs|

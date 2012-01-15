@@ -2,10 +2,17 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 class GameStateSpecImpl
   attr_reader :actions
+
+  def initialize(*args)
+  end
   
   def act(options)
     @actions ||= []
     @actions << options
+  end
+
+  def current_player
+    nil
   end
 end
 
@@ -41,11 +48,11 @@ describe GameState do
 
       it 'should return an instance with all previous actions applied' do
         g0 = GameState.create!({ :game => @game })
-        a1 = { :foo => 'bar' }
-        a2 = { :doodle => :dawdle, 1 => 4 }
-        g1 = GameState.create!({ :game => @game, :previous => g1, :action => a1.to_json })
-        g2 = GameState.create!({ :game => @game, :previous => g2, :action => a2.to_json })
-        g2.game_instance.actions == [a1, a2]
+        a1 = { 'foo' => 'bar' }
+        a2 = { 'doodle' => 'dawdle', '1' => 4 }
+        g1 = GameState.create!({ :game => @game, :previous => g0, :action => a1.to_json })
+        g2 = GameState.create!({ :game => @game, :previous => g1, :action => a2.to_json })
+        g2.game_instance.actions.should == [a1, a2]
       end
     end
   end

@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/map_parser')
 require 'nokogiri'
 
 module Dieselisation
-  class Game18AL
+  class Game18AL < GameInstance
 
     def starting_cash(num_players)
       player_rows = xml('Game.xml').css('Component[name=PlayerManager] Players').to_a
