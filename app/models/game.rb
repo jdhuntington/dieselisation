@@ -82,7 +82,7 @@ class Game < ActiveRecord::Base
   end
 
   def game_instance
-    @game_instance ||= game_state && game_state.game_instance
+    game_state && game_state.game_instance
   end
 
   def requires_confirmation?

@@ -18,7 +18,7 @@ $g = Game.create!({ :owner    => players.first,
 
 
 players[1 .. -1].each { |player| $g.add_player player }
-$g.start_without_shuffle!
+$g.start!
 
 ScenarioRunner::Formatter.init File.basename(ARGV.first)
 begin

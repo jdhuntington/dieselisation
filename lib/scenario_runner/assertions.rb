@@ -29,7 +29,6 @@ module ScenarioRunner
     end
 
     def assert actual, expected
-      STDERR.puts({ :actual => actual, :expected => expected }.inspect)
       ::ScenarioRunner::Formatter.log_assertion actual, expected
       actual_eval   = eval actual
       expected_eval = eval expected

@@ -135,6 +135,7 @@ module Dieselisation
     end
 
     def act(options)
+      # STDERR.puts({ :object_id => object_id, :options => options }.inspect)
       case options['verb']
 
       when 'bid_on_private' then handle_bid(options)

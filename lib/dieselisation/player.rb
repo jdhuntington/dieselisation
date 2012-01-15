@@ -15,7 +15,10 @@ module Dieselisation
         @bids[asset.name] = bid
         asset.bid(self, bid)
       else
-        raise "Can't bid #{bid} on #{asset.inspect}"
+        params = { :bid => bid,
+          :available_balance => available_balance,
+          :minimum_bid => asset.minimum_bid }
+        raise InvalidBid.new("Can't bid #{bid} on #{asset.nickname}. #{params.inspect}")
       end
     end
     
