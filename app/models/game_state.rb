@@ -7,13 +7,12 @@ class GameState < ActiveRecord::Base
   belongs_to :previous, :class_name => 'GameState'
 
   def game_instance
-    if previous
-      raise ArgumentError.new('Expected #action') if action.blank?
-      # STDERR.puts "grabbing previous"
-      previous.apply(JSON.parse(action))
-    else
-      eval(game.implementation).new(game.ordered_users.map(&:id), :shuffle_players => false)
-    end
+    @gi ||= if previous
+              raise ArgumentError.new('Expected #action') if action.blank?
+              previous.apply(JSON.parse(action))
+            else
+              eval(game.implementation).new(game.ordered_users.map(&:id), :shuffle_players => false)
+            end
   end
 
   def act(options)

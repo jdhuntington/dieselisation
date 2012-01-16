@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-class GameStateSpecImpl
+class GameStateSpecImpl < Dieselisation::GameInstance
   attr_reader :actions
 
   def initialize(*args)
@@ -12,7 +12,7 @@ class GameStateSpecImpl
   end
 
   def current_player
-    nil
+    Dieselisation::Player.new({ :identifier => 1 })
   end
 end
 
